@@ -1,0 +1,7 @@
+**.pdf
+
+**/db/
+**/incremental_db/
+**/out/
+**/c5_pin_model_dump.txt
+**de1soc.qsf

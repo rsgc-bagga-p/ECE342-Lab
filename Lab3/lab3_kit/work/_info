@@ -1,0 +1,332 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/Users/mikha/Desktop/k/School/University_of_Toronto/ECE_3rd_Year/SecondSem/ECE342/Lab3/lab3_kit
+vde1soc_top
+Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
+Z2 !s110 1517630117
+!i10b 1
+!s100 IBen8z0;mjgc7P@=2LmlE1
+IUVM2A;9QjWDg9kzaBR^291
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+!s105 de1soc_top_sv_unit
+S1
+R0
+w1517629592
+8de1soc_top.sv
+Fde1soc_top.sv
+L0 1
+Z4 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z5 !s108 1517630117.000000
+Z6 !s107 vga/vga_output.sv|vga/vga_memory.sv|vga/vga_input.sv|vga/vga_adapter.sv|ui/user_interface.sv|ui/ui_datapath.sv|ui/ui_control.sv|lda/line_drawing_algorithm.sv|lda/lda_datapath.sv|lda/lda_control.sv|common/simple_alu.sv|common/en_reg_n.sv|vga_bmp.sv|testbench.sv|de1soc_top.sv|
+Z7 !s90 -reportprogress|300|de1soc_top.sv|testbench.sv|vga_bmp.sv|common/en_reg_n.sv|common/simple_alu.sv|lda/lda_control.sv|lda/lda_datapath.sv|lda/line_drawing_algorithm.sv|ui/ui_control.sv|ui/ui_datapath.sv|ui/user_interface.sv|vga/vga_adapter.sv|vga/vga_input.sv|vga/vga_memory.sv|vga/vga_output.sv|
+!i113 1
+Z8 tCvgOpt 0
+ven_reg_n
+R1
+R2
+!i10b 1
+!s100 e2_VIWHJfK3jYiD?G^;571
+Io3i[cGhAXd8YfM6]eHdmX0
+R3
+!s105 en_reg_n_sv_unit
+S1
+R0
+w1517613200
+8common/en_reg_n.sv
+Fcommon/en_reg_n.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vlda_control
+R1
+R2
+!i10b 1
+!s100 KS4]Lgj=`ic8DIH[cBJIK1
+IS639m4kXl>PIc;o77FLmO2
+R3
+!s105 lda_control_sv_unit
+S1
+R0
+w1517628579
+8lda/lda_control.sv
+Flda/lda_control.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vlda_datapath
+R1
+R2
+!i10b 1
+!s100 ;36h:k6H=@D^c]b?M9XNH3
+IN=:>lo61dKKI;C>nBlN<52
+R3
+!s105 lda_datapath_sv_unit
+S1
+R0
+w1517628535
+8lda/lda_datapath.sv
+Flda/lda_datapath.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vline_drawing_algorithm
+R1
+R2
+!i10b 1
+!s100 U4;WUnI2Lge3`iLe8?mEA2
+I3zRVWfg;F6TloOkl1<8VH3
+R3
+!s105 line_drawing_algorithm_sv_unit
+S1
+R0
+w1517628598
+8lda/line_drawing_algorithm.sv
+Flda/line_drawing_algorithm.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vsimple_alu
+R1
+R2
+!i10b 1
+!s100 Fco`F_B43o8fX^04?zmKG3
+IHY3PK8bJG30XZOl[1b[L22
+R3
+!s105 simple_alu_sv_unit
+S1
+R0
+w1517630115
+8common/simple_alu.sv
+Fcommon/simple_alu.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vtestbench
+R1
+R2
+!i10b 1
+!s100 FIWc:TIgakm^=Tnhz=5@^0
+IPm6Tk3PGGm8k;Z=Y[[8oB1
+R3
+!s105 testbench_sv_unit
+S1
+R0
+w1517629862
+8testbench.sv
+Ftestbench.sv
+L0 3
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vui_control
+R1
+R2
+!i10b 1
+!s100 V6QIE47M0TWN<ViMBP<Ij2
+I]]@32^J3zz6RhXjl9;M431
+R3
+!s105 ui_control_sv_unit
+S1
+R0
+w1517629967
+8ui/ui_control.sv
+Fui/ui_control.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vui_datapath
+R1
+R2
+!i10b 1
+!s100 Ql<e=ZIcRClFOCN<OGdff3
+IC?F;S?Uc=;U>FcPZ0IB8j1
+R3
+!s105 ui_datapath_sv_unit
+S1
+R0
+w1517630000
+8ui/ui_datapath.sv
+Fui/ui_datapath.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vuser_interface
+R1
+R2
+!i10b 1
+!s100 U@gjjS811<^DSJjcOlh;G0
+I;KUcgNoF[QXhNdMD9A]`<2
+R3
+!s105 user_interface_sv_unit
+S1
+R0
+w1517626464
+8ui/user_interface.sv
+Fui/user_interface.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vvga_bmp
+R1
+R2
+!i10b 1
+!s100 z:WYCAHS6D]L?KFl2bLlC1
+IKZn4V?jG?z3ATS5OWnAQ^2
+R3
+!s105 vga_bmp_sv_unit
+S1
+R0
+Z9 w1517426306
+8vga_bmp.sv
+Fvga_bmp.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vvga_input
+R1
+R2
+!i10b 1
+!s100 ZUzJPA[1D<E[FAMiS5lTn2
+IPLcDaL6>j^4bD@Ta2lHi]3
+R3
+Z10 !s105 vga_input_sv_unit
+S1
+R0
+R9
+8vga/vga_input.sv
+Fvga/vga_input.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vvga_memory
+R1
+R2
+!i10b 1
+!s100 PO]E7lIM5gWgW8T6oz@GC1
+Im8TohmWBDFkTMg]]QKVZ>3
+R3
+R10
+S1
+R0
+R9
+8vga/vga_memory.sv
+Fvga/vga_memory.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
+vvga_output
+R1
+R2
+!i10b 1
+!s100 DMbVR8lNJI<flK3Hi4RPJ3
+IVLQ:eZb<HO[=^EU>Sf_g[0
+R3
+R10
+S1
+R0
+R9
+8vga/vga_output.sv
+Fvga/vga_output.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+R6
+R7
+!i113 1
+R8
