@@ -32,8 +32,8 @@ logic steep;
 logic [9:0] dx;
 logic [9:0] dy;
 logic x0_gt_x1;
-logic [1:0] ystep;
-logic [1:0] xstep;
+logic [9:0] ystep;
+logic [9:0] xstep;
 
 logic [9:0] error;
 logic [9:0] x;
@@ -158,8 +158,8 @@ always_comb begin
       // abs(x1 - x0)
       // x1 > x0 ? x1 - x0 : x0 - x1
       alu_sel[1] = 1;
-      alu_a[1] = cmp_gt[0] ? i_x1 : i_x0;
-      alu_b[1] = cmp_gt[0] ? i_x0 : i_x1;
+      alu_a[1] = cmp_gt[1] ? i_x1 : i_x0;
+      alu_b[1] = cmp_gt[1] ? i_x0 : i_x1;
       end
     // S_DRAW
     1: begin
@@ -205,8 +205,8 @@ always_ff @ (posedge i_clk or posedge i_reset) begin
     dx <= cmp_gt[2] ? alu_out[0] : alu_out[1];
     dy <= cmp_gt[2] ? alu_out[1] : alu_out[0];
     x0_gt_x1 <= cmp_gt[2] ? ~cmp_gt[0] : ~cmp_gt[1];
-    ystep <= (cmp_gt[2] ? cmp_gt[1] : cmp_gt[0]) ? 2'd1 : -2'd1;
-    xstep <= (cmp_gt[2] ? cmp_gt[0] : cmp_gt[1]) ? 2'd1 : -2'd1; 
+    ystep <= (cmp_gt[2] ? cmp_gt[1] : cmp_gt[0]) ? 10'd1 : -10'd1;
+    xstep <= (cmp_gt[2] ? cmp_gt[0] : cmp_gt[1]) ? 10'd1 : -10'd1; 
   end
   
   // error
