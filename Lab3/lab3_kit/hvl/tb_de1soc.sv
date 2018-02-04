@@ -196,8 +196,8 @@ module tb_de1soc();
     color = 0;
     check_mismatch();
 
-    xin = 234;
-    yin = 123;
+    xin = 511;
+    yin = 255;
     cin = 3'b111;
     update_user_regs();
     check_mismatch();
@@ -213,8 +213,8 @@ module tb_de1soc();
 	@(posedge done);
     @(posedge clk);
 
-    xin = 222;
-    yin = 111;
+    xin = 1;
+    yin = 10;
     cin = 3'b010;
     update_user_regs();
     check_mismatch();

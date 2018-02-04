@@ -94,6 +94,7 @@ module de1soc_top
   // Internal constructs
 
   booth_multiplier_n #(
+  //carry_save_multiplier_unsigned_n #(
     .WIDTH(8)
   ) m_mult (
     .i_m(reg_x),
