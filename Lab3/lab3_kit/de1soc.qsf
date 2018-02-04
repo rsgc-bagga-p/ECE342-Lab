@@ -270,8 +270,17 @@ set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
 
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to *
 set_instance_assignment -name FAST_OUTPUT_ENABLE_REGISTER ON -to *
+set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to *
+set_global_assignment -name SYSTEMVERILOG_FILE common/hex_decoder.sv
+set_global_assignment -name SYSTEMVERILOG_FILE common/simple_alu.sv
+set_global_assignment -name SYSTEMVERILOG_FILE common/comparator.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ui/user_interface.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ui/ui_datapath.sv
+set_global_assignment -name SYSTEMVERILOG_FILE ui/ui_control.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/line_drawing_algorithm.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/lda_datapath.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/lda_control.sv
 set_global_assignment -name QIP_FILE vga/vga_adapter.qip
 set_global_assignment -name SYSTEMVERILOG_FILE de1soc_top.sv
 set_global_assignment -name SDC_FILE de1soc.sdc
-set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to *
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

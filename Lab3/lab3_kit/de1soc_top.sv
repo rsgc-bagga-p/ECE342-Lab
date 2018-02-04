@@ -100,10 +100,10 @@ user_interface m_user_interface (
 
   // input from user
   .i_val                    (SW[8:0]),
-  .i_setx                   (KEY[0]),
-  .i_sety                   (KEY[1]),
-  .i_setcol                 (KEY[2]),
-  .i_go                     (KEY[3]),
+  .i_setx                   (~KEY[0]),
+  .i_sety                   (~KEY[1]),
+  .i_setcol                 (~KEY[2]),
+  .i_go                     (~KEY[3]),
 
   // input from line drawing algorithm
   .i_done                   (ui_done),
@@ -140,6 +140,43 @@ line_drawing_algorithm m_line_drawing_algorithm (
   .o_color                  (vga_color),
   .o_plot                   (vga_plot)
 
+);
+
+logic [4:0][3:0] hex_val;
+assign hex_val[0] = SW[9] ? lda_x1[3:0] : lda_x0[3:0];
+assign hex_val[1] = SW[9] ? lda_x1[7:4] : lda_x0[7:4];
+assign hex_val[2] = SW[9] ? lda_x1[8] : lda_x0[8];
+assign hex_val[3] = SW[9] ? lda_y1[3:0] : lda_y0[3:0];
+assign hex_val[4] = SW[9] ? lda_y1[7:4] : lda_y0[7:4];
+
+hex_decoder m_hex0 (
+  .hex_digit(hex_val[0]),
+  .segments(HEX0)
+);
+
+hex_decoder m_hex1 (
+  .hex_digit(hex_val[1]),
+  .segments(HEX1)
+);
+
+hex_decoder m_hex2 (
+  .hex_digit(hex_val[2]),
+  .segments(HEX2)
+);
+
+hex_decoder m_hex3 (
+  .hex_digit(hex_val[3]),
+  .segments(HEX3)
+);
+
+hex_decoder m_hex4 (
+  .hex_digit(hex_val[4]),
+  .segments(HEX4)
+);
+
+hex_decoder m_hex5 (
+  .hex_digit(lda_color),
+  .segments(HEX5)
 );
 
 endmodule

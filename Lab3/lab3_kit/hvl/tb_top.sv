@@ -17,6 +17,9 @@ module tb_top();
 
     if (UNIT == "cmp")
       tb_cmp m_tb_cmp();
+	
+	if (UNIT == "de1")
+      tb_de1soc m_tb_de1();
 
   endgenerate
 

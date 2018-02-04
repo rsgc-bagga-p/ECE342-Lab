@@ -106,7 +106,7 @@ always_comb begin
       // signed: error - dy < 0
       // unsigned: error - dy > 511
       cmp_a[0] = alu_out[0];
-      cmp_b[0] = 511;
+      cmp_b[0] = 0;
     end
     default: begin
       cmp_a[0] = 0;
@@ -219,7 +219,7 @@ always_ff @ (posedge i_clk or posedge i_reset) begin
   else if (i_update_error) begin
     // signed: error - dy < 0
     // unsigned: error - dy > 255
-    error <= cmp_gt[0] ? alu_out[1] : alu_out[0];
+    error <= cmp_lt[0] ? alu_out[1] : alu_out[0];
   end
   
   // y
@@ -230,7 +230,7 @@ always_ff @ (posedge i_clk or posedge i_reset) begin
     y <= cmp_gt[2] ? i_x0 : i_y0;
   end
   else if (i_update_y) begin
-    y <= cmp_gt[0] ? alu_out[2] : y;
+    y <= cmp_lt[0] ? alu_out[2] : y;
   end
   
   // x
