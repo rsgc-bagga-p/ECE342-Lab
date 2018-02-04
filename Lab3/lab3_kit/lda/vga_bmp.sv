@@ -1,8 +1,8 @@
 module vga_bmp
 (
 	input clk,
-	input [9:0] x,
-	input [8:0] y,
+	input [8:0] x,
+	input [7:0] y,
 	input [2:0] color,
 	input plot
 );
@@ -21,11 +21,11 @@ end
 // https://stackoverflow.com/questions/2654480/writing-bmp-image-in-pure-c-c-without-other-libraries
 task write_bmp();
 	integer fp;
-	bit [0:13][7:0] bmpfileheader; 
-	bit [0:39][7:0] bmpinfoheader; 
-	
+	bit [0:13][7:0] bmpfileheader;
+	bit [0:39][7:0] bmpinfoheader;
+
 	fp = $fopen("vga.bmp", "wb");
-	
+
 	bmpfileheader = '0;
 	bmpfileheader[0:1] = {"B","M"};
 	bmpfileheader[10] = 8'd54;
@@ -33,7 +33,7 @@ task write_bmp();
 	bmpfileheader[3] = FILESIZE[15:8];
 	bmpfileheader[4] = FILESIZE[23:16];
 	bmpfileheader[5] = FILESIZE[31:24];
-	
+
 	bmpinfoheader = '0;
 	bmpinfoheader[0] = 8'd40;
 	bmpinfoheader[12:14] = {8'd1, 8'd0, 8'd24};
@@ -45,24 +45,24 @@ task write_bmp();
 	bmpinfoheader[9] = H[15:8];
 	bmpinfoheader[10] = H[23:16];
 	bmpinfoheader[11] = H[31:24];
-	
+
 	for (integer i = 0; i < 14; i++)
 		$fwrite(fp, "%c", bmpfileheader[i]);
 	for (integer i = 0; i < 40; i++)
 		$fwrite(fp, "%c", bmpinfoheader[i]);
-	
+
 	for (integer y = 0; y < H; y++) begin
 		for (integer x = 0; x < W; x++) begin
-			$fwrite(fp, "%c%c%c", 
-				{8{mem[H-y-1][x][0]}}, 
-				{8{mem[H-y-1][x][1]}}, 
+			$fwrite(fp, "%c%c%c",
+				{8{mem[H-y-1][x][0]}},
+				{8{mem[H-y-1][x][1]}},
 				{8{mem[H-y-1][x][2]}});
 		end
 		for (integer x = 0; x < (4-((W*3)%4))%4; x++) begin
 			$fwrite(fp, "%c", 8'd0);
 		end
 	end
-	
+
 	$fclose(fp);
 endtask;
 

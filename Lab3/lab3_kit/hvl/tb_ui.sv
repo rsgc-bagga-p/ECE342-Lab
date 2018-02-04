@@ -28,7 +28,7 @@ module tb_ui();
   logic       dut_start;
 
   // DUT Instantiation
-  user_interface m_user_interface (
+  user_interface m_ui (
 
     .i_clk                    (clk),
     .i_reset                  (reset),
