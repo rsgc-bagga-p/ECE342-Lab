@@ -29,26 +29,26 @@ module lda_datapath
 );
 
 logic steep;
-logic [8:0] dx;
-logic [7:0] dy;
+logic [9:0] dx;
+logic [9:0] dy;
 logic x0_gt_x1;
 logic [1:0] ystep;
 logic [1:0] xstep;
 
-logic [8:0] error;
-logic [8:0] x;
-logic [7:0] y;
+logic [9:0] error;
+logic [9:0] x;
+logic [9:0] y;
 
-logic [3:0][8:0] alu_a;
-logic [3:0][8:0] alu_b;
+logic [3:0][9:0] alu_a;
+logic [3:0][9:0] alu_b;
 logic [3:0]      alu_sel;
-logic [3:0][8:0] alu_out;
+logic [3:0][9:0] alu_out;
 
 genvar i;
 generate
   for (i = 0; i < 4; i++) begin : alu
     simple_alu #(
-      .WIDTH  (9)
+      .WIDTH  (10)
     ) m_salu (
       .i_salu_a (alu_a[i]),
       .i_salu_b (alu_b[i]),
@@ -58,8 +58,8 @@ generate
   end
 endgenerate
 
-logic [2:0][8:0] cmp_a;
-logic [2:0][8:0] cmp_b;
+logic [2:0][9:0] cmp_a;
+logic [2:0][9:0] cmp_b;
 logic [2:0]      cmp_gt;
 logic [2:0]      cmp_lt;
 logic [2:0]      cmp_eq;
@@ -68,7 +68,7 @@ generate
   for (i = 0; i < 3; i++) begin : comparator
     comparator #
     (
-      .WIDTH (9)
+      .WIDTH (10)
     ) m_cmp (
       .i_cmp_a (cmp_a[i]),
       .i_cmp_b (cmp_b[i]),
@@ -79,7 +79,7 @@ generate
   end
 endgenerate
 
-assign o_keep_drawing = (x0_gt_x1 ? cmp_gt[0] : cmp_lt[0] | cmp_eq[0]);
+assign o_keep_drawing = (x0_gt_x1 ? cmp_gt[0] : cmp_lt[0]) | cmp_eq[0];
 
 assign o_x = steep ? y : x;
 assign o_y = steep ? x : y;
@@ -99,13 +99,14 @@ always_comb begin
     1: begin
       // compare x, x1
       cmp_a[0] = x;
-      cmp_b[0] = i_x1;
+      cmp_b[0] = steep ? i_y1 : i_x1;
     end
     // S_DRAW
     2: begin
-      // error - dy < 0
+      // signed: error - dy < 0
+      // unsigned: error - dy > 511
       cmp_a[0] = alu_out[0];
-      cmp_b[0] = 0;
+      cmp_b[0] = 511;
     end
     default: begin
       cmp_a[0] = 0;
@@ -205,7 +206,7 @@ always_ff @ (posedge i_clk or posedge i_reset) begin
     dy <= cmp_gt[2] ? alu_out[1] : alu_out[0];
     x0_gt_x1 <= cmp_gt[2] ? ~cmp_gt[0] : ~cmp_gt[1];
     ystep <= (cmp_gt[2] ? cmp_gt[1] : cmp_gt[0]) ? 2'd1 : -2'd1;
-    xstep <= (cmp_gt[2] ? cmp_gt[0] : cmp_gt[1]) ? -2'd1 : 2'd1; 
+    xstep <= (cmp_gt[2] ? cmp_gt[0] : cmp_gt[1]) ? 2'd1 : -2'd1; 
   end
   
   // error
@@ -216,7 +217,9 @@ always_ff @ (posedge i_clk or posedge i_reset) begin
     error <= (cmp_gt[2] ? alu_out[0] : alu_out[1]) >> 1;
   end
   else if (i_update_error) begin
-    error <= cmp_lt[0] ? alu_out[1] : alu_out[0];
+    // signed: error - dy < 0
+    // unsigned: error - dy > 255
+    error <= cmp_gt[0] ? alu_out[1] : alu_out[0];
   end
   
   // y
@@ -227,7 +230,7 @@ always_ff @ (posedge i_clk or posedge i_reset) begin
     y <= cmp_gt[2] ? i_x0 : i_y0;
   end
   else if (i_update_y) begin
-    y = cmp_lt[0] ? alu_out[2] : y;
+    y <= cmp_gt[0] ? alu_out[2] : y;
   end
   
   // x

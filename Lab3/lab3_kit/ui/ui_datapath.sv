@@ -12,7 +12,7 @@ module ui_datapath
 
   output logic [8:0] o_xin,
   output logic [7:0] o_yin,
-  output logic [3:0] o_cin,
+  output logic [2:0] o_cin,
   output logic [8:0] o_x0,
   output logic [8:0] o_x1,
   output logic [7:0] o_y0,
@@ -32,19 +32,19 @@ module ui_datapath
       o_y1 <= 8'd0;
       o_color <= 3'd0;
     end
+    else begin
+      if (i_setx) o_xin <= i_val[8:0];
+      if (i_sety) o_yin <= i_val[7:0];
+      if (i_setcol) o_cin <= i_val[2:0];
 
-    if (i_setx) o_xin <= i_val[8:0];
-    if (i_sety) o_yin <= i_val[7:0];
-    if (i_setcol) o_cin <= i_val[2:0];
-
-    if (i_reg_ld) begin
-      o_x0 <= o_xin;
-      o_x1 <= o_x0;
-      o_y0 <= o_yin;
-      o_y1 <= o_y0;
-      o_color <= o_cin;
+      if (i_reg_ld) begin
+        o_x0 <= o_xin;
+        o_x1 <= o_x0;
+        o_y0 <= o_yin;
+        o_y1 <= o_y0;
+        o_color <= o_cin;
+      end
     end
-
   end
 
 endmodule

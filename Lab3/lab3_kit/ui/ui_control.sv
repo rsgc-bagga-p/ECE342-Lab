@@ -34,24 +34,24 @@ module ui_control
 
       S_WAIT: begin
         // wait for lda to finish drawing and assert i_done
-        if (i_done) nextstate <= S_READY;
+        if (i_done) nextstate = S_READY;
       end
 
       S_READY: begin
         // user has asserted go
-        if (i_go) nextstate <= S_LOAD;
+        if (i_go) nextstate = S_LOAD;
       end
 
       S_LOAD: begin
         // load registers
         o_reg_ld = 1'b1;
-        nextstate <= S_START;
+        nextstate = S_START;
       end
 
       S_START: begin
         // start lda
         o_start = 1'b1;
-        nextstate <= S_WAIT;
+        nextstate = S_WAIT;
       end
 
     endcase

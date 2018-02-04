@@ -1,8 +1,8 @@
 module line_drawing_algorithm
 (
   input i_clk,
-  inout i_reset,
-  
+  input i_reset,
+
   input [8:0] i_x0,
   input [8:0] i_x1,
   input [7:0] i_y0,

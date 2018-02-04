@@ -7,22 +7,22 @@ module lda_control
   input i_start,
   
   // out to UI
-  output o_done,
+  output logic o_done,
   
   // out to VGA
-  output o_plot,
+  output logic o_plot,
   
   // in from data
   input i_keep_drawing,
   
   // out to data
-  output o_ld_initial,
-  output o_update_error,
-  output o_update_y,
-  output o_update_x,
-  output [1:0] o_mux_cmp0,
-  output o_mux_alu0,
-  output o_mux_alu1
+  output logic o_ld_initial,
+  output logic o_update_error,
+  output logic o_update_y,
+  output logic o_update_x,
+  output logic [1:0] o_mux_cmp0,
+  output logic o_mux_alu0,
+  output logic o_mux_alu1
 );
 
 // States
@@ -58,13 +58,13 @@ always_comb begin
 	
 	case (state)
 		S_WAIT: begin
-			o_done = 1'b0;
+			o_done = 1'b1;
 			if (i_start) nextstate = S_INIT;
 		end
     S_INIT: begin
       o_ld_initial = 1'b1;
       
-      o_mux_cmp0 = 2'd1;
+      o_mux_cmp0 = 2'd0;
       
       o_mux_alu0 = 1'b0;
       o_mux_alu1 = 1'b0;

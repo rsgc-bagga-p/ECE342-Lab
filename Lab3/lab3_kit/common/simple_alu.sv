@@ -1,8 +1,8 @@
 module simple_alu #
 (
   parameter WIDTH = 2,
-  localparam NUMOPS = 2,
-  localparam SWIDTH = $clog2(NUMOPS)
+  parameter NUMOPS = 2,
+  parameter SWIDTH = $clog2(NUMOPS)
 )
 (
   input [WIDTH-1:0] i_salu_a,
