@@ -1,6 +1,6 @@
 `timescale 100ps/100ps // Makes 50GHz
 
-module testbench();
+module tb_top();
 
   parameter UNIT = "ui";
 
@@ -16,7 +16,7 @@ module testbench();
       tb_salu m_tb_salu();
 
     if (UNIT == "cmp")
-      tb_salu m_tb_salu();
+      tb_cmp m_tb_cmp();
 
   endgenerate
 

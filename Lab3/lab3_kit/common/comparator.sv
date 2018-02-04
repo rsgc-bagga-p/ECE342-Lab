@@ -10,16 +10,8 @@ module comparator #
   output o_cmp_eq
 );
 
-  always_comb begin
-
-    o_gt = 1'b0;
-    o_lt = 1'b0;
-    o_eq = 1'b0;
-
-    if (i_a == i_b) o_eq = 1'b1;
-    else if (i_a > ib) o_gt = 1'b1;
-    else /* i_a < i_b */ o_lt = 1'b1;
-
-  end
+  assign o_cmp_gt = (i_cmp_a > i_cmp_b);
+  assign o_cmp_lt = (i_cmp_a < i_cmp_b);
+  assign o_cmp_eq = (i_cmp_a == i_cmp_b);
 
 endmodule
