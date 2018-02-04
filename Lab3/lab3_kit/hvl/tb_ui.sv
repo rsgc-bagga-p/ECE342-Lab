@@ -58,14 +58,100 @@ module tb_ui();
 
   );
 
-  // assertions
-  /*property dut_starts_properly;
-    @(posedge clk)
-      disable iff(!dut_done)
-        $rose(go) |-> #6 dut_start;
-  assert property (!done |-> !dut_start);*/
+  // Helpers
 
-  // model => how to write?
+  int update_done = 0;
+  int xin, yin, cin, x0, x1, y0, y1, color;
+
+  task update_user_regs ();
+
+    begin
+
+      setx = 1'b0;
+      sety = 1'b0;
+      setcol = 1'b0;
+
+      @(negedge clk);
+      val = xin;
+      setx = 1'b1;
+
+      @(negedge clk);
+      setx = 1'b0;
+      val = yin;
+      sety = 1'b1;
+
+      @(negedge clk);
+      sety = 1'b0;
+      val = cin;
+      setcol = 1'b1;
+
+      @(posedge clk);
+      setcol = 1'b0;
+
+      @(posedge clk);
+      update_done = 1;
+
+    end
+
+  endtask // update_regs
+
+  task update_internal_regs ();
+
+    begin
+
+      @(posedge clk);
+      x1 = x0;
+      y1 = y0;
+      x0 = xin;
+      y0 = yin;
+      color = cin;
+
+    end
+
+  endtask //update_internal_regs
+
+  // take a couple cycles to simulate
+  task sim_lda ();
+
+    begin
+
+      @(posedge clk);
+      done = 1'b0;
+
+      repeat(50)
+        @(posedge clk);
+
+      @(posedge clk);
+      done = 1'b1;
+
+    end
+
+  endtask
+
+  integer stage = 0;
+  function void check_mismatch ();
+
+    if (
+      dut_xin != xin |
+      dut_yin != yin |
+      dut_cin != cin |
+      dut_x0 != x0 |
+      dut_x1 != x1 |
+      dut_y0 != y0 |
+      dut_y1 != y1 |
+      dut_color != color
+    )
+    begin
+      $display("DUT output did not match Model output!");
+      $display("Stage was: %0d", stage++);
+      $display("DUT result was: xin: %0d, yin: %0d, cin: %0d, x0: %0d, x1: %0d, y0: %0d, y1: %0d, color: %0d,"
+        , dut_xin, dut_yin, dut_cin, dut_x0, dut_x1, dut_y0, dut_y1, dut_color);
+      $display("DUT result was: xin: %0d, yin: %0d, cin: %0d, x0: %0d, x1: %0d, y0: %0d, y1: %0d, color: %0d,"
+        , xin, yin, cin, x0, x1, y0, y1, color);
+      $stop;
+    end
+
+  endfunction // check_misamtch
 
   // Clock Signal
   initial clk = 1'b0;
@@ -74,9 +160,55 @@ module tb_ui();
   // Stimulus & checker
   initial begin
 
+    // reset
     reset = 0;
-    #1 reset = 1;
-    @(posedge clk) reset = 0;
+    @(negedge clk);
+    reset = 1;
+    @(negedge clk);
+    reset = 0;
+
+    go = 0;
+    done = 1;
+
+    xin = 0;
+    yin = 0;
+    cin = 0;
+    x0 = 0;
+    x1 = 0;
+    y0 = 0;
+    y1 = 0;
+    color = 0;
+    check_mismatch();
+
+    xin = 234;
+    yin = 123;
+    cin = 3'b111;
+    update_user_regs();
+    check_mismatch();
+
+    go = 1;
+    update_internal_regs();
+    @(posedge clk);
+    @(posedge clk);
+    check_mismatch();
+    @(posedge clk);
+    check_mismatch();
+    go = 0;
+    sim_lda();
+    @(posedge clk);
+
+    xin = 222;
+    yin = 111;
+    cin = 3'b010;
+    update_user_regs();
+    check_mismatch();
+
+    go = 1;
+    @(posedge clk);
+    check_mismatch();
+
+    // wait until done
+    @(posedge clk);
 
     $display("All cases passed!");
     $stop;

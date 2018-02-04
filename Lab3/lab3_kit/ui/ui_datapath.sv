@@ -12,7 +12,7 @@ module ui_datapath
 
   output logic [8:0] o_xin,
   output logic [7:0] o_yin,
-  output logic [3:0] o_cin,
+  output logic [2:0] o_cin,
   output logic [8:0] o_x0,
   output logic [8:0] o_x1,
   output logic [7:0] o_y0,

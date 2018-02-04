@@ -19,7 +19,7 @@ module user_interface
   output [8:0]              o_x1,
   output [7:0]              o_y0,
   output [7:0]              o_y1,
-  output [3:0]              o_color,
+  output [2:0]              o_color,
   output                    o_start
 
   // for simulation only
@@ -27,7 +27,7 @@ module user_interface
   ,
   output  [8:0]             o_xin,
   output  [7:0]             o_yin,
-  output  [3:0]             o_cin
+  output  [2:0]             o_cin
   // synthesis translate_on
 
 );
