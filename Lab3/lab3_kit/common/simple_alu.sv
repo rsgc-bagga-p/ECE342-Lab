@@ -16,10 +16,15 @@ module simple_alu #
   localparam ADD = 0;
   localparam SUB = 1;
 
-  assign o_salu_of = (~i_salu_a[WIDTH-1] | ~i_salu_b[WIDTH-1])
-    & (~o_salu_out[WIDTH-1])& (i_salu_sel == ADD);
+  assign o_salu_of
+    = ((i_salu_sel == ADD) & (~i_salu_a[WIDTH-1] | ~i_salu_b[WIDTH-1]) & (o_salu_out[WIDTH-1]))
+    | ((i_salu_sel == SUB) & (~i_salu_a[WIDTH-1] & i_salu_b[WIDTH-1]) & (o_salu_out[WIDTH-1]))
+    ;
 
-  assign o_salu_uf = (i_salu_b > i_salu_a) & (i_salu_sel == SUB);
+  assign o_salu_uf
+    = ((i_salu_sel == ADD) & (i_salu_a[WIDTH-1] | i_salu_b[WIDTH-1]) & (~o_salu_out[WIDTH-1]))
+    | ((i_salu_sel == SUB) & (i_salu_a[WIDTH-1] & ~i_salu_b[WIDTH-1]) & (~o_salu_out[WIDTH-1]))
+    ;
 
   always_comb begin
     case (i_salu_sel)

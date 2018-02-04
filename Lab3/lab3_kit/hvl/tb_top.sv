@@ -16,7 +16,7 @@ module tb_top();
       tb_salu m_tb_salu();
 
     if (UNIT == "cmp")
-      tb_salu m_tb_salu();
+      tb_cmp m_tb_cmp();
 
   endgenerate
 

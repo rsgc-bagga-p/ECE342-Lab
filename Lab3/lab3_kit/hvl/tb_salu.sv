@@ -41,18 +41,20 @@ module tb_salu();
   // Stimulus
   initial begin
 
-    for (integer x = 0; x < 2**9; x++) begin
-      for (integer y = 0; y < 2**9; y++) begin
+    for (integer x = -2**8; x < 2**8; x++) begin
+      for (integer y = -2**8; y < 2**8; y++) begin
 
         logic [8:0] sum;
         logic [8:0] diff;
         logic overflow;
         logic underflow;
 
-        sum = x+y;
-        diff = x-y;
-        if (sum > 2**9-1) overflow = 1;
-        if (diff < 0) underflow = 1;
+        sum = x + y;
+        diff = x - y;
+        if (x > 0 && y > 0 && sum <= 0) overflow = 1;
+        if (x > 0 && y < 0 && diff <= 0) overflow = 1;
+        if (x < 0 && y < 0 && sum >= 0) underflow = 1;
+        if (x < 0 && y > 0 && diff >= 0) underflow = 1;
 
         a = x[8:0];
         b = y[8:0];
