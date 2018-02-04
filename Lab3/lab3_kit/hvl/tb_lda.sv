@@ -65,22 +65,118 @@ module tb_lda();
     reset = 0;
 
     // configure inputs
+
+    // (0,0) to (335,209)
+    // !steep x1 > x0
     @(negedge clk);
-    x0 = 0;
+    x1 = 0;
+    y1 = 0;
+    x0 = 335;
+    y0 = 209;
+    color = 3'b001;
+    @(posedge clk);
+    start = 1'b1;
+    @(posedge clk);
+    start = 1'b0;
+    @(posedge dut_done);
+    m_vga_bmp.write_bmp();
+
+/*
+
+    // (335,209) to (335,0)
+    // vertical
+    @(negedge clk);
+    x1 = x0;
+    y1 = y0;
+    x0 = 335;
     y0 = 0;
-    x1 = 335;
-    y1 = 209;
+    color = 3'b010;
+    @(posedge clk);
+    start = 1'b1;
+    @(posedge clk);
+    start = 1'b0;
+    @(posedge dut_done);
+    m_vga_bmp.write_bmp();
+
+    // (335,0) to (0,209)
+    // !steep x0 > x1
+    @(negedge clk);
+    x1 = x0;
+    y1 = y0;
+    x0 = 0;
+    y0 = 209;
+    color = 3'b011;
+    @(posedge clk);
+    start = 1'b1;
+    @(posedge clk);
+    start = 1'b0;
+    @(posedge dut_done);
+    m_vga_bmp.write_bmp();
+
+    // (0,209) to (168,0)
+    // steep x1 > x0
+    @(negedge clk);
+    x1 = x0;
+    y1 = y0;
+    x0 = 168;
+    y0 = 0;
+    color = 3'b100;
+    @(posedge clk);
+    start = 1'b1;
+    @(posedge clk);
+    start = 1'b0;
+    @(posedge dut_done);
+    m_vga_bmp.write_bmp();
+
+    // (168,0) to (168,209)
+    // vertical
+    @(negedge clk);
+    x1 = x0;
+    y1 = y0;
+    x0 = 168;
+    y0 = 209;
+    color = 3'b101;
+    @(posedge clk);
+    start = 1'b1;
+    @(posedge clk);
+    start = 1'b0;
+    @(posedge dut_done);
+    m_vga_bmp.write_bmp();
+
+    // (168,209) to (0,30)
+    // steep x0 > x1
+    @(negedge clk);
+    x1 = x0;
+    y1 = y0;
+    x0 = 0;
+    y0 = 30;
+    color = 3'b110;
+    @(posedge clk);
+    start = 1'b1;
+    @(posedge clk);
+    start = 1'b0;
+    @(posedge dut_done);
+    m_vga_bmp.write_bmp();
+
+    // (0,30) to (335,30)
+    // horizontal
+    @(negedge clk);
+    x1 = x0;
+    y1 = y0;
+    x0 = 335;
+    y0 = 30;
     color = 3'b111;
     @(posedge clk);
     start = 1'b1;
-
-    // wait until done
-    @(posedge dut_done);
     @(posedge clk);
+    start = 1'b0;
+    @(posedge dut_done);
+    m_vga_bmp.write_bmp();
+
+*/
 
     // finish
     $display("All cases passed!");
-    //m_vga_bmp.write_bmp();
     $stop;
 
   end
