@@ -9,15 +9,17 @@ module simple_alu #
   input [WIDTH-1:0] i_salu_b,
   input [SWIDTH-1:0] i_salu_sel,
   output logic [WIDTH-1:0] o_salu_out,
-  output o_overflow,
-  output o_underflow
+  output o_salu_of,
+  output o_salu_uf
 );
 
   localparam ADD = 0;
   localparam SUB = 1;
 
-  assign o_overflow = (~i_salu_a[WIDTH-1]) & (~i_salu_b[WIDTH-1]) & (i_salu_sel == ADD);
-  assign o_underflow = (i_salu_a[WIDTH-1]) & (i_salu_b[WIDTH-1]) & (i_salu_sel == SUB);
+  assign o_salu_of = (~i_salu_a[WIDTH-1] | ~i_salu_b[WIDTH-1])
+    & (~o_salu_out[WIDTH-1])& (i_salu_sel == ADD);
+
+  assign o_salu_uf = (i_salu_b > i_salu_a) & (i_salu_sel == SUB);
 
   always_comb begin
     case (i_salu_sel)

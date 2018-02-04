@@ -1,6 +1,6 @@
 `timescale 100ps/100ps // Makes 50GHz
 
-module testbench();
+module tb_salu();
 
   //-----
   // DUT
@@ -10,19 +10,24 @@ module testbench();
 
   logic clk;
 
-  logic [7:0] dut_x;
-  logic [7:0] dut_y;
+  logic [8:0] a;
+  logic [8:0] b;
+  logic sel;
 
-  logic [15:0] dut_product;
+  logic [8:0] dut_out;
+  logic dut_of;
+  logic dut_uf;
 
   // DUT Instantiation
   simple_alu #(
     .WIDTH (9)
   ) m_salu (
-    .i_salu_a   (dut_a),
-    .i_salu_b   (dut_b),
-    .i_salu_sel (dut_sel),
-    .o_salu_out (dut_out)
+    .i_salu_a   (a),
+    .i_salu_b   (b),
+    .i_salu_sel (sel),
+    .o_salu_out (dut_out),
+    .o_salu_of  (dut_of),
+    .o_salu_uf  (dut_uf)
   );
 
   //-----------
@@ -30,28 +35,67 @@ module testbench();
   //-----------
 
   // Clock Signal
-  initial dut_clk = 1'b0;
-  always #1 dut_clk = ~dut_clk;
+  initial clk = 1'b0;
+  always #1 clk = ~clk;
 
   // Stimulus
   initial begin
 
-    for (integer x = -2**7; x < 2**7-1; x++) begin
-      for (integer y = -2**7; y < 2**7-1; y++) begin
+    for (integer x = 0; x < 2**9; x++) begin
+      for (integer y = 0; y < 2**9; y++) begin
 
-        logic [15:0] product;
-        product = x * y;
+        logic [8:0] sum;
+        logic [8:0] diff;
+        logic overflow;
+        logic underflow;
 
-        dut_x = x[7:0];
-        dut_y = y[7:0];
+        sum = x+y;
+        diff = x-y;
+        if (sum > 2**9-1) overflow = 1;
+        if (diff < 0) underflow = 1;
 
-        @(posedge dut_clk)
-        @(posedge dut_clk)
-        if(dut_product != product) begin
+        a = x[8:0];
+        b = y[8:0];
+
+        sel = 0; // add
+        @(posedge clk)
+
+        if(dut_out != sum) begin
           $display("DUT output did not match Model output!");
+          $display("Operation was: ADD");
           $display("Operands were: x = %0d, y = %0d", x, y);
-          $display("DUT result was: %0d", dut_product);
-          $display("Expected result was: %0d", product);
+          $display("DUT result was: %0d", dut_out);
+          $display("Expected result was: %0d", sum);
+          $stop;
+        end
+
+        if(dut_of != overflow) begin
+          $display("DUT output did not match Model output!");
+          $display("Operation was: ADD");
+          $display("Operands were: x = %0d, y = %0d", x, y);
+          $display("DUT result was: %s", dut_of?"overflow":"no overflow");
+          $display("Expected result was: %s", overflow?"overflow":"no overflow");
+          $stop;
+        end
+
+        sel = 1; // subtract
+        @(posedge clk)
+
+        if(dut_out != diff) begin
+          $display("DUT output did not match Model output!");
+          $display("Operation was: SUB");
+          $display("Operands were: x = %0d, y = %0d", x, y);
+          $display("DUT result was: %0d", dut_out);
+          $display("Expected result was: %0d", diff);
+          $stop;
+        end
+
+        if(dut_uf != underflow) begin
+          $display("DUT output did not match Model output!");
+          $display("Operation was: SUB");
+          $display("Operands were: x = %0d, y = %0d", x, y);
+          $display("DUT result was: %s", dut_uf?"underflow":"no underflow");
+          $display("Expected result was: %s", underflow?"underflow":"no underflow");
           $stop;
         end
 

@@ -1,6 +1,6 @@
 `timescale 100ps/100ps // Makes 50GHz
 
-module testbench();
+module tb_top();
 
   parameter UNIT = "ui";
 
