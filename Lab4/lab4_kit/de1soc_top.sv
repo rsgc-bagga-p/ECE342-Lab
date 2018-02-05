@@ -1,8 +1,8 @@
-module de1soc_top 
+module de1soc_top
 (
 	// These are the board inputs/outputs required for all the ECE342 labs.
 	// Each lab can use the subset it needs -- unused pins will be ignored.
-	
+
     // Clock pins
     input                     CLOCK_50,
 
@@ -46,6 +46,11 @@ end
 //
 // INSTANTIATE QSYS SYSTEM HERE
 //
-
+nios_system u0 (
+		.clk_clk         (CLOCK_50),         //      clk.clk
+		.leds_export     (LEDR),     //     leds.export
+		.reset_reset_n   (reset_n),   //    reset.reset_n
+		.switches_export (SW)  // switches.export
+);
 
 endmodule
