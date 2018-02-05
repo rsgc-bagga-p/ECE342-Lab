@@ -20,7 +20,7 @@ module carry_save_multiplier_unsigned_n #
 
   generate
 
-    for (i = 0; i < WIDTH; i++) begin
+    for (i = 0; i < WIDTH; i++) begin : o_p_low
       assign o_p[i] = csa_out[i][0];
     end
 

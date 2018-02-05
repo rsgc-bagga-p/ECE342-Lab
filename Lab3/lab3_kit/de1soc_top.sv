@@ -142,6 +142,8 @@ line_drawing_algorithm m_line_drawing_algorithm (
 
 );
 
+assign LEDR[0] = ui_done;
+
 logic [4:0][3:0] hex_val;
 assign hex_val[0] = SW[9] ? lda_x1[3:0] : lda_x0[3:0];
 assign hex_val[1] = SW[9] ? lda_x1[7:4] : lda_x0[7:4];
