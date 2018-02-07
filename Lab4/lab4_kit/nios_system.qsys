@@ -21,7 +21,7 @@
    {
       datum baseAddress
       {
-         value = "8192";
+         value = "69632";
          type = "String";
       }
    }
@@ -31,22 +31,6 @@
       {
          value = "0";
          type = "int";
-      }
-   }
-   element jtag_uart
-   {
-      datum _sortIndex
-      {
-         value = "5";
-         type = "int";
-      }
-   }
-   element jtag_uart.avalon_jtag_slave
-   {
-      datum baseAddress
-      {
-         value = "8224";
-         type = "String";
       }
    }
    element nios2_processor
@@ -61,7 +45,7 @@
    {
       datum baseAddress
       {
-         value = "6144";
+         value = "67584";
          type = "String";
       }
    }
@@ -98,7 +82,7 @@
    {
       datum baseAddress
       {
-         value = "8208";
+         value = "69648";
          type = "String";
       }
    }
@@ -156,25 +140,6 @@
   <parameter name="resetSynchronousEdges" value="NONE" />
  </module>
  <module
-   name="jtag_uart"
-   kind="altera_avalon_jtag_uart"
-   version="16.1"
-   enabled="1">
-  <parameter name="allowMultipleConnections" value="false" />
-  <parameter name="avalonSpec" value="2.0" />
-  <parameter name="clkFreq" value="50000000" />
-  <parameter name="hubInstanceID" value="0" />
-  <parameter name="readBufferDepth" value="64" />
-  <parameter name="readIRQThreshold" value="8" />
-  <parameter name="simInputCharacterStream" value="" />
-  <parameter name="simInteractiveOptions">NO_INTERACTIVE_WINDOWS</parameter>
-  <parameter name="useRegistersForReadBuffer" value="false" />
-  <parameter name="useRegistersForWriteBuffer" value="false" />
-  <parameter name="useRelativePathForSimFile" value="false" />
-  <parameter name="writeBufferDepth" value="64" />
-  <parameter name="writeIRQThreshold" value="8" />
- </module>
- <module
    name="nios2_processor"
    kind="altera_nios2_qsys"
    version="16.1"
@@ -187,8 +152,8 @@
   <parameter name="cpuID_stored" value="0" />
   <parameter name="cpuReset" value="false" />
   <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
-  <parameter name="dataAddrWidth" value="14" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory.s1' start='0x0' end='0x1000' /><slave name='nios2_processor.jtag_debug_module' start='0x1800' end='0x2000' /><slave name='LEDs.s1' start='0x2000' end='0x2010' /><slave name='switches.s1' start='0x2010' end='0x2020' /><slave name='jtag_uart.avalon_jtag_slave' start='0x2020' end='0x2028' /></address-map>]]></parameter>
+  <parameter name="dataAddrWidth" value="17" />
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory.s1' start='0x0' end='0x10000' /><slave name='nios2_processor.jtag_debug_module' start='0x10800' end='0x11000' /><slave name='LEDs.s1' start='0x11000' end='0x11010' /><slave name='switches.s1' start='0x11010' end='0x11020' /></address-map>]]></parameter>
   <parameter name="dcache_bursts" value="false" />
   <parameter name="dcache_lineSize" value="32" />
   <parameter name="dcache_numTCDM" value="0" />
@@ -213,10 +178,10 @@
   <parameter name="icache_ramBlockType" value="Automatic" />
   <parameter name="icache_size" value="4096" />
   <parameter name="icache_tagramBlockType" value="Automatic" />
-  <parameter name="impl" value="Tiny" />
-  <parameter name="instAddrWidth" value="13" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory.s1' start='0x0' end='0x1000' /><slave name='nios2_processor.jtag_debug_module' start='0x1800' end='0x2000' /></address-map>]]></parameter>
-  <parameter name="internalIrqMaskSystemInfo" value="32" />
+  <parameter name="impl" value="Small" />
+  <parameter name="instAddrWidth" value="17" />
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory.s1' start='0x0' end='0x10000' /><slave name='nios2_processor.jtag_debug_module' start='0x10800' end='0x11000' /></address-map>]]></parameter>
+  <parameter name="internalIrqMaskSystemInfo" value="0" />
   <parameter name="manuallyAssignCpuID" value="true" />
   <parameter name="mmu_TLBMissExcOffset" value="0" />
   <parameter name="mmu_TLBMissExcSlave" value="None" />
@@ -240,7 +205,7 @@
   <parameter name="regfile_ramBlockType" value="Automatic" />
   <parameter name="resetOffset" value="0" />
   <parameter name="resetSlave" value="onchip_memory.s1" />
-  <parameter name="resetrequest_enabled" value="true" />
+  <parameter name="resetrequest_enabled" value="false" />
   <parameter name="setting_HBreakTest" value="false" />
   <parameter name="setting_HDLSimCachesCleared" value="true" />
   <parameter name="setting_activateModelChecker" value="false" />
@@ -325,7 +290,7 @@
   <parameter name="initMemContent" value="true" />
   <parameter name="initializationFileName" value="onchip_mem.hex" />
   <parameter name="instanceID" value="NONE" />
-  <parameter name="memorySize" value="4096" />
+  <parameter name="memorySize" value="65536" />
   <parameter name="readDuringWriteMode" value="DONT_CARE" />
   <parameter name="resetrequest_enabled" value="true" />
   <parameter name="simAllowMRAMContentsFile" value="false" />
@@ -355,18 +320,9 @@
    kind="avalon"
    version="16.1"
    start="nios2_processor.data_master"
-   end="jtag_uart.avalon_jtag_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x2020" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="16.1"
-   start="nios2_processor.data_master"
    end="nios2_processor.jtag_debug_module">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1800" />
+  <parameter name="baseAddress" value="0x00010800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -384,7 +340,7 @@
    start="nios2_processor.data_master"
    end="switches.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x2010" />
+  <parameter name="baseAddress" value="0x00011010" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -393,7 +349,7 @@
    start="nios2_processor.data_master"
    end="LEDs.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x2000" />
+  <parameter name="baseAddress" value="0x00011000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -402,7 +358,7 @@
    start="nios2_processor.instruction_master"
    end="nios2_processor.jtag_debug_module">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x1800" />
+  <parameter name="baseAddress" value="0x00010800" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -421,30 +377,17 @@
    end="nios2_processor.clk" />
  <connection kind="clock" version="16.1" start="clk_0.clk" end="switches.clk" />
  <connection kind="clock" version="16.1" start="clk_0.clk" end="LEDs.clk" />
- <connection kind="clock" version="16.1" start="clk_0.clk" end="jtag_uart.clk" />
  <connection
    kind="clock"
    version="16.1"
    start="clk_0.clk"
    end="onchip_memory.clk1" />
  <connection
-   kind="interrupt"
-   version="16.1"
-   start="nios2_processor.d_irq"
-   end="jtag_uart.irq">
-  <parameter name="irqNumber" value="5" />
- </connection>
- <connection
    kind="reset"
    version="16.1"
    start="clk_0.clk_reset"
    end="switches.reset" />
  <connection kind="reset" version="16.1" start="clk_0.clk_reset" end="LEDs.reset" />
- <connection
-   kind="reset"
-   version="16.1"
-   start="clk_0.clk_reset"
-   end="jtag_uart.reset" />
  <connection
    kind="reset"
    version="16.1"
@@ -465,11 +408,6 @@
    version="16.1"
    start="nios2_processor.jtag_debug_module_reset"
    end="LEDs.reset" />
- <connection
-   kind="reset"
-   version="16.1"
-   start="nios2_processor.jtag_debug_module_reset"
-   end="jtag_uart.reset" />
  <connection
    kind="reset"
    version="16.1"

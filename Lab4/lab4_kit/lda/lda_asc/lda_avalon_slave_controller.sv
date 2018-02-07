@@ -1,15 +1,16 @@
 module lda_avalon_slave_controller
 (
   input i_clk,
-  input i_resetn,
+  input i_reset,
 
   // Avalon Interconnect Signals
   output [31:0] o_readdata,
   input [31:0] i_writedata,
   input i_read,
   input i_write,
-  input i_byteenable,
+  input [3:0] i_byteenable,
   input i_chipselect,
+  output o_waitrequest,
 
   // LDA Signals
   output [8:0] o_x0,

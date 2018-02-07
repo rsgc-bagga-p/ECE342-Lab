@@ -1,7 +1,7 @@
 module lda_asc_control
 (
   input i_clk,
-  input i_reset,
+  input i_reset
 
 
 );
@@ -18,4 +18,4 @@ module lda_asc_control
 
 
 
-endmodule  
+endmodule

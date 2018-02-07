@@ -6,22 +6,18 @@ module tb_top();
 
   generate
 
-    if (UNIT != "pass") begin
+    if (UNIT == "asc")
+      tb_asc m_tb_asc();
 
-      if (UNIT == "asc")
-        tb_asc m_tb_asc();
-
-      if (UNIT == "lda")
-        tb_lda m_tb_lda();
-
-    end
-
-    else begin
-      $display("No testbench selected");
-      $display("sim.do usage:");
-      $display("Modelsim> do sim.do [asc|lda]");
-    end
+    if (UNIT == "lda")
+      tb_lda m_tb_lda();
 
   endgenerate
+
+  if (UNIT != "pass" || UNIT != "asc" || UNIT != "lda") begin
+      $info("No testbench selected");
+      $info("sim.do usage:");
+      $info("Modelsim> do sim.do [asc|lda]");
+  end
 
 endmodule

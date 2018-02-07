@@ -271,6 +271,18 @@ set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to *
 set_instance_assignment -name FAST_OUTPUT_ENABLE_REGISTER ON -to *
 set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to *
+set_global_assignment -name VERILOG_FILE lda/vga/vgapll.v
+set_global_assignment -name SYSTEMVERILOG_FILE lda/vga/vga_output.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/vga/vga_memory.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/vga/vga_input.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/vga/vga_adapter.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/lda_asc/lda_avalon_slave_controller.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/lda_asc/lda_avalon_interface.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/lda_asc/lda_asc_datapath.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/lda_asc/lda_asc_control.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/lda/line_drawing_algorithm.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/lda/lda_datapath.sv
+set_global_assignment -name SYSTEMVERILOG_FILE lda/lda/lda_control.sv
 set_global_assignment -name QIP_FILE nios_system/synthesis/nios_system.qip
 set_global_assignment -name SYSTEMVERILOG_FILE de1soc_top.sv
 set_global_assignment -name SDC_FILE de1soc.sdc

@@ -13,22 +13,16 @@ module nios_system (
 	wire  [31:0] nios2_processor_data_master_readdata;                            // mm_interconnect_0:nios2_processor_data_master_readdata -> nios2_processor:d_readdata
 	wire         nios2_processor_data_master_waitrequest;                         // mm_interconnect_0:nios2_processor_data_master_waitrequest -> nios2_processor:d_waitrequest
 	wire         nios2_processor_data_master_debugaccess;                         // nios2_processor:jtag_debug_module_debugaccess_to_roms -> mm_interconnect_0:nios2_processor_data_master_debugaccess
-	wire  [13:0] nios2_processor_data_master_address;                             // nios2_processor:d_address -> mm_interconnect_0:nios2_processor_data_master_address
+	wire  [16:0] nios2_processor_data_master_address;                             // nios2_processor:d_address -> mm_interconnect_0:nios2_processor_data_master_address
 	wire   [3:0] nios2_processor_data_master_byteenable;                          // nios2_processor:d_byteenable -> mm_interconnect_0:nios2_processor_data_master_byteenable
 	wire         nios2_processor_data_master_read;                                // nios2_processor:d_read -> mm_interconnect_0:nios2_processor_data_master_read
 	wire         nios2_processor_data_master_write;                               // nios2_processor:d_write -> mm_interconnect_0:nios2_processor_data_master_write
 	wire  [31:0] nios2_processor_data_master_writedata;                           // nios2_processor:d_writedata -> mm_interconnect_0:nios2_processor_data_master_writedata
 	wire  [31:0] nios2_processor_instruction_master_readdata;                     // mm_interconnect_0:nios2_processor_instruction_master_readdata -> nios2_processor:i_readdata
 	wire         nios2_processor_instruction_master_waitrequest;                  // mm_interconnect_0:nios2_processor_instruction_master_waitrequest -> nios2_processor:i_waitrequest
-	wire  [12:0] nios2_processor_instruction_master_address;                      // nios2_processor:i_address -> mm_interconnect_0:nios2_processor_instruction_master_address
+	wire  [16:0] nios2_processor_instruction_master_address;                      // nios2_processor:i_address -> mm_interconnect_0:nios2_processor_instruction_master_address
 	wire         nios2_processor_instruction_master_read;                         // nios2_processor:i_read -> mm_interconnect_0:nios2_processor_instruction_master_read
-	wire         mm_interconnect_0_jtag_uart_avalon_jtag_slave_chipselect;        // mm_interconnect_0:jtag_uart_avalon_jtag_slave_chipselect -> jtag_uart:av_chipselect
-	wire  [31:0] mm_interconnect_0_jtag_uart_avalon_jtag_slave_readdata;          // jtag_uart:av_readdata -> mm_interconnect_0:jtag_uart_avalon_jtag_slave_readdata
-	wire         mm_interconnect_0_jtag_uart_avalon_jtag_slave_waitrequest;       // jtag_uart:av_waitrequest -> mm_interconnect_0:jtag_uart_avalon_jtag_slave_waitrequest
-	wire   [0:0] mm_interconnect_0_jtag_uart_avalon_jtag_slave_address;           // mm_interconnect_0:jtag_uart_avalon_jtag_slave_address -> jtag_uart:av_address
-	wire         mm_interconnect_0_jtag_uart_avalon_jtag_slave_read;              // mm_interconnect_0:jtag_uart_avalon_jtag_slave_read -> jtag_uart:av_read_n
-	wire         mm_interconnect_0_jtag_uart_avalon_jtag_slave_write;             // mm_interconnect_0:jtag_uart_avalon_jtag_slave_write -> jtag_uart:av_write_n
-	wire  [31:0] mm_interconnect_0_jtag_uart_avalon_jtag_slave_writedata;         // mm_interconnect_0:jtag_uart_avalon_jtag_slave_writedata -> jtag_uart:av_writedata
+	wire         nios2_processor_instruction_master_readdatavalid;                // mm_interconnect_0:nios2_processor_instruction_master_readdatavalid -> nios2_processor:i_readdatavalid
 	wire  [31:0] mm_interconnect_0_nios2_processor_jtag_debug_module_readdata;    // nios2_processor:jtag_debug_module_readdata -> mm_interconnect_0:nios2_processor_jtag_debug_module_readdata
 	wire         mm_interconnect_0_nios2_processor_jtag_debug_module_waitrequest; // nios2_processor:jtag_debug_module_waitrequest -> mm_interconnect_0:nios2_processor_jtag_debug_module_waitrequest
 	wire         mm_interconnect_0_nios2_processor_jtag_debug_module_debugaccess; // mm_interconnect_0:nios2_processor_jtag_debug_module_debugaccess -> nios2_processor:jtag_debug_module_debugaccess
@@ -39,7 +33,7 @@ module nios_system (
 	wire  [31:0] mm_interconnect_0_nios2_processor_jtag_debug_module_writedata;   // mm_interconnect_0:nios2_processor_jtag_debug_module_writedata -> nios2_processor:jtag_debug_module_writedata
 	wire         mm_interconnect_0_onchip_memory_s1_chipselect;                   // mm_interconnect_0:onchip_memory_s1_chipselect -> onchip_memory:chipselect
 	wire  [31:0] mm_interconnect_0_onchip_memory_s1_readdata;                     // onchip_memory:readdata -> mm_interconnect_0:onchip_memory_s1_readdata
-	wire   [9:0] mm_interconnect_0_onchip_memory_s1_address;                      // mm_interconnect_0:onchip_memory_s1_address -> onchip_memory:address
+	wire  [13:0] mm_interconnect_0_onchip_memory_s1_address;                      // mm_interconnect_0:onchip_memory_s1_address -> onchip_memory:address
 	wire   [3:0] mm_interconnect_0_onchip_memory_s1_byteenable;                   // mm_interconnect_0:onchip_memory_s1_byteenable -> onchip_memory:byteenable
 	wire         mm_interconnect_0_onchip_memory_s1_write;                        // mm_interconnect_0:onchip_memory_s1_write -> onchip_memory:write
 	wire  [31:0] mm_interconnect_0_onchip_memory_s1_writedata;                    // mm_interconnect_0:onchip_memory_s1_writedata -> onchip_memory:writedata
@@ -51,10 +45,9 @@ module nios_system (
 	wire   [1:0] mm_interconnect_0_leds_s1_address;                               // mm_interconnect_0:LEDs_s1_address -> LEDs:address
 	wire         mm_interconnect_0_leds_s1_write;                                 // mm_interconnect_0:LEDs_s1_write -> LEDs:write_n
 	wire  [31:0] mm_interconnect_0_leds_s1_writedata;                             // mm_interconnect_0:LEDs_s1_writedata -> LEDs:writedata
-	wire         irq_mapper_receiver0_irq;                                        // jtag_uart:av_irq -> irq_mapper:receiver0_irq
 	wire  [31:0] nios2_processor_d_irq_irq;                                       // irq_mapper:sender_irq -> nios2_processor:d_irq
-	wire         rst_controller_reset_out_reset;                                  // rst_controller:reset_out -> [LEDs:reset_n, irq_mapper:reset, jtag_uart:rst_n, mm_interconnect_0:nios2_processor_reset_n_reset_bridge_in_reset_reset, nios2_processor:reset_n, onchip_memory:reset, rst_translator:in_reset, switches:reset_n]
-	wire         rst_controller_reset_out_reset_req;                              // rst_controller:reset_req -> [nios2_processor:reset_req, onchip_memory:reset_req, rst_translator:reset_req_in]
+	wire         rst_controller_reset_out_reset;                                  // rst_controller:reset_out -> [LEDs:reset_n, irq_mapper:reset, mm_interconnect_0:nios2_processor_reset_n_reset_bridge_in_reset_reset, nios2_processor:reset_n, onchip_memory:reset, rst_translator:in_reset, switches:reset_n]
+	wire         rst_controller_reset_out_reset_req;                              // rst_controller:reset_req -> [onchip_memory:reset_req, rst_translator:reset_req_in]
 	wire         nios2_processor_jtag_debug_module_reset_reset;                   // nios2_processor:jtag_debug_module_resetrequest -> rst_controller:reset_in1
 
 	nios_system_LEDs leds (
@@ -68,23 +61,9 @@ module nios_system (
 		.out_port   (leds_export)                           // external_connection.export
 	);
 
-	nios_system_jtag_uart jtag_uart (
-		.clk            (clk_clk),                                                   //               clk.clk
-		.rst_n          (~rst_controller_reset_out_reset),                           //             reset.reset_n
-		.av_chipselect  (mm_interconnect_0_jtag_uart_avalon_jtag_slave_chipselect),  // avalon_jtag_slave.chipselect
-		.av_address     (mm_interconnect_0_jtag_uart_avalon_jtag_slave_address),     //                  .address
-		.av_read_n      (~mm_interconnect_0_jtag_uart_avalon_jtag_slave_read),       //                  .read_n
-		.av_readdata    (mm_interconnect_0_jtag_uart_avalon_jtag_slave_readdata),    //                  .readdata
-		.av_write_n     (~mm_interconnect_0_jtag_uart_avalon_jtag_slave_write),      //                  .write_n
-		.av_writedata   (mm_interconnect_0_jtag_uart_avalon_jtag_slave_writedata),   //                  .writedata
-		.av_waitrequest (mm_interconnect_0_jtag_uart_avalon_jtag_slave_waitrequest), //                  .waitrequest
-		.av_irq         (irq_mapper_receiver0_irq)                                   //               irq.irq
-	);
-
 	nios_system_nios2_processor nios2_processor (
 		.clk                                   (clk_clk),                                                         //                       clk.clk
 		.reset_n                               (~rst_controller_reset_out_reset),                                 //                   reset_n.reset_n
-		.reset_req                             (rst_controller_reset_out_reset_req),                              //                          .reset_req
 		.d_address                             (nios2_processor_data_master_address),                             //               data_master.address
 		.d_byteenable                          (nios2_processor_data_master_byteenable),                          //                          .byteenable
 		.d_read                                (nios2_processor_data_master_read),                                //                          .read
@@ -97,6 +76,7 @@ module nios_system (
 		.i_read                                (nios2_processor_instruction_master_read),                         //                          .read
 		.i_readdata                            (nios2_processor_instruction_master_readdata),                     //                          .readdata
 		.i_waitrequest                         (nios2_processor_instruction_master_waitrequest),                  //                          .waitrequest
+		.i_readdatavalid                       (nios2_processor_instruction_master_readdatavalid),                //                          .readdatavalid
 		.d_irq                                 (nios2_processor_d_irq_irq),                                       //                     d_irq.irq
 		.jtag_debug_module_resetrequest        (nios2_processor_jtag_debug_module_reset_reset),                   //   jtag_debug_module_reset.reset
 		.jtag_debug_module_address             (mm_interconnect_0_nios2_processor_jtag_debug_module_address),     //         jtag_debug_module.address
@@ -107,7 +87,8 @@ module nios_system (
 		.jtag_debug_module_waitrequest         (mm_interconnect_0_nios2_processor_jtag_debug_module_waitrequest), //                          .waitrequest
 		.jtag_debug_module_write               (mm_interconnect_0_nios2_processor_jtag_debug_module_write),       //                          .write
 		.jtag_debug_module_writedata           (mm_interconnect_0_nios2_processor_jtag_debug_module_writedata),   //                          .writedata
-		.no_ci_readra                          ()                                                                 // custom_instruction_master.readra
+		.no_ci_readra                          (),                                                                // custom_instruction_master.readra
+		.reset_req                             (1'b0)                                                             //               (terminated)
 	);
 
 	nios_system_onchip_memory onchip_memory (
@@ -147,13 +128,7 @@ module nios_system (
 		.nios2_processor_instruction_master_waitrequest      (nios2_processor_instruction_master_waitrequest),                  //                                              .waitrequest
 		.nios2_processor_instruction_master_read             (nios2_processor_instruction_master_read),                         //                                              .read
 		.nios2_processor_instruction_master_readdata         (nios2_processor_instruction_master_readdata),                     //                                              .readdata
-		.jtag_uart_avalon_jtag_slave_address                 (mm_interconnect_0_jtag_uart_avalon_jtag_slave_address),           //                   jtag_uart_avalon_jtag_slave.address
-		.jtag_uart_avalon_jtag_slave_write                   (mm_interconnect_0_jtag_uart_avalon_jtag_slave_write),             //                                              .write
-		.jtag_uart_avalon_jtag_slave_read                    (mm_interconnect_0_jtag_uart_avalon_jtag_slave_read),              //                                              .read
-		.jtag_uart_avalon_jtag_slave_readdata                (mm_interconnect_0_jtag_uart_avalon_jtag_slave_readdata),          //                                              .readdata
-		.jtag_uart_avalon_jtag_slave_writedata               (mm_interconnect_0_jtag_uart_avalon_jtag_slave_writedata),         //                                              .writedata
-		.jtag_uart_avalon_jtag_slave_waitrequest             (mm_interconnect_0_jtag_uart_avalon_jtag_slave_waitrequest),       //                                              .waitrequest
-		.jtag_uart_avalon_jtag_slave_chipselect              (mm_interconnect_0_jtag_uart_avalon_jtag_slave_chipselect),        //                                              .chipselect
+		.nios2_processor_instruction_master_readdatavalid    (nios2_processor_instruction_master_readdatavalid),                //                                              .readdatavalid
 		.LEDs_s1_address                                     (mm_interconnect_0_leds_s1_address),                               //                                       LEDs_s1.address
 		.LEDs_s1_write                                       (mm_interconnect_0_leds_s1_write),                                 //                                              .write
 		.LEDs_s1_readdata                                    (mm_interconnect_0_leds_s1_readdata),                              //                                              .readdata
@@ -179,10 +154,9 @@ module nios_system (
 	);
 
 	nios_system_irq_mapper irq_mapper (
-		.clk           (clk_clk),                        //       clk.clk
-		.reset         (rst_controller_reset_out_reset), // clk_reset.reset
-		.receiver0_irq (irq_mapper_receiver0_irq),       // receiver0.irq
-		.sender_irq    (nios2_processor_d_irq_irq)       //    sender.irq
+		.clk        (clk_clk),                        //       clk.clk
+		.reset      (rst_controller_reset_out_reset), // clk_reset.reset
+		.sender_irq (nios2_processor_d_irq_irq)       //    sender.irq
 	);
 
 	altera_reset_controller #(

@@ -13,8 +13,23 @@ module lda_avalon_interface
   output o_waitrequest,
 
   // Conduit Interface
-  output [7:0] o_vga,
+  output [7:0] o_vga
 );
+
+  logic i_reset;
+  assign i_reset = ~i_resetn;
+
+  logic [8:0] lda_x0;
+  logic [8:0] lda_x1;
+  logic [7:0] lda_y0;
+  logic [7:0] lda_y1;
+  logic [2:0] lda_color;
+  logic lda_start;
+  logic ctrl_done;
+  logic vga_x;
+  logic vga_y;
+  logic vga_color;
+  logic vga_plot;
 
   lda_avalon_slave_controller m_lda_avalon_salve_controller (
     .i_clk,
@@ -34,7 +49,7 @@ module lda_avalon_interface
     .o_y1          (lda_y1),
     .o_color       (lda_color),
     .o_start       (lda_start),
-    .i_done        (ctrl_done),
+    .i_done        (ctrl_done)
   );
 
   line_drawing_algorithm m_line_drawing_algorithm (
@@ -56,7 +71,7 @@ module lda_avalon_interface
   );
 
   vga_adapter #(
-  	.BITS_PER_CHANNEL(1)
+    .BITS_PER_CHANNEL(1)
   ) m_vga_adapter (
     .CLOCK_50      (i_clk),
     .VGA_R         (o_vga[0]),
