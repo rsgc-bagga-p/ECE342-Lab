@@ -47,10 +47,18 @@ end
 // INSTANTIATE QSYS SYSTEM HERE
 //
 nios_system u0 (
-    .clk_clk         (CLOCK_50),         //      clk.clk
-    .leds_export     (LEDR),     //     leds.export
-    .reset_reset_n   (reset_n),   //    reset.reset_n
-    .switches_export (SW)  // switches.export
+    .clk_clk            (CLOCK_50),        //         clk.clk
+    .leds_export        (LEDR),            //        leds.export
+    .reset_reset_n      (reset_n),         //       reset.reset_n
+    .switches_export    (SW),              //    switches.export
+    .vga_b_export       (VGA_B),           //       vga_b.export
+    .vga_blank_n_export (VGA_BLANK_N),     // vga_blank_n.export
+    .vga_clk_export     (VGA_CLK),         //     vga_clk.export
+    .vga_g_export       (VGA_G),           //       vga_g.export
+    .vga_hs_export      (VGA_HS),          //      vga_hs.export
+    .vga_r_export       (VGA_R),           //       vga_r.export
+    .vga_sync_n_export  (VGA_SYNC_N),      //  vga_sync_n.export
+    .vga_vs_export      (VGA_VS)           //      vga_vs.export
 );
 
 endmodule

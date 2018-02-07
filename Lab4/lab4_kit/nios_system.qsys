@@ -21,7 +21,7 @@
    {
       datum baseAddress
       {
-         value = "69632";
+         value = "69648";
          type = "String";
       }
    }
@@ -31,6 +31,22 @@
       {
          value = "0";
          type = "int";
+      }
+   }
+   element lda_avalon_interface
+   {
+      datum _sortIndex
+      {
+         value = "5";
+         type = "int";
+      }
+   }
+   element lda_avalon_interface.lda_avalon_slave
+   {
+      datum baseAddress
+      {
+         value = "69664";
+         type = "String";
       }
    }
    element nios2_processor
@@ -46,6 +62,30 @@
       datum baseAddress
       {
          value = "67584";
+         type = "String";
+      }
+   }
+   element nios_system
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
+      }
+   }
+   element nios_system
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
+         type = "String";
+      }
+   }
+   element nios_system
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
          type = "String";
       }
    }
@@ -82,7 +122,7 @@
    {
       datum baseAddress
       {
-         value = "69648";
+         value = "69632";
          type = "String";
       }
    }
@@ -119,6 +159,47 @@
    internal="switches.external_connection"
    type="conduit"
    dir="end" />
+ <interface name="vga" internal="lda_avalon_interface.conduit_end" />
+ <interface
+   name="vga_b"
+   internal="lda_avalon_interface.vga_b_external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="vga_blank_n"
+   internal="lda_avalon_interface.vga_blank_n_external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="vga_clk"
+   internal="lda_avalon_interface.vga_clk_external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="vga_g"
+   internal="lda_avalon_interface.vga_g_external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="vga_hs"
+   internal="lda_avalon_interface.vga_hs_external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="vga_r"
+   internal="lda_avalon_interface.vga_r_external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="vga_sync_n"
+   internal="lda_avalon_interface.vga_sync_n_external_connection"
+   type="conduit"
+   dir="end" />
+ <interface
+   name="vga_vs"
+   internal="lda_avalon_interface.vga_vs_external_connection"
+   type="conduit"
+   dir="end" />
  <module name="LEDs" kind="altera_avalon_pio" version="16.1" enabled="1">
   <parameter name="bitClearingEdgeCapReg" value="false" />
   <parameter name="bitModifyingOutReg" value="false" />
@@ -140,6 +221,11 @@
   <parameter name="resetSynchronousEdges" value="NONE" />
  </module>
  <module
+   name="lda_avalon_interface"
+   kind="lda_avalon_interface"
+   version="1.1"
+   enabled="1" />
+ <module
    name="nios2_processor"
    kind="altera_nios2_qsys"
    version="16.1"
@@ -153,7 +239,7 @@
   <parameter name="cpuReset" value="false" />
   <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
   <parameter name="dataAddrWidth" value="17" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory.s1' start='0x0' end='0x10000' /><slave name='nios2_processor.jtag_debug_module' start='0x10800' end='0x11000' /><slave name='LEDs.s1' start='0x11000' end='0x11010' /><slave name='switches.s1' start='0x11010' end='0x11020' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory.s1' start='0x0' end='0x10000' /><slave name='nios2_processor.jtag_debug_module' start='0x10800' end='0x11000' /><slave name='switches.s1' start='0x11000' end='0x11010' /><slave name='LEDs.s1' start='0x11010' end='0x11020' /><slave name='lda_avalon_interface.lda_avalon_slave' start='0x11020' end='0x11040' /></address-map>]]></parameter>
   <parameter name="dcache_bursts" value="false" />
   <parameter name="dcache_lineSize" value="32" />
   <parameter name="dcache_numTCDM" value="0" />
@@ -329,6 +415,15 @@
    kind="avalon"
    version="16.1"
    start="nios2_processor.data_master"
+   end="lda_avalon_interface.lda_avalon_slave">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00011020" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="16.1"
+   start="nios2_processor.data_master"
    end="onchip_memory.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
@@ -340,7 +435,7 @@
    start="nios2_processor.data_master"
    end="switches.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00011010" />
+  <parameter name="baseAddress" value="0x00011000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -349,7 +444,7 @@
    start="nios2_processor.data_master"
    end="LEDs.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00011000" />
+  <parameter name="baseAddress" value="0x00011010" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -381,6 +476,11 @@
    kind="clock"
    version="16.1"
    start="clk_0.clk"
+   end="lda_avalon_interface.clk" />
+ <connection
+   kind="clock"
+   version="16.1"
+   start="clk_0.clk"
    end="onchip_memory.clk1" />
  <connection
    kind="reset"
@@ -388,6 +488,11 @@
    start="clk_0.clk_reset"
    end="switches.reset" />
  <connection kind="reset" version="16.1" start="clk_0.clk_reset" end="LEDs.reset" />
+ <connection
+   kind="reset"
+   version="16.1"
+   start="clk_0.clk_reset"
+   end="lda_avalon_interface.reset" />
  <connection
    kind="reset"
    version="16.1"
@@ -408,6 +513,11 @@
    version="16.1"
    start="nios2_processor.jtag_debug_module_reset"
    end="LEDs.reset" />
+ <connection
+   kind="reset"
+   version="16.1"
+   start="nios2_processor.jtag_debug_module_reset"
+   end="lda_avalon_interface.reset" />
  <connection
    kind="reset"
    version="16.1"

@@ -80,7 +80,7 @@ module lda_avalon_interface
   vga_adapter #(
     .BITS_PER_CHANNEL(1)
   ) m_vga_adapter (
-    .CLOCK_50      (i_clk),
+    .clk           (i_clk),
     .VGA_R         (o_vga_r_export),
     .VGA_G         (o_vga_g_export),
     .VGA_B         (o_vga_b_export),
