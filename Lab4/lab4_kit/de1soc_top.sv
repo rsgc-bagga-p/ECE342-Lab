@@ -39,18 +39,18 @@ module de1soc_top
 logic reset_n;
 logic [1:0] reset_reg;
 always_ff @ (posedge CLOCK_50) begin
-	reset_n <= reset_reg[0];
-	reset_reg <= {1'b1, reset_reg[1]};
+  reset_n <= reset_reg[0];
+  reset_reg <= {1'b1, reset_reg[1]};
 end
 
 //
 // INSTANTIATE QSYS SYSTEM HERE
 //
 nios_system u0 (
-		.clk_clk         (CLOCK_50),         //      clk.clk
-		.leds_export     (LEDR),     //     leds.export
-		.reset_reset_n   (reset_n),   //    reset.reset_n
-		.switches_export (SW)  // switches.export
+    .clk_clk         (CLOCK_50),         //      clk.clk
+    .leds_export     (LEDR),     //     leds.export
+    .reset_reset_n   (reset_n),   //    reset.reset_n
+    .switches_export (SW)  // switches.export
 );
 
 endmodule
