@@ -17,7 +17,7 @@ module nios_system (
 	output	[9:0]	leds_export;
 	input		reset_reset_n;
 	input	[9:0]	switches_export;
-	inout	[7:0]	vga_b_export;
+	output	[7:0]	vga_b_export;
 	output		vga_blank_n_export;
 	output		vga_clk_export;
 	output	[7:0]	vga_g_export;

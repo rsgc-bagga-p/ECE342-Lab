@@ -1,4 +1,5 @@
 module lda_avalon_slave_controller
+import lda_reg_pkg::*;
 (
   input i_clk,
   input i_reset,
@@ -21,31 +22,13 @@ module lda_avalon_slave_controller
   input             i_done
 );
 
-  import lda_reg_pkg::*;
-
-  assign o_readdata = assign_readdata(
-    .rd_sel           (rd_sel),
-    .mode             (reg_mode),
-    .status           (reg_status),
-    .x0               (reg_x0),
-    .x1               (reg_x1),
-    .y0               (reg_y0),
-    .y1               (reg_y1),
-    .color            (reg_color)
-  );
-
+  lda_reg_t dp_rd_sel;
   logic dp_mode_ld;
   logic dp_sp_ld;
   logic dp_ep_ld;
   logic dp_col_ld;
-
-  logic reg_mode;
-  logic reg_status;
-  logic [8:0] reg_x0;
-  logic [8:0] reg_x1;
-  logic [7:0] reg_y0;
-  logic [7:0] reg_y1;
-  logic [2:0] reg_color;
+  logic dp_status;
+  logic ctrl_mode;
 
   lda_asc_datapath m_lda_asc_datapath (
     .i_clk,
@@ -54,17 +37,19 @@ module lda_avalon_slave_controller
     .o_readdata,
     .i_writedata,
 
+    .i_rd_sel         (dp_rd_sel),
     .i_mode_ld        (dp_mode_ld),
     .i_sp_ld          (dp_sp_ld),
     .i_ep_ld          (dp_ep_ld),
     .i_col_ld         (dp_col_ld),
+    .i_status         (dp_status),
 
-    .o_mode           (reg_mode),
-    .o_x0             (reg_x0),
-    .o_x1             (reg_x1),
-    .o_y0             (reg_y0),
-    .o_y1             (reg_y1),
-    .o_color          (reg_color)
+    .o_mode           (ctrl_mode),
+    .o_x0             (o_x0),
+    .o_x1             (o_x1),
+    .o_y0             (o_y0),
+    .o_y1             (o_y1),
+    .o_color          (o_color)
   );
 
   lda_asc_control m_lda_asc_control (
@@ -76,12 +61,13 @@ module lda_avalon_slave_controller
     .i_write,
     .i_done,
 
-    .i_mode           (reg_mode),
+    .i_mode           (ctrl_mode),
 
     .o_start,
     .o_waitrequest,
 
-    .o_status         (reg_status),
+    .o_status         (dp_status),
+    .o_rd_sel         (dp_rd_sel),
     .o_mode_ld        (dp_mode_ld),
     .o_sp_ld          (dp_sp_ld),
     .o_ep_ld          (dp_ep_ld),

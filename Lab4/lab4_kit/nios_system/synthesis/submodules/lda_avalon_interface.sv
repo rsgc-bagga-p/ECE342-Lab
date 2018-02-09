@@ -1,30 +1,26 @@
 module lda_avalon_interface
 (
-  input i_clk,
-  input i_resetn,
+  input clk,
+  input reset,
 
   // Memory-Map Interface
-  output [31:0] o_readdata,
-  input [31:0] i_writedata,
-  input i_read,
-  input i_write,
-  input [3:0] i_byteenable,
-  input i_chipselect,
-  output o_waitrequest,
+  input   [31:0]    avs_s1_address,
+  input             avs_s1_read,
+  input             avs_s1_write,
+  output  [31:0]    avs_s1_readdata,
+  input   [31:0]    avs_s1_writedata,
+  output            avs_s1_waitrequest,
 
   // Conduit Interface
-  output [7:0] o_vga_r_export,
-  output [7:0] o_vga_g_export,
-  output [7:0] o_vga_b_export,
-  output o_vga_hs_export,
-  output o_vga_vs_export,
-  output o_vga_sync_n_export,
-  output o_vga_blank_n_export,
-  output o_vga_clk_export
+  output  [7:0]     coe_VGA_R_export,
+  output  [7:0]     coe_VGA_G_export,
+  output  [7:0]     coe_VGA_B_export,
+  output            coe_VGA_HS_export,
+  output            coe_VGA_VS_export,
+  output            coe_VGA_SYNC_N_export,
+  output            coe_VGA_BLANK_N_export,
+  output            coe_VGA_CLK_export
 );
-
-  logic i_reset;
-  assign i_reset = ~i_resetn;
 
   logic [8:0] lda_x0;
   logic [8:0] lda_x1;
@@ -39,16 +35,15 @@ module lda_avalon_interface
   logic vga_plot;
 
   lda_avalon_slave_controller m_lda_avalon_salve_controller (
-    .i_clk,
-    .i_reset,
+    .i_clk         (clk),
+    .i_reset       (reset),
 
-    .o_readdata,
-    .i_writedata,
-    .i_read,
-    .i_write,
-    .i_byteenable,
-    .i_chipselect,
-    .o_waitrequest,
+    .i_address     (avs_s1_address),
+    .i_read        (avs_s1_read),
+    .i_write       (avs_s1_write),
+    .o_readdata    (avs_s1_readdata),
+    .i_writedata   (avs_s1_writedata),
+    .o_waitrequest (avs_s1_waitrequest),
 
     .o_x0          (lda_x0),
     .o_x1          (lda_x1),
@@ -60,8 +55,8 @@ module lda_avalon_interface
   );
 
   line_drawing_algorithm m_line_drawing_algorithm (
-    .i_clk,
-    .i_reset,
+    .i_clk         (clk),
+    .i_reset       (reset),
 
     .i_x0          (lda_x0),
     .i_x1          (lda_x1),
@@ -80,15 +75,15 @@ module lda_avalon_interface
   vga_adapter #(
     .BITS_PER_CHANNEL(1)
   ) m_vga_adapter (
-    .clk           (i_clk),
-    .VGA_R         (o_vga_r_export),
-    .VGA_G         (o_vga_g_export),
-    .VGA_B         (o_vga_b_export),
-    .VGA_HS        (o_vga_hs_export),
-    .VGA_VS        (o_vga_vs_export),
-    .VGA_SYNC_N    (o_vga_sync_n_export),
-    .VGA_BLANK_N   (o_vga_blank_n_export),
-    .VGA_CLK       (o_vga_clk_export),
+    .clk           (clk),
+    .VGA_R         (coe_VGA_R_export),
+    .VGA_G         (coe_VGA_G_export),
+    .VGA_B         (coe_VGA_B_export),
+    .VGA_HS        (coe_VGA_HS_export),
+    .VGA_VS        (coe_VGA_VS_export),
+    .VGA_SYNC_N    (coe_VGA_SYNC_N_export),
+    .VGA_BLANK_N   (coe_VGA_BLANK_N_export),
+    .VGA_CLK       (coe_VGA_CLK_export),
     .x             (vga_x),
     .y             (vga_y),
     .color         (vga_color),

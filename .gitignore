@@ -5,6 +5,7 @@
 **/db/
 **/incremental_db/
 **/out/
+**/output_files/
 **/c5_pin_model_dump.txt
 **/*.qws
 **/*.qdf

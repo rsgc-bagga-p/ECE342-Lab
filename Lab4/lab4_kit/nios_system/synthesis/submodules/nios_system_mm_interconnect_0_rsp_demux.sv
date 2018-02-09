@@ -28,7 +28,7 @@
 // ------------------------------------------
 // Generation parameters:
 //   output_name:         nios_system_mm_interconnect_0_rsp_demux
-//   ST_DATA_W:           93
+//   ST_DATA_W:           110
 //   ST_CHANNEL_W:        5
 //   NUM_OUTPUTS:         2
 //   VALID_WIDTH:         1
@@ -46,7 +46,7 @@ module nios_system_mm_interconnect_0_rsp_demux
     // Sink
     // -------------------
     input  [1-1      : 0]   sink_valid,
-    input  [93-1    : 0]   sink_data, // ST_DATA_W=93
+    input  [110-1    : 0]   sink_data, // ST_DATA_W=110
     input  [5-1 : 0]   sink_channel, // ST_CHANNEL_W=5
     input                         sink_startofpacket,
     input                         sink_endofpacket,
@@ -56,14 +56,14 @@ module nios_system_mm_interconnect_0_rsp_demux
     // Sources 
     // -------------------
     output reg                      src0_valid,
-    output reg [93-1    : 0] src0_data, // ST_DATA_W=93
+    output reg [110-1    : 0] src0_data, // ST_DATA_W=110
     output reg [5-1 : 0] src0_channel, // ST_CHANNEL_W=5
     output reg                      src0_startofpacket,
     output reg                      src0_endofpacket,
     input                           src0_ready,
 
     output reg                      src1_valid,
-    output reg [93-1    : 0] src1_data, // ST_DATA_W=93
+    output reg [110-1    : 0] src1_data, // ST_DATA_W=110
     output reg [5-1 : 0] src1_channel, // ST_CHANNEL_W=5
     output reg                      src1_startofpacket,
     output reg                      src1_endofpacket,

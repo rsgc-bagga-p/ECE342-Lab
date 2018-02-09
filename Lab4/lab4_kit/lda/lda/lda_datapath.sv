@@ -81,8 +81,8 @@ endgenerate
 
 assign o_keep_drawing = (x0_gt_x1 ? cmp_gt[0] : cmp_lt[0]);
 
-assign o_x = steep ? y : x;
-assign o_y = steep ? x : y;
+assign o_x = steep ? y[8:0] : x[8:0];
+assign o_y = steep ? x[7:0] : y[7:0];
 assign o_color = i_color;
 
 always_comb begin

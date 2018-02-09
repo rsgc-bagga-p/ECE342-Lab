@@ -53,6 +53,13 @@ agreement for further details.
 		(line (pt 0 112)(pt 128 112)(line_width 3))
 	)
 	(port
+		(pt 0 232)
+		(output)
+		(text "vga_b_export[7..0]" (rect 0 0 76 12)(font "Arial" (font_size 8)))
+		(text "vga_b_export[7..0]" (rect 4 221 112 232)(font "Arial" (font_size 8)))
+		(line (pt 0 232)(pt 128 232)(line_width 3))
+	)
+	(port
 		(pt 0 272)
 		(output)
 		(text "vga_blank_n_export" (rect 0 0 82 12)(font "Arial" (font_size 8)))
@@ -100,13 +107,6 @@ agreement for further details.
 		(text "vga_vs_export" (rect 0 0 62 12)(font "Arial" (font_size 8)))
 		(text "vga_vs_export" (rect 4 501 82 512)(font "Arial" (font_size 8)))
 		(line (pt 0 512)(pt 128 512)(line_width 1))
-	)
-	(port
-		(pt 0 232)
-		(bidir)
-		(text "vga_b_export[7..0]" (rect 0 0 76 12)(font "Arial" (font_size 8)))
-		(text "vga_b_export[7..0]" (rect 4 221 112 232)(font "Arial" (font_size 8)))
-		(line (pt 0 232)(pt 128 232)(line_width 3))
 	)
 	(drawing
 		(text "clk" (rect 113 43 244 99)(font "Arial" (color 128 0 0)(font_size 9)))

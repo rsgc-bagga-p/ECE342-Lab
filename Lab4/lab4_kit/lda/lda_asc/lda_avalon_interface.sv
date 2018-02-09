@@ -41,7 +41,7 @@ module lda_avalon_interface
     .i_address     (avs_s1_address),
     .i_read        (avs_s1_read),
     .i_write       (avs_s1_write),
-    .i_readdata    (avs_s1_readdata),
+    .o_readdata    (avs_s1_readdata),
     .i_writedata   (avs_s1_writedata),
     .o_waitrequest (avs_s1_waitrequest),
 

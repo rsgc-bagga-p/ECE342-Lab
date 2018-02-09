@@ -41,7 +41,7 @@
          type = "int";
       }
    }
-   element lda_avalon_interface.lda_avalon_slave
+   element lda_avalon_interface.s1
    {
       datum baseAddress
       {
@@ -62,6 +62,14 @@
       datum baseAddress
       {
          value = "67584";
+         type = "String";
+      }
+   }
+   element nios_system
+   {
+      datum _originalDeviceFamily
+      {
+         value = "Cyclone V";
          type = "String";
       }
    }
@@ -159,45 +167,44 @@
    internal="switches.external_connection"
    type="conduit"
    dir="end" />
- <interface name="vga" internal="lda_avalon_interface.conduit_end" />
  <interface
    name="vga_b"
-   internal="lda_avalon_interface.vga_b_external_connection"
+   internal="lda_avalon_interface.vga_b"
    type="conduit"
    dir="end" />
  <interface
    name="vga_blank_n"
-   internal="lda_avalon_interface.vga_blank_n_external_connection"
+   internal="lda_avalon_interface.vga_blank_n"
    type="conduit"
    dir="end" />
  <interface
    name="vga_clk"
-   internal="lda_avalon_interface.vga_clk_external_connection"
+   internal="lda_avalon_interface.vga_clk"
    type="conduit"
    dir="end" />
  <interface
    name="vga_g"
-   internal="lda_avalon_interface.vga_g_external_connection"
+   internal="lda_avalon_interface.vga_g"
    type="conduit"
    dir="end" />
  <interface
    name="vga_hs"
-   internal="lda_avalon_interface.vga_hs_external_connection"
+   internal="lda_avalon_interface.vga_hs"
    type="conduit"
    dir="end" />
  <interface
    name="vga_r"
-   internal="lda_avalon_interface.vga_r_external_connection"
+   internal="lda_avalon_interface.vga_r"
    type="conduit"
    dir="end" />
  <interface
    name="vga_sync_n"
-   internal="lda_avalon_interface.vga_sync_n_external_connection"
+   internal="lda_avalon_interface.vga_sync_n"
    type="conduit"
    dir="end" />
  <interface
    name="vga_vs"
-   internal="lda_avalon_interface.vga_vs_external_connection"
+   internal="lda_avalon_interface.vga_vs"
    type="conduit"
    dir="end" />
  <module name="LEDs" kind="altera_avalon_pio" version="16.1" enabled="1">
@@ -223,7 +230,7 @@
  <module
    name="lda_avalon_interface"
    kind="lda_avalon_interface"
-   version="1.1"
+   version="2.0"
    enabled="1" />
  <module
    name="nios2_processor"
@@ -239,7 +246,7 @@
   <parameter name="cpuReset" value="false" />
   <parameter name="customInstSlavesSystemInfo" value="&lt;info/&gt;" />
   <parameter name="dataAddrWidth" value="17" />
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory.s1' start='0x0' end='0x10000' /><slave name='nios2_processor.jtag_debug_module' start='0x10800' end='0x11000' /><slave name='switches.s1' start='0x11000' end='0x11010' /><slave name='LEDs.s1' start='0x11010' end='0x11020' /><slave name='lda_avalon_interface.lda_avalon_slave' start='0x11020' end='0x11040' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='onchip_memory.s1' start='0x0' end='0x10000' /><slave name='nios2_processor.jtag_debug_module' start='0x10800' end='0x11000' /><slave name='switches.s1' start='0x11000' end='0x11010' /><slave name='LEDs.s1' start='0x11010' end='0x11020' /><slave name='lda_avalon_interface.s1' start='0x11020' end='0x11040' /></address-map>]]></parameter>
   <parameter name="dcache_bursts" value="false" />
   <parameter name="dcache_lineSize" value="32" />
   <parameter name="dcache_numTCDM" value="0" />
@@ -415,15 +422,6 @@
    kind="avalon"
    version="16.1"
    start="nios2_processor.data_master"
-   end="lda_avalon_interface.lda_avalon_slave">
-  <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x00011020" />
-  <parameter name="defaultConnection" value="false" />
- </connection>
- <connection
-   kind="avalon"
-   version="16.1"
-   start="nios2_processor.data_master"
    end="onchip_memory.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x0000" />
@@ -445,6 +443,15 @@
    end="LEDs.s1">
   <parameter name="arbitrationPriority" value="1" />
   <parameter name="baseAddress" value="0x00011010" />
+  <parameter name="defaultConnection" value="false" />
+ </connection>
+ <connection
+   kind="avalon"
+   version="16.1"
+   start="nios2_processor.data_master"
+   end="lda_avalon_interface.s1">
+  <parameter name="arbitrationPriority" value="1" />
+  <parameter name="baseAddress" value="0x00011020" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -476,12 +483,12 @@
    kind="clock"
    version="16.1"
    start="clk_0.clk"
-   end="lda_avalon_interface.clk" />
+   end="onchip_memory.clk1" />
  <connection
    kind="clock"
    version="16.1"
    start="clk_0.clk"
-   end="onchip_memory.clk1" />
+   end="lda_avalon_interface.clock" />
  <connection
    kind="reset"
    version="16.1"

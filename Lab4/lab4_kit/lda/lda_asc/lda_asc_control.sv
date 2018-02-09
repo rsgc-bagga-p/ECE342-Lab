@@ -1,4 +1,5 @@
 module lda_asc_control
+import lda_reg_pkg::*;
 (
   input i_clk,
   input i_reset,
@@ -6,7 +7,7 @@ module lda_asc_control
   input   [31:0]    i_address,
   input             i_read,
   input             i_write,
-  output            i_done,
+  input             i_done,
 
   input             i_mode,
 
@@ -14,13 +15,12 @@ module lda_asc_control
   output  logic     o_waitrequest,
 
   output  logic     o_status,
+  output  lda_reg_t o_rd_sel,
   output  logic     o_mode_ld,
   output  logic     o_sp_ld,
   output  logic     o_ep_ld,
   output  logic     o_col_ld
 );
-
-  import lda_reg_pkg::*;
 
   lda_reg_t reg_en;
 
@@ -43,6 +43,7 @@ module lda_asc_control
     o_start = 1'd0;
     o_status = 1'd0;
     o_waitrequest = 1'd0;
+	 nextstate = state;
 
     case (state)
       S_WAIT: begin
@@ -67,7 +68,8 @@ module lda_asc_control
     o_sp_ld     = 1'd0;
     o_ep_ld     = 1'd0;
     o_col_ld    = 1'd0;
-    rd_sel      = NONE;
+    o_rd_sel    = NONE;
+	 reg_en      = NONE;
 
     // decode address
     if(i_address >= 32'h0001_1020 && i_address < 32'h0001_1024)
@@ -88,13 +90,14 @@ module lda_asc_control
     // basic read and write
     if(reg_en != NONE) begin
       if(i_read)
-        rd_sel = reg_en;
+        o_rd_sel = reg_en;
       if(i_write) begin
         case (reg_en)
           MODE:     o_mode_ld   = 1'd1;
           START_P:  o_sp_ld     = 1'd1;
           END_P:    o_ep_ld     = 1'd1;
           COLOR:    o_col_ld    = 1'd1;
+			 default:;
         endcase
       end
     end

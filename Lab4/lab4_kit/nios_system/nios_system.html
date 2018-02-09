@@ -67,7 +67,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
   </table>
   <table class="blueBar">
    <tr>
-    <td class="l">2018.02.07.14:02:04</td>
+    <td class="l">2018.02.09.15:09:39</td>
     <td class="r">Datasheet</td>
    </tr>
   </table>
@@ -95,7 +95,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
      </a> altera_avalon_pio 16.1
      <br/>&#160;&#160;
      <a href="#module_lda_avalon_interface"><b>lda_avalon_interface</b>
-     </a> lda_avalon_interface 1.1
+     </a> lda_avalon_interface 2.0
      <br/>&#160;&#160;
      <a href="#module_nios2_processor"><b>nios2_processor</b>
      </a> altera_nios2_qsys 16.1
@@ -143,7 +143,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
     <td class="empty"></td>
    </tr>
    <tr>
-    <td class="slaveb">lda_avalon_slave&#160;</td>
+    <td class="slaveb">s1&#160;</td>
     <td class="addr"><span style="color:#989898">0x</span>00011020</td>
     <td class="empty"></td>
    </tr>
@@ -441,7 +441,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
   <a name="module_lda_avalon_interface"> </a>
   <div>
    <hr/>
-   <h2>lda_avalon_interface</h2>lda_avalon_interface v1.1
+   <h2>lda_avalon_interface</h2>lda_avalon_interface v2.0
    <br/>
    <div class="greydiv">
     <table class="connectionboxes">
@@ -453,7 +453,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
       <td class="main" rowspan="9">lda_avalon_interface</td>
      </tr>
      <tr>
-      <td class="to">&#160;&#160;lda_avalon_slave</td>
+      <td class="to">&#160;&#160;s1</td>
      </tr>
      <tr>
       <td class="from">jtag_debug_module_reset&#160;&#160;</td>
@@ -471,7 +471,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
       <td class="from">clk&#160;&#160;</td>
      </tr>
      <tr>
-      <td class="to">&#160;&#160;clk</td>
+      <td class="to">&#160;&#160;clock</td>
      </tr>
      <tr>
       <td class="from">clk_reset&#160;&#160;</td>
@@ -529,32 +529,6 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
      </tr>
      <tr>
       <td class="to">&#160;&#160;reset_n</td>
-     </tr>
-     <tr>
-      <td></td>
-      <td></td>
-      <td class="from">data_master&#160;&#160;</td>
-      <td class="neighbor" rowspan="4">
-       <a href="#module_lda_avalon_interface">lda_avalon_interface</a>
-      </td>
-     </tr>
-     <tr>
-      <td></td>
-      <td></td>
-      <td class="to">&#160;&#160;lda_avalon_slave</td>
-     </tr>
-     <tr>
-      <td></td>
-      <td></td>
-      <td class="from">jtag_debug_module_reset&#160;&#160;</td>
-     </tr>
-     <tr>
-      <td></td>
-      <td></td>
-      <td class="to">&#160;&#160;reset</td>
-     </tr>
-     <tr style="height:6px">
-      <td></td>
      </tr>
      <tr>
       <td></td>
@@ -624,6 +598,32 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
       <td class="from">data_master&#160;&#160;</td>
       <td class="neighbor" rowspan="4">
        <a href="#module_LEDs">LEDs</a>
+      </td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="to">&#160;&#160;s1</td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="from">jtag_debug_module_reset&#160;&#160;</td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="to">&#160;&#160;reset</td>
+     </tr>
+     <tr style="height:6px">
+      <td></td>
+     </tr>
+     <tr>
+      <td></td>
+      <td></td>
+      <td class="from">data_master&#160;&#160;</td>
+      <td class="neighbor" rowspan="4">
+       <a href="#module_lda_avalon_interface">lda_avalon_interface</a>
       </td>
      </tr>
      <tr>
@@ -1132,7 +1132,7 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
        </tr>
        <tr>
         <td class="parametername">dataSlaveMapParam</td>
-        <td class="parametervalue">&lt;address-map&gt;&lt;slave name='onchip_memory.s1' start='0x0' end='0x10000' /&gt;&lt;slave name='nios2_processor.jtag_debug_module' start='0x10800' end='0x11000' /&gt;&lt;slave name='switches.s1' start='0x11000' end='0x11010' /&gt;&lt;slave name='LEDs.s1' start='0x11010' end='0x11020' /&gt;&lt;slave name='lda_avalon_interface.lda_avalon_slave' start='0x11020' end='0x11040' /&gt;&lt;/address-map&gt;</td>
+        <td class="parametervalue">&lt;address-map&gt;&lt;slave name='onchip_memory.s1' start='0x0' end='0x10000' /&gt;&lt;slave name='nios2_processor.jtag_debug_module' start='0x10800' end='0x11000' /&gt;&lt;slave name='switches.s1' start='0x11000' end='0x11010' /&gt;&lt;slave name='LEDs.s1' start='0x11010' end='0x11020' /&gt;&lt;slave name='lda_avalon_interface.s1' start='0x11020' end='0x11040' /&gt;&lt;/address-map&gt;</td>
        </tr>
        <tr>
         <td class="parametername">clockFrequency</td>
@@ -1780,8 +1780,8 @@ div.greydiv { vertical-align:top ; text-align:center ; background:#eeeeee ; bord
   </div>
   <table class="blueBar">
    <tr>
-    <td class="l">generation took 0.00 seconds</td>
-    <td class="r">rendering took 0.02 seconds</td>
+    <td class="l">generation took 0.01 seconds</td>
+    <td class="r">rendering took 0.07 seconds</td>
    </tr>
   </table>
  </body>
