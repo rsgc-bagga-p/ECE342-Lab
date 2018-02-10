@@ -4,13 +4,15 @@ module lda_avalon_interface
   input reset,
 
   // Memory-Map Interface
-  input   [2:0]    avs_s1_address,
+  input   [2:0]     avs_s1_address,
   input             avs_s1_read,
   input             avs_s1_write,
   output  [31:0]    avs_s1_readdata,
   input   [31:0]    avs_s1_writedata,
   output            avs_s1_waitrequest,
 
+/*
+  // Comment this section out for simulation
   // Conduit Interface
   output  [7:0]     coe_VGA_R_export,
   output  [7:0]     coe_VGA_G_export,
@@ -20,6 +22,15 @@ module lda_avalon_interface
   output            coe_VGA_SYNC_N_export,
   output            coe_VGA_BLANK_N_export,
   output            coe_VGA_CLK_export
+*/
+
+  // Simulation only
+  // synthesis translate_off
+  output [8:0] o_vga_x,
+  output [7:0] o_vga_y,
+  output [2:0] o_vga_color,
+  output o_vga_plot
+  // synthesis translate_on
 );
 
   logic [8:0] lda_x0;
@@ -33,6 +44,14 @@ module lda_avalon_interface
   logic vga_y;
   logic vga_color;
   logic vga_plot;
+
+  // Simulation only
+  // synthesis translate_off
+  assign o_vga_x = vga_x;
+  assign o_vga_y = vga_y;
+  assign o_vga_color = vga_color;
+  assign o_vga_plot = vga_plot;
+  // synthesis translate_on
 
   lda_avalon_slave_controller m_lda_avalon_salve_controller (
     .i_clk         (clk),
@@ -72,6 +91,7 @@ module lda_avalon_interface
     .o_plot        (vga_plot)
   );
 
+/*
   vga_adapter #(
     .BITS_PER_CHANNEL(1)
   ) m_vga_adapter (
@@ -89,5 +109,6 @@ module lda_avalon_interface
     .color         (vga_color),
     .plot          (vga_plot)
   );
+*/
 
 endmodule

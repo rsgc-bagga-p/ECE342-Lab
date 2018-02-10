@@ -49,15 +49,15 @@ import lda_asc_pkg::*;
       S_WAIT: begin
         if (i_write && reg_en == GO) begin
           o_start = 1'd1;
-          if (i_mode)
-            o_status = 1'd1;
-          else
-            o_waitrequest = 1'd1;
+          if (i_mode) o_status = 1'd1;
+          else o_waitrequest = 1'd1;
           nextstate = S_RUN;
         end
       end
       S_RUN: begin
-        if(i_done) nextstate = S_WAIT;
+        if (i_mode) o_status = 1'd1;
+        else o_waitrequest = 1'd1;
+        if (i_done) nextstate = S_WAIT;
       end
     endcase
   end : state_table
@@ -83,9 +83,8 @@ import lda_asc_pkg::*;
     endcase
 
     // basic read and write
-    if(i_read)
-      o_rd_sel = reg_en;
-    if(i_write) begin
+    if (i_read) o_rd_sel = reg_en;
+    if (i_write) begin
       case (reg_en)
         MODE:     o_mode_ld   = 1'd1;
         START_P:  o_sp_ld     = 1'd1;

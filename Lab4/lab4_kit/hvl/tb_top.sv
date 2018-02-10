@@ -9,15 +9,13 @@ module tb_top();
     if (UNIT == "asc")
       tb_asc m_tb_asc();
 
-    if (UNIT == "lda")
-      tb_lda m_tb_lda();
+    if (UNIT == "avl")
+      tb_avlintf m_tb_avlintf();
 
   endgenerate
 
-  if (UNIT != "pass" || UNIT != "asc" || UNIT != "lda") begin
-      $info("No testbench selected");
-      $info("sim.do usage:");
-      $info("Modelsim> do sim.do [asc|lda]");
+  if (UNIT != "pass" || UNIT != "asc" || UNIT != "avl") begin
+      $info("No testbench selected\nsim.do usage:\nModelsim> do sim.do [asc|avl]");
   end
 
 endmodule
