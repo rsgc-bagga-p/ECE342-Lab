@@ -55,7 +55,7 @@ module nios_system (
 	wire  [31:0] mm_interconnect_0_leds_s1_writedata;                             // mm_interconnect_0:LEDs_s1_writedata -> LEDs:writedata
 	wire  [31:0] mm_interconnect_0_lda_avalon_interface_s1_readdata;              // lda_avalon_interface:avs_s1_readdata -> mm_interconnect_0:lda_avalon_interface_s1_readdata
 	wire         mm_interconnect_0_lda_avalon_interface_s1_waitrequest;           // lda_avalon_interface:avs_s1_waitrequest -> mm_interconnect_0:lda_avalon_interface_s1_waitrequest
-	wire  [31:0] mm_interconnect_0_lda_avalon_interface_s1_address;               // mm_interconnect_0:lda_avalon_interface_s1_address -> lda_avalon_interface:avs_s1_address
+	wire   [2:0] mm_interconnect_0_lda_avalon_interface_s1_address;               // mm_interconnect_0:lda_avalon_interface_s1_address -> lda_avalon_interface:avs_s1_address
 	wire         mm_interconnect_0_lda_avalon_interface_s1_read;                  // mm_interconnect_0:lda_avalon_interface_s1_read -> lda_avalon_interface:avs_s1_read
 	wire         mm_interconnect_0_lda_avalon_interface_s1_write;                 // mm_interconnect_0:lda_avalon_interface_s1_write -> lda_avalon_interface:avs_s1_write
 	wire  [31:0] mm_interconnect_0_lda_avalon_interface_s1_writedata;             // mm_interconnect_0:lda_avalon_interface_s1_writedata -> lda_avalon_interface:avs_s1_writedata

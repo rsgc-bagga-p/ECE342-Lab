@@ -4,7 +4,7 @@ module lda_avalon_interface
   input reset,
 
   // Memory-Map Interface
-  input   [31:0]    avs_s1_address,
+  input   [2:0]    avs_s1_address,
   input             avs_s1_read,
   input             avs_s1_write,
   output  [31:0]    avs_s1_readdata,

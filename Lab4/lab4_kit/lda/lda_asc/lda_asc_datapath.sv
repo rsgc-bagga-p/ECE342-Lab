@@ -1,5 +1,5 @@
 module lda_asc_datapath
-import lda_reg_pkg::*;
+import lda_asc_pkg::*;
 (
   input i_clk,
   input i_reset,

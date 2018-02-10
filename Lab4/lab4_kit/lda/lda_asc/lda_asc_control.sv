@@ -1,10 +1,10 @@
 module lda_asc_control
-import lda_reg_pkg::*;
+import lda_asc_pkg::*;
 (
   input i_clk,
   input i_reset,
 
-  input   [31:0]    i_address,
+  input   [2:0]     i_address,
   input             i_read,
   input             i_write,
   input             i_done,
@@ -34,8 +34,8 @@ import lda_reg_pkg::*;
 
   // State regs
   always_ff @ (posedge i_clk or posedge i_reset) begin
-  	if (i_reset) state <= S_WAIT;
-  	else state <= nextstate;
+    if (i_reset) state <= S_WAIT;
+    else state <= nextstate;
   end
 
   // State table
@@ -43,7 +43,7 @@ import lda_reg_pkg::*;
     o_start = 1'd0;
     o_status = 1'd0;
     o_waitrequest = 1'd0;
-	 nextstate = state;
+    nextstate = state;
 
     case (state)
       S_WAIT: begin
@@ -69,37 +69,30 @@ import lda_reg_pkg::*;
     o_ep_ld     = 1'd0;
     o_col_ld    = 1'd0;
     o_rd_sel    = NONE;
-	 reg_en      = NONE;
+    reg_en      = NONE;
 
     // decode address
-    if(i_address >= 32'h0001_1020 && i_address < 32'h0001_1024)
-      reg_en = MODE;
-    if(i_address >= 32'h0001_1024 && i_address < 32'h0001_1028)
-      reg_en = STATUS;
-    if(i_address >= 32'h0001_1028 && i_address < 32'h0001_102C)
-      reg_en = GO;
-    if(i_address >= 32'h0001_102C && i_address < 32'h0001_1030)
-      reg_en = START_P;
-    if(i_address >= 32'h0001_1030 && i_address < 32'h0001_1034)
-      reg_en = END_P;
-    if(i_address >= 32'h0001_1034 && i_address < 32'h0001_1038)
-      reg_en = COLOR;
-    if(i_address >= 32'h0001_1038 || i_address < 32'h0001_1024)
-      reg_en = NONE;
+    case (i_address)
+      3'b000:  reg_en = MODE;
+      3'b001:  reg_en = STATUS;
+      3'b010:  reg_en = GO;
+      3'b011:  reg_en = START_P;
+      3'b100:  reg_en = END_P;
+      3'b101:  reg_en = COLOR;
+      default: reg_en = NONE;
+    endcase
 
     // basic read and write
-    if(reg_en != NONE) begin
-      if(i_read)
-        o_rd_sel = reg_en;
-      if(i_write) begin
-        case (reg_en)
-          MODE:     o_mode_ld   = 1'd1;
-          START_P:  o_sp_ld     = 1'd1;
-          END_P:    o_ep_ld     = 1'd1;
-          COLOR:    o_col_ld    = 1'd1;
-			 default:;
-        endcase
-      end
+    if(i_read)
+      o_rd_sel = reg_en;
+    if(i_write) begin
+      case (reg_en)
+        MODE:     o_mode_ld   = 1'd1;
+        START_P:  o_sp_ld     = 1'd1;
+        END_P:    o_ep_ld     = 1'd1;
+        COLOR:    o_col_ld    = 1'd1;
+        default:  /* do nothing */  ;
+      endcase
     end
   end : other_logic
 

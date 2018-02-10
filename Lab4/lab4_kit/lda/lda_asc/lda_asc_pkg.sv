@@ -1,4 +1,4 @@
-package lda_reg_pkg;
+package lda_asc_pkg;
 
   typedef enum
   {

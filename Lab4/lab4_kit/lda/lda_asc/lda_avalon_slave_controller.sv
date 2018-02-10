@@ -1,11 +1,11 @@
 module lda_avalon_slave_controller
-import lda_reg_pkg::*;
+import lda_asc_pkg::*;
 (
   input i_clk,
   input i_reset,
 
   // Avalon Interconnect Signals
-  input   [31:0]    i_address,
+  input   [2:0]     i_address,
   input             i_read,
   input             i_write,
   output  [31:0]    o_readdata,

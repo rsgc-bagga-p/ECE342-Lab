@@ -48,6 +48,11 @@ set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 256
 set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
+set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
+set_global_assignment -name SYSTEMVERILOG_FILE lda_asc/lda_asc_pkg.sv
 set_global_assignment -name SYSTEMVERILOG_FILE common/simple_alu.sv
 set_global_assignment -name SYSTEMVERILOG_FILE common/hex_decoder.sv
 set_global_assignment -name SYSTEMVERILOG_FILE common/comparator.sv
@@ -56,7 +61,6 @@ set_global_assignment -name SYSTEMVERILOG_FILE vga/vga_output.sv
 set_global_assignment -name SYSTEMVERILOG_FILE vga/vga_memory.sv
 set_global_assignment -name SYSTEMVERILOG_FILE vga/vga_input.sv
 set_global_assignment -name SYSTEMVERILOG_FILE vga/vga_adapter.sv
-set_global_assignment -name SYSTEMVERILOG_FILE lda_asc/lda_reg_pkg.sv
 set_global_assignment -name SYSTEMVERILOG_FILE lda_asc/lda_avalon_slave_controller.sv
 set_global_assignment -name SYSTEMVERILOG_FILE lda_asc/lda_avalon_interface.sv
 set_global_assignment -name SYSTEMVERILOG_FILE lda_asc/lda_asc_datapath.sv
@@ -64,8 +68,4 @@ set_global_assignment -name SYSTEMVERILOG_FILE lda_asc/lda_asc_control.sv
 set_global_assignment -name SYSTEMVERILOG_FILE lda/line_drawing_algorithm.sv
 set_global_assignment -name SYSTEMVERILOG_FILE lda/lda_datapath.sv
 set_global_assignment -name SYSTEMVERILOG_FILE lda/lda_control.sv
-set_global_assignment -name MIN_CORE_JUNCTION_TEMP 0
-set_global_assignment -name MAX_CORE_JUNCTION_TEMP 85
-set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
-set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
