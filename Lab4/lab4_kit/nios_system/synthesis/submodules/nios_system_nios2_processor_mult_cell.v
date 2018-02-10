@@ -36,11 +36,10 @@ module nios_system_nios2_processor_mult_cell (
   input            clk;
   input            reset_n;
 
-
-wire    [ 31: 0] M_mul_cell_result;
-wire    [ 31: 0] M_mul_cell_result_part_1;
-wire    [ 15: 0] M_mul_cell_result_part_2;
-wire             mul_clr;
+  wire    [ 31: 0] M_mul_cell_result;
+  wire    [ 31: 0] M_mul_cell_result_part_1;
+  wire    [ 15: 0] M_mul_cell_result_part_2;
+  wire             mul_clr;
   assign mul_clr = ~reset_n;
   altera_mult_add the_altmult_add_part_1
     (
