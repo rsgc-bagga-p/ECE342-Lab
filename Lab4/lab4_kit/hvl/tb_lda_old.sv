@@ -79,9 +79,9 @@ module tb_lda_old();
     @(posedge clk);
     start = 1'b0;
     @(posedge dut_done);
-    m_vga_bmp.write_bmp();
+    //m_vga_bmp.write_bmp();
 
-/*
+
 
     // (335,209) to (335,0)
     // vertical
@@ -96,7 +96,7 @@ module tb_lda_old();
     @(posedge clk);
     start = 1'b0;
     @(posedge dut_done);
-    m_vga_bmp.write_bmp();
+    //m_vga_bmp.write_bmp();
 
     // (335,0) to (0,209)
     // !steep x0 > x1
@@ -111,7 +111,7 @@ module tb_lda_old();
     @(posedge clk);
     start = 1'b0;
     @(posedge dut_done);
-    m_vga_bmp.write_bmp();
+    //m_vga_bmp.write_bmp();
 
     // (0,209) to (168,0)
     // steep x1 > x0
@@ -126,7 +126,7 @@ module tb_lda_old();
     @(posedge clk);
     start = 1'b0;
     @(posedge dut_done);
-    m_vga_bmp.write_bmp();
+    //m_vga_bmp.write_bmp();
 
     // (168,0) to (168,209)
     // vertical
@@ -141,7 +141,7 @@ module tb_lda_old();
     @(posedge clk);
     start = 1'b0;
     @(posedge dut_done);
-    m_vga_bmp.write_bmp();
+    //m_vga_bmp.write_bmp();
 
     // (168,209) to (0,30)
     // steep x0 > x1
@@ -156,7 +156,7 @@ module tb_lda_old();
     @(posedge clk);
     start = 1'b0;
     @(posedge dut_done);
-    m_vga_bmp.write_bmp();
+    //m_vga_bmp.write_bmp();
 
     // (0,30) to (335,30)
     // horizontal
@@ -173,7 +173,7 @@ module tb_lda_old();
     @(posedge dut_done);
     m_vga_bmp.write_bmp();
 
-*/
+
 
     // finish
     $display("All cases passed!");

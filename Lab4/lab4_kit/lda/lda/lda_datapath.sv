@@ -38,6 +38,7 @@ logic [9:0] xstep;
 logic [9:0] error;
 logic [9:0] x;
 logic [9:0] y;
+logic [2:0] color;
 
 /*logic [3:0][9:0] alu_a;
 logic [3:0][9:0] alu_b;
@@ -85,7 +86,7 @@ assign o_keep_drawing = x0_gt_x1 ? (x > endpoint) : (x < endpoint);
 
 assign o_x = steep ? y[8:0] : x[8:0];
 assign o_y = steep ? x[7:0] : y[7:0];
-assign o_color = i_color;
+assign o_color = color;
 
 /*always_comb begin
   // Comparators
@@ -194,22 +195,22 @@ end*/
 
 logic y1_gt_y0;
 logic x1_gt_x0;
-logic w_dx;
-logic w_dy;
-logic w_steep;
+logic [9:0] tmp_dx;
+logic [9:0] tmp_dy;
+logic tmp_steep;
 always_comb begin
   y1_gt_y0 = (i_y1 > i_y0);
   x1_gt_x0 = (i_x1 > i_x0);
-  w_dy = y1_gt_y0 ? i_y1 - i_y0 : i_y0 - i_y1;
-  w_dx = x1_gt_x0 ? i_x1 - i_x0 : i_x0 - i_x1;
-  w_steep = (w_dy > w_dx);
+  tmp_dy = y1_gt_y0 ? i_y1 - i_y0 : i_y0 - i_y1;
+  tmp_dx = x1_gt_x0 ? i_x1 - i_x0 : i_x0 - i_x1;
+  tmp_steep = (tmp_dy > tmp_dx);
 end
 
 logic error_lt_0;
 assign error_lt_0 = $signed(error - dy) < $signed(0);
 
 always_ff @ (posedge i_clk or posedge i_reset) begin
-  // steep, dx, dy, x0_gt_x1, xstep, ystep
+  // steep, dx, dy, x0_gt_x1, xstep, ystep, endpoint, color
   if (i_reset) begin
     steep <= 0;
     dx <= 0;
@@ -218,6 +219,7 @@ always_ff @ (posedge i_clk or posedge i_reset) begin
     ystep <= 0;
     xstep <= 0;
     endpoint <= 0;
+    color <= 0;
   end
   else if (i_ld_initial) begin
     /*steep <= cmp_gt[2];
@@ -226,13 +228,14 @@ always_ff @ (posedge i_clk or posedge i_reset) begin
     x0_gt_x1 <= cmp_gt[2] ? ~cmp_gt[0] : ~cmp_gt[1];
     ystep <= (cmp_gt[2] ? cmp_gt[1] : cmp_gt[0]) ? 10'd1 : -10'd1;
     xstep <= (cmp_gt[2] ? cmp_gt[0] : cmp_gt[1]) ? 10'd1 : -10'd1;*/
-    steep <= w_steep;
-    dx <= w_steep ? w_dy : w_dx;
-    dy <= w_steep ? w_dx : w_dy;
-    x0_gt_x1 <= w_steep ? (i_y0 > i_y1) : (i_x0 > i_x1);
-    xstep <= (w_steep ? y1_gt_y0 : x1_gt_x0) ? 10'd1 : -10'd1;
-    ystep <= (w_steep ? x1_gt_x0 : y1_gt_y0) ? 10'd1 : -10'd1;
-    endpoint <= w_steep ? i_y1 : i_x1;
+    steep <= tmp_steep;
+    dx <= tmp_steep ? tmp_dy : tmp_dx;
+    dy <= tmp_steep ? tmp_dx : tmp_dy;
+    x0_gt_x1 <= tmp_steep ? (i_y0 > i_y1) : (i_x0 > i_x1);
+    xstep <= (tmp_steep ? y1_gt_y0 : x1_gt_x0) ? 10'd1 : -10'd1;
+    ystep <= (tmp_steep ? x1_gt_x0 : y1_gt_y0) ? 10'd1 : -10'd1;
+    endpoint <= tmp_steep ? i_y1 : i_x1;
+    color <= i_color;
   end
   
   // error
@@ -241,7 +244,7 @@ always_ff @ (posedge i_clk or posedge i_reset) begin
   end
   else if (i_ld_initial) begin
     //error <= (cmp_gt[2] ? alu_out[0] : alu_out[1]) >> 1;
-    error <= (w_steep ? w_dy : w_dx) >> 1;
+    error <= (tmp_steep ? tmp_dy : tmp_dx) >> 1;
   end
   else if (i_update_error) begin
     // signed: error - dy < 0
@@ -256,7 +259,7 @@ always_ff @ (posedge i_clk or posedge i_reset) begin
   end
   else if (i_ld_initial) begin
     //y <= cmp_gt[2] ? i_x0 : i_y0;
-    y <= w_steep ? i_x0 : i_y0;
+    y <= tmp_steep ? i_x0 : i_y0;
   end
   else if (i_update_y) begin
     //y <= cmp_lt[0] ? alu_out[2] : y;
@@ -269,7 +272,7 @@ always_ff @ (posedge i_clk or posedge i_reset) begin
   end
   else if (i_ld_initial) begin
     //x <= cmp_gt[2] ? i_y0 : i_x0;
-    x <= w_steep ? i_y0 : i_x0;
+    x <= tmp_steep ? i_y0 : i_x0;
   end
   else if (i_update_x) begin
     //x <= alu_out[3];
