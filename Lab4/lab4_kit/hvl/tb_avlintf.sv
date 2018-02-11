@@ -256,9 +256,12 @@ module tb_avlintf();
     write_field(GO, {'0,1'b1});
 
     check_all(readdata,
-      {'0,1'b0}, {'0,1'b0}, {'0}, {'0,y0,x0}, {'0,y1,x1},
+      {'0,1'b0}, {'0,1'b1}, {'0}, {'0,y0,x0}, {'0,y1,x1},
       {'0,color}, {'0}, {'0}
     );
+
+    // wait until lda finishes (as proxy for waitrequest going low)
+    poll_status();
 
     // write to bmp
     m_vga_bmp.write_bmp();
