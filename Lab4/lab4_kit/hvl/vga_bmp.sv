@@ -24,7 +24,7 @@ task write_bmp();
 	bit [0:13][7:0] bmpfileheader;
 	bit [0:39][7:0] bmpinfoheader;
 
-	fp = $fopen("../vga.bmp", "wb");
+	fp = $fopen("vga.bmp", "wb");
 
 	bmpfileheader = '0;
 	bmpfileheader[0:1] = {"B","M"};

@@ -50,13 +50,19 @@ import lda_asc_pkg::*;
         if (i_write && reg_en == GO) begin
           o_start = 1'd1;
           if (i_mode) o_status = 1'd1;
-          else o_waitrequest = 1'd1;
+          else begin
+            o_waitrequest = 1'd1;
+            o_status = 1'd1;
+          end
           nextstate = S_RUN;
         end
       end
       S_RUN: begin
         if (i_mode) o_status = 1'd1;
-        else o_waitrequest = 1'd1;
+        else begin
+          o_waitrequest = 1'd1;
+          o_status = 1'd1;
+        end
         if (i_done) nextstate = S_WAIT;
       end
     endcase

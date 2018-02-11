@@ -205,6 +205,13 @@ module tb_avlintf();
     // set color
     color = 3'b101;
     write_field(COLOR, {'0,color});
+
+    // check matching expected values
+    check_all(readdata,
+      {'0,1'b1}, {'0,1'b0}, {'0}, {'0,y0,x0}, {'0,y1,x1},
+      {'0,color}, {'0}, {'0}
+    );
+
     // go
     write_field(GO, {'0,1'b1});
 
@@ -236,6 +243,9 @@ module tb_avlintf();
     // wait until lda finishes
     poll_status();
 
+    // write to bmp
+    m_vga_bmp.write_bmp();
+
     // check matching expected values
     check_all(readdata,
       {'0,1'b0}, {'0,1'b0}, {'0}, {'0,y0,x0}, {'0,y1,x1},
@@ -249,6 +259,9 @@ module tb_avlintf();
       {'0,1'b0}, {'0,1'b0}, {'0}, {'0,y0,x0}, {'0,y1,x1},
       {'0,color}, {'0}, {'0}
     );
+
+    // write to bmp
+    m_vga_bmp.write_bmp();
 
     // finish
     $display("All cases passed!");
