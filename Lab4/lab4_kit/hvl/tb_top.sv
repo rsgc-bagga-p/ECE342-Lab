@@ -12,9 +12,12 @@ module tb_top();
     if (UNIT == "lda")
       tb_lda m_tb_lda();
 
+    if (UNIT == "old")
+      tb_lda_old m_tb_lda_old();
+
   endgenerate
 
-  if (UNIT != "pass" || UNIT != "asc" || UNIT != "lda") begin
+  if (UNIT != "pass" || UNIT != "asc" || UNIT != "lda" || UNIT != "old") begin
       $info("No testbench selected");
       $info("sim.do usage:");
       $info("Modelsim> do sim.do [asc|lda]");
