@@ -12,31 +12,31 @@
 
 #include <math.h>
 
-enum lda_reg {MODE = 0, STATUS, GO, START, END, COLOUR};
+#define SWITCH (volatile int *)0x00011000
+#define LED (volatile int *)0x00011010
+#define LDA (volatile int *)0x00011020
+
+enum LDA_reg {MODE = 0, STATUS, GO, START, END, COLOUR};
 
 void unmerge_coord(int coord, int *x, int *y);
 int merge_coord(int x, int y);
 
 int main() {
-	volatile int * switches = (int *)0x00011000;
-	volatile int * led = (int *)0x00011010;
-	volatile int * lda = (int *)0x00011020;
-
 	int angle_factor = 0;
 
-	*(lda + START) = merge_coord(158, 104);
-	*(lda + END) = merge_coord(178, 104);
+	*(LDA + START) = merge_coord(158, 104);
+	*(LDA + END) = merge_coord(178, 104);
 
 	while (1) {
 		int x0, y0, x1, y1;
-		unmerge_coord(*(lda + START), &x0, &y0);
-		unmerge_coord(*(lda + END), &x1, &y1);
+		unmerge_coord(*(LDA + START), &x0, &y0);
+		unmerge_coord(*(LDA + END), &x1, &y1);
 
 		// Check movement type
-		if (*switches & 0x04) {
+		if (*SWITCH & 0x04) {
 			// Rotate
 			// Check direction
-			if (*switches & 0x08) angle_factor++;
+			if (*SWITCH & 0x08) angle_factor++;
 			else angle_factor--;
 
 			x1 = 20 * cos(2 * M_PI / 60 * angle_factor) + x0;
@@ -45,56 +45,68 @@ int main() {
 		else {
 			// Translate
 			// Check direction
-			if (*switches & 0x02) {
-				if (y0 > 0) {
+			if (*SWITCH & 0x02) {
+				if (y0 > 0 && y1 > 0) {
 					y0--;
 					y1--;
+				}
+				else if (y0 > y1) {
+					y1 = 209 - (y0 - y1);
+					y0 = 209;
+				}
+				else if (y1 > y0) {
+					y0 = 209 - (y1 - y0);
+					y1 = 209;
 				}
 				else {
 					y0 = 209;
 					y1 = 209;
-					x0 = 158;
-					x1 = 178;
 				}
 			}
 			else {
-				if (y0 < 209) {
+				if (y0 < 209 && y1 < 209) {
 					y0++;
 					y1++;
+				}
+				else if (y0 > y1) {
+					y0 = 0 + (y0 - y1);
+					y1 = 0;
+				}
+				else if (y1 > y0) {
+					y1 = 0 + (y1 - y0);
+					y0 = 0;
 				}
 				else {
 					y0 = 0;
 					y1 = 0;
-					x0 = 158;
-					x1 = 178;
 				}
 			}
 		}
 		
-		*lda = *switches; // Set mode
-		*(lda + START) = merge_coord(x0, y0); // Start point
-		*(lda + END) = merge_coord(x1, y1); // End point
-		*(lda + COLOUR) = *switches >> 7; // Set colour
+		*LDA = *SWITCH; // Set mode
+		*(LDA + START) = merge_coord(x0, y0); // Start point
+		*(LDA + END) = merge_coord(x1, y1); // End point
+		*(LDA + COLOUR) = *SWITCH >> 7; // Set colour
 		
 		// If mode = 1 (poll), loop until status = 0
-		if (*lda & 0x01)
-			while (*(lda + STATUS) & 0x01);
+		if (*LDA & 0x01)
+			while (*(LDA + STATUS) & 0x01);
 		
-		*(lda + GO) = 1; // Start drawing
+		*(LDA + GO) = 1; // Start drawing
 
 		// Wait 1/30th of a second
 		// (50M cycles)/(7 cycles per loop)/30 = 238095 loops
 		for (int i = 0; i < 238095; i++);
 		
-		*(lda + START) = merge_coord(x0, y0); // Start point
-		*(lda + END) = merge_coord(x1, y1); // End point
-		*(lda + COLOUR) = 0; // Set colour black
+		*(LDA + START) = merge_coord(x0, y0); // Start point
+		*(LDA + END) = merge_coord(x1, y1); // End point
+		*(LDA + COLOUR) = 0; // Set colour black
 		
 		// If mode = 1 (poll), loop until status = 0
-		if (*lda & 0x01)
-			while (*(lda + STATUS) & 0x01);
+		if (*LDA & 0x01)
+			while (*(LDA + STATUS) & 0x01);
 		
-		*(lda + GO) = 1; // Erase line
+		*(LDA + GO) = 1; // Erase line
 	}
   
   return 0;

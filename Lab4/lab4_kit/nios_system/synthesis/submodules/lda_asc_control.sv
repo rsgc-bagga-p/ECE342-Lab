@@ -23,16 +23,16 @@ import lda_asc_pkg::*;
 );
 
   lda_reg_t reg_en;
-  lda_reg_t old_en;
-  logic old_write;
+  //lda_reg_t old_en;
+  //logic old_write;
 
   // States
   enum int unsigned
   {
     // intial state
     S_WAIT,
-    S_RUN
-    //S_PAUSE
+    S_RUN,
+    S_PAUSE
   } state, nextstate;
 
   // State regs
@@ -40,14 +40,14 @@ import lda_asc_pkg::*;
     if (i_reset) state <= S_WAIT;
     else state <= nextstate;
     
-    if (i_reset) begin
+    /*if (i_reset) begin
       old_en <= NONE;
       old_write <= 1'b0;
     end
     else begin
       old_en <= reg_en;
       old_write <= i_write;
-    end
+    end*/
   end
 
   // State table
@@ -59,8 +59,8 @@ import lda_asc_pkg::*;
 
     case (state)
       S_WAIT: begin
-        //if (i_write && reg_en == GO) begin
-        if (((old_write && old_en != GO) || !old_write) && (i_write && reg_en == GO)) begin
+        if (i_write && reg_en == GO) begin
+        //if (((old_write && old_en != GO) || !old_write) && (i_write && reg_en == GO)) begin
           o_start = 1'd1;
           if (i_mode) o_status = 1'd1;
           else begin
@@ -77,14 +77,14 @@ import lda_asc_pkg::*;
           o_status = 1'd1;
         end
         if (i_done) begin
-          nextstate = S_WAIT;
-          //if (i_mode) nextstate = S_WAIT;
-          //else nextstate = S_PAUSE;
+          //nextstate = S_WAIT;
+          if (i_mode) nextstate = S_WAIT;
+          else nextstate = S_PAUSE;
         end
       end
-      /*S_PAUSE: begin
+      S_PAUSE: begin
         nextstate = S_WAIT;
-      end*/
+      end
     endcase
   end : state_table
 
