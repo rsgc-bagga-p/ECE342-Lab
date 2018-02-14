@@ -3,8 +3,7 @@
 // LDA    0x0001_1020 - 0x0001_103f
 
 // SW[0]   Mode - 0/stall, 1/poll
-// SW[1]   Direction - Translation mode: 0/down, 1/up; Rotation mode: 0/CW. 1/CCW
-// SW[2]   Move type - 0/translation, 1/rotation
+// SW[1]   Direction - 0/down, 1/up
 // SW[9:7] Colour
 
 // VGA 335 x 209
@@ -31,54 +30,42 @@ int main() {
 		unmerge_coord(*(LDA + START), &x0, &y0);
 		unmerge_coord(*(LDA + END), &x1, &y1);
 
-		// Check movement type
-		if (*SWITCH & 0x04) {
-			// Rotate
-			// Check direction
-			if (*SWITCH & 0x02) angle_factor++;
-			else angle_factor--;
-
-			x1 = 20 * cos(2 * M_PI / 60 * angle_factor) + x0;
-			y1 = 20 * sin(2 * M_PI / 60 * angle_factor) + y0;
-		}
-		else {
-			// Translate
-			// Check direction
-			if (*SWITCH & 0x02) {
-				if (y0 > 0 && y1 > 0) {
-					y0--;
-					y1--;
-				}
-				else if (y0 > y1) {
-					y1 = 209 - (y0 - y1);
-					y0 = 209;
-				}
-				else if (y1 > y0) {
-					y0 = 209 - (y1 - y0);
-					y1 = 209;
-				}
-				else {
-					y0 = 209;
-					y1 = 209;
-				}
+		// Translate
+		// Check direction
+		if (*SWITCH & 0x02) {
+			if (y0 > 0 && y1 > 0) {
+				y0--;
+				y1--;
+			}
+			else if (y0 > y1) {
+				y1 = 209 - (y0 - y1);
+				y0 = 209;
+			}
+			else if (y1 > y0) {
+				y0 = 209 - (y1 - y0);
+				y1 = 209;
 			}
 			else {
-				if (y0 < 209 && y1 < 209) {
-					y0++;
-					y1++;
-				}
-				else if (y0 > y1) {
-					y0 = 0 + (y0 - y1);
-					y1 = 0;
-				}
-				else if (y1 > y0) {
-					y1 = 0 + (y1 - y0);
-					y0 = 0;
-				}
-				else {
-					y0 = 0;
-					y1 = 0;
-				}
+				y0 = 209;
+				y1 = 209;
+			}
+		}
+		else {
+			if (y0 < 209 && y1 < 209) {
+				y0++;
+				y1++;
+			}
+			else if (y0 > y1) {
+				y0 = 0 + (y0 - y1);
+				y1 = 0;
+			}
+			else if (y1 > y0) {
+				y1 = 0 + (y1 - y0);
+				y0 = 0;
+			}
+			else {
+				y0 = 0;
+				y1 = 0;
 			}
 		}
 		
