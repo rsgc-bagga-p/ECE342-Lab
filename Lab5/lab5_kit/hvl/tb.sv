@@ -1,7 +1,7 @@
 module tb();
 
 // Change this to use a different program!
-localparam HEX_FILE = "sum10.hex";
+localparam HEX_FILE = "software/sum10.hex";
 
 // Create a 100MHz clock
 logic clk;
@@ -27,7 +27,7 @@ logic [15:0] o_mem_wrdata;
 // Instantiate the processor and hook up signals.
 // Since the cpu's ports have the same names as the signals
 // in the testbench, we can use the .* shorthand to automatically match them up
-cpu dut(.*);
+cpu dut(.i_clk(clk), .i_reset(reset), .*);
 
 // Create a 64KB memory
 logic [15:0] mem [0:32767];
