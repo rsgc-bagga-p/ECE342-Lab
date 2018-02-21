@@ -1,7 +1,9 @@
-module tb();
+`timescale 1ns/1ns // Makes 100MHz
+
+module tb_cpu();
 
 // Change this to use a different program!
-localparam HEX_FILE = "sum10.hex";
+parameter HEX_FILE = "sum10.hex";
 
 // Create a 100MHz clock
 logic clk;
@@ -27,7 +29,11 @@ logic [15:0] o_mem_wrdata;
 // Instantiate the processor and hook up signals.
 // Since the cpu's ports have the same names as the signals
 // in the testbench, we can use the .* shorthand to automatically match them up
-cpu dut(.*);
+cpu dut (
+	.i_clk(clk),
+	.i_reset(reset),
+	.*
+);
 
 // Create a 64KB memory
 logic [15:0] mem [0:32767];
@@ -38,7 +44,7 @@ always_ff @ (posedge clk) begin
 	// rd enable is actually used.
 	if (o_mem_rd) i_mem_rddata <= mem[o_mem_addr[15:1]];
 	else i_mem_rddata <= 16'bx;
-	
+
 	// Write logic
 	if (o_mem_wr) mem[o_mem_addr[15:1]] <= o_mem_wrdata;
 end
@@ -62,7 +68,7 @@ always_ff @ (posedge clk) begin
 		int rd_addr;
 		string str;
 		int str_len;
-		
+
 		// Allocate a verilog string with 512 characters (we can't expand strings apparently).
 		// rd_addr points to the string to print out, and the CPU gave this to us
 		str = {512{" "}};
@@ -72,31 +78,31 @@ always_ff @ (posedge clk) begin
 		while (str_len < 512) begin
 			logic [15:0] rd_val;
 			rd_val = mem[rd_addr >> 1];
-			
+
 			if (rd_val == 16'hxxxx) begin
 				$display("Bad string result: got xxxx at address %h",
 					rd_addr);
 				$stop();
 			end
-			
+
 			// The lower 8 bits of the 16-bit word are an ASCII character to add to the string
 			str.putc(str_len, rd_val[7:0]);
-			
+
 			// Got null terminator, we're done
-			if (rd_val == 16'd0) 
+			if (rd_val == 16'd0)
 				break;
-			
+
 			// Advance memory read position (by 1 word) and string write position
 			rd_addr += 2;
 			str_len++;
 		end
-		
+
 		// Ran out of string room?
 		if (str_len == 512) begin
 			$display("Bad string result: no null terminator found after 512 chars");
 			$stop();
 		end
-		
+
 		// Got string, display it
 		$display("String result: %s", str.substr(0, str_len-1));
 		$stop();
