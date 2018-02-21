@@ -2,8 +2,7 @@ module cpu_control
 (
   input i_clk,
   input i_reset,
-  
-  input [15:0] i_mem_rddata,
+
   output o_mem_rd,
   output o_mem_wr,
   output [1:0] o_mem_addr_sel,
@@ -11,19 +10,19 @@ module cpu_control
   output o_pc_sel,
   output o_pc_ld,
   
-  input [15:0] i_ir,
+  input [4:0] i_ir,
   output o_ir_ld,
   
   output [2:0] o_rf_sel,
   output o_rf_write,
   output o_rf_addr_w_sel,
   
-  output o_alu_a_sel,
-  
   input i_alu_n,
   input i_alu_z,
   output o_alu_n_ld,
-  output o_alu_z_ld
+  output o_alu_z_ld,
+  output o_alu_a_sel,
+  output o_alu_op
 );
 
 // States
@@ -43,18 +42,24 @@ end
 // State table
 always_comb begin
 	nextstate = state;
+  
   o_mem_rd = 1'd0;
   o_mem_wr = 1'd0;
   o_mem_addr_sel = 2'd0;
+  
   o_pc_sel = 1'd0;
   o_pc_ld = 1'd0;
+  
   o_ir_ld = 1'd0;
+  
   o_rf_sel = 3'd0;
   o_rf_write = 1'd0;
   o_rf_addr_w_sel = 1'd0;
-  o_alu_a_sel = 1'd0;
+  
   o_alu_n_ld = 1'd0;
   o_alu_z_ld = 1'd0;
+  o_alu_a_sel = 1'd0;
+  o_alu_op = 1'd0;
   
   case (state)
     S_START: begin
@@ -65,57 +70,91 @@ always_comb begin
       o_ir_ld = 1'd1;
     end
     S_EXECUTE: begin
-      o_mem_rd = 1'd1;
-      o_pc_sel = 1'd0;
-      o_pc_ld = 1'd1;
-      o_ir_ld = 1'd1;
-      o_rf_sel = 3'd0;
-      o_rf_write = 1'd0;
-      o_rf_addr_w_sel = 1'd0;
-      o_alu_a_sel = 1'd0;
-      o_alu_n_ld = 1'd0;
-      o_alu_z_ld = 1'd0;
-      
-      case (i_ir[4:0])
-        5'b00000: begin
+      case (i_ir[3:0])
+        // mv, mvi
+        4'b0000: begin
+          o_mem_rd = 1'd1;
+          o_mem_wr = 1'd0;
+          o_mem_addr_sel = 2'd1;
+          
+          o_pc_sel = 1'd1;
+          o_pc_ld = 1'd1;
+          
+          o_ir_ld = 1'd1;
+          
+          //o_rf_sel = 3'd0;
+          o_rf_write = 1'd1;
+          o_rf_addr_w_sel = 1'd0;
+          
+          //o_alu_n_ld = 1'd0;
+          //o_alu_z_ld = 1'd0;
+          //o_alu_a_sel = 1'd0;
+          //o_alu_op = 1'd0;
+        
+          if (~i_ir[4]) begin
+            o_rf_sel = 3'd6;
+          end
+          else begin
+            o_rf_sel = 3'd0;
+          end
         end
-        5'b00001: begin
+        // add, addi
+        4'b0001: begin
+          if (~i_ir[4]) begin
+          end
+          else begin
+          end
         end
-        5'b00010: begin
+        // sub, subi
+        4'b0010: begin
+          if (~i_ir[4]) begin
+          end
+          else begin
+          end
         end
-        5'b00100: begin
+        // cmp, cmpi
+        4'b0011: begin
+          if (~i_ir[4]) begin
+          end
+          else begin
+          end
         end
-        5'b00101: begin
+        // ld
+        4'b0100: begin
         end
-        5'b10000: begin
+        // st
+        4'b0101: begin
         end
-        5'b10001: begin
+        // mvhi
+        4'b0110: begin
         end
-        5'b00000: begin
+        // jr, j
+        4'b1000: begin
+          if (~i_ir[4]) begin
+          end
+          else begin
+          end
         end
-        5'b00000: begin
+        // jzr, jz
+        4'b1001: begin
+          if (~i_ir[4]) begin
+          end
+          else begin
+          end
         end
-        5'b00000: begin
+        // jnr, jn
+        4'b1010: begin
+          if (~i_ir[4]) begin
+          end
+          else begin
+          end
         end
-        5'b00000: begin
-        end
-        5'b00000: begin
-        end
-        5'b00000: begin
-        end
-        5'b00000: begin
-        end
-        5'b00000: begin
-        end
-        5'b00000: begin
-        end
-        5'b00000: begin
-        end
-        5'b00000: begin
-        end
-        5'b00000: begin
-        end
-        5'b00000: begin
+        // callr, call
+        4'b1100: begin
+          if (~i_ir[4]) begin
+          end
+          else begin
+          end
         end
       endcase
       
