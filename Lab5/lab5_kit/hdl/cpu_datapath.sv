@@ -118,11 +118,12 @@ module cpu_datapath
   assign pc_out = pc + 2;
   assign jmp_pc = pc_out + (ir_imm11 << 1);
 
+  assign ir_in = i_mem_rddata;
   assign ir_imm8 = {{8{ir[15]}},ir[15:8]};
   assign ir_imm11 = {{5{ir[15]}},ir[15:5]};
   assign rf_addrx = ir[7:5];
   assign rf_addry = ir[10:8];
-  assign o_ir_instcode = ir[4:0];
+  assign o_ir_instrcode = ir[4:0];
 
   assign alu_op_a = rf_datax_out;
 
