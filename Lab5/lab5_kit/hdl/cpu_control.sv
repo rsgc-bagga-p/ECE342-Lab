@@ -3,26 +3,26 @@ module cpu_control
   input i_clk,
   input i_reset,
 
-  output o_mem_rd,
-  output o_mem_wr,
-  output [1:0] o_mem_addr_sel,
-  
-  output o_pc_sel,
-  output o_pc_ld,
-  
+  output logic o_mem_rd,
+  output logic o_mem_wr,
+  output logic [2:0] o_mem_addr_sel,
+
+  output logic [1:0] o_pc_sel,
+  output logic o_pc_ld,
+
   input [4:0] i_ir,
-  output o_ir_ld,
-  
-  output [2:0] o_rf_sel,
-  output o_rf_write,
-  output o_rf_addr_w_sel,
-  
+  output logic o_ir_ld,
+
+  output logic [2:0] o_rf_sel,
+  output logic o_rf_write,
+  output logic o_rf_addr_w_sel,
+
   input i_alu_n,
   input i_alu_z,
-  output o_alu_n_ld,
-  output o_alu_z_ld,
-  output o_alu_a_sel,
-  output o_alu_op
+  output logic o_alu_n_ld,
+  output logic o_alu_z_ld,
+  output logic o_alu_b_sel,
+  output logic o_alu_op
 );
 
 // States
@@ -42,25 +42,25 @@ end
 // State table
 always_comb begin
 	nextstate = state;
-  
+
   o_mem_rd = 1'd0;
   o_mem_wr = 1'd0;
   o_mem_addr_sel = 2'd0;
-  
+
   o_pc_sel = 1'd0;
   o_pc_ld = 1'd0;
-  
+
   o_ir_ld = 1'd0;
-  
+
   o_rf_sel = 3'd0;
   o_rf_write = 1'd0;
   o_rf_addr_w_sel = 1'd0;
-  
+
   o_alu_n_ld = 1'd0;
   o_alu_z_ld = 1'd0;
-  o_alu_a_sel = 1'd0;
+  o_alu_b_sel = 1'd0;
   o_alu_op = 1'd0;
-  
+
   case (state)
     S_START: begin
       nextstate = S_EXECUTE;
@@ -76,21 +76,21 @@ always_comb begin
           o_mem_rd = 1'd1;
           o_mem_wr = 1'd0;
           o_mem_addr_sel = 2'd1;
-          
+
           o_pc_sel = 1'd1;
           o_pc_ld = 1'd1;
-          
+
           o_ir_ld = 1'd1;
-          
+
           //o_rf_sel = 3'd0;
           o_rf_write = 1'd1;
           o_rf_addr_w_sel = 1'd0;
-          
+
           //o_alu_n_ld = 1'd0;
           //o_alu_z_ld = 1'd0;
-          //o_alu_a_sel = 1'd0;
+          //o_alu_b_sel = 1'd0;
           //o_alu_op = 1'd0;
-        
+
           if (~i_ir[4]) begin
             o_rf_sel = 3'd6;
           end
@@ -157,10 +157,10 @@ always_comb begin
           end
         end
       endcase
-      
+
     end
     S_MEM: begin
-      
+
     end
 	endcase
 end

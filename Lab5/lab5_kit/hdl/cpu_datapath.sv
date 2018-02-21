@@ -17,7 +17,7 @@ module cpu_datapath
 
   input        i_alu_n_ld,
   input        i_alu_z_ld,
-  input        i_alu_a_sel,
+  input        i_alu_b_sel,
   input        i_alu_op_sel,
 
   // Outputs to Control
@@ -124,6 +124,8 @@ module cpu_datapath
   assign rf_addry = ir[10:8];
   assign o_ir_instcode = ir[4:0];
 
+  assign alu_op_a = rf_datax_out;
+
   always_comb begin
 
     case (i_mem_addr_sel)
@@ -158,10 +160,10 @@ module cpu_datapath
       default: rf_data_in = {'0};
     endcase
 
-    case (i_alu_a_sel)
-      0: alu_op_a = ir_imm8;
-      1: alu_op_a = rf_datay_out;
-      default alu_op_a = {'0};
+    case (i_alu_b_sel)
+      0: alu_op_b = ir_imm8;
+      1: alu_op_b = rf_datay_out;
+      default alu_op_b = {'0};
     endcase
 
   end // always_comb
