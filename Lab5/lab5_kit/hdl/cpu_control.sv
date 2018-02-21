@@ -66,9 +66,10 @@ always_comb begin
     S_START: begin
       nextstate = S_EXECUTE;
       o_mem_rd = 1'd1;
+      o_mem_addr_sel = 3'd0;
       o_pc_sel = 2'd1;
-      o_pc_ld = 1'd1;
-      o_ir_ld = 1'd1;
+      o_pc_ld = 1'd0;
+      o_ir_ld = 1'd0;
     end
     
     S_EXECUTE: begin
