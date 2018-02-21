@@ -46,7 +46,6 @@ module cpu_datapath
   logic [15:0] ir_imm8;
   logic [15:0] ir_imm11;
 
-  logic        rf_write;
   logic [2:0]  rf_addrw;
   logic [2:0]  rf_addrx;
   logic [2:0]  rf_addry;
@@ -146,8 +145,8 @@ module cpu_datapath
     endcase
 
     case (i_rf_addrw_sel)
-      0: rf_addrw = rf_datax_out;
-      1: rf_addrw = rf_datay_out;
+      0: rf_addrw = rf_addrx;
+      1: rf_addrw = rf_addry;
       default: rf_addrw = {'0};
     endcase
 
