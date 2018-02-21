@@ -1,4 +1,4 @@
-module reg_file #
+module regfile #
 (
   parameter WIDTH = 2,
   parameter NUMREGS = 2
@@ -17,7 +17,7 @@ module reg_file #
 );
 
   // internal registers
-  logic [WIDTH-1:0] [NUMREGS-1:0] regs;
+  logic [WIDTH-1:0] regs [NUMREGS-1:0];
 
   // assign outputs
   integer c_i;
@@ -37,7 +37,10 @@ module reg_file #
         if (i_addrw == s_i) regs[s_i] <= i_data_in;
         else                regs[s_i] <= regs[s_i];
       end
-    else regs <= regs;
+    else begin
+      for (s_i = 0; s_i < NUMREGS; s_i++)
+        regs[s_i] <= regs[s_i];
+    end
   end // always_ff
 
 endmodule

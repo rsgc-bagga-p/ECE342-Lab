@@ -6,13 +6,13 @@ module cpu_control
   output logic o_mem_rd,
   output logic o_mem_wr,
   output logic [2:0] o_mem_addr_sel,
-  
-  output logic o_pc_sel,
+
+  output logic [1:0] o_pc_sel,
   output logic o_pc_ld,
-  
+
   input [4:0] i_ir,
   output logic o_ir_ld,
-  
+
   output logic [2:0] o_rf_sel,
   output logic o_rf_write,
   output logic o_rf_addr_w_sel,
@@ -43,40 +43,41 @@ end
 // State table
 always_comb begin
 	nextstate = state;
-  
+
   o_mem_rd = 1'd0;
   o_mem_wr = 1'd0;
   o_mem_addr_sel = 3'd0;
   
-  o_pc_sel = 1'd0;
+  o_pc_sel = 2'd0;
   o_pc_ld = 1'd0;
-  
+
   o_ir_ld = 1'd0;
-  
+
   o_rf_sel = 3'd0;
   o_rf_write = 1'd0;
   o_rf_addr_w_sel = 1'd0;
-  
+
   o_alu_n_ld = 1'd0;
   o_alu_z_ld = 1'd0;
   o_alu_b_sel = 1'd0;
   o_alu_op = 1'd0;
-  
+
   case (state)
     S_START: begin
       nextstate = S_EXECUTE;
       o_mem_rd = 1'd1;
-      o_pc_sel = 1'd1;
+      o_pc_sel = 2'd1;
       o_pc_ld = 1'd1;
       o_ir_ld = 1'd1;
     end
+    
     S_EXECUTE: begin
       case (i_ir[3:0])
         // mv, mvi
         4'b0000: begin
           o_mem_rd = 1'd1;
           o_mem_addr_sel = 3'd1;
-          o_pc_sel = 1'd1;
+          o_pc_sel = 2'd1;
           o_pc_ld = 1'd1;
           o_ir_ld = 1'd1;
         
@@ -90,7 +91,7 @@ always_comb begin
         4'b0001: begin
           o_mem_rd = 1'd1;
           o_mem_addr_sel = 3'd1;
-          o_pc_sel = 1'd1;
+          o_pc_sel = 2'd1;
           o_pc_ld = 1'd1;
           o_ir_ld = 1'd1;
           
@@ -109,7 +110,7 @@ always_comb begin
         4'b0010: begin
           o_mem_rd = 1'd1;
           o_mem_addr_sel = 3'd1;
-          o_pc_sel = 1'd1;
+          o_pc_sel = 2'd1;
           o_pc_ld = 1'd1;
           o_ir_ld = 1'd1;
           
@@ -128,7 +129,7 @@ always_comb begin
         4'b0011: begin
           o_mem_rd = 1'd1;
           o_mem_addr_sel = 3'd1;
-          o_pc_sel = 1'd1;
+          o_pc_sel = 2'd1;
           o_pc_ld = 1'd1;
           o_ir_ld = 1'd1;
           
@@ -146,7 +147,7 @@ always_comb begin
           o_mem_rd = 1'd1;
           o_mem_wr = 1'd0;
           o_mem_addr_sel = 3'd3;
-          o_pc_sel = 1'd0;
+          o_pc_sel = 2'd0;
           o_pc_ld = 1'd0;
           o_ir_ld = 1'd0;
           
@@ -166,7 +167,7 @@ always_comb begin
           o_mem_rd = 1'd0;
           o_mem_wr = 1'd1;
           o_mem_addr_sel = 3'd3;
-          o_pc_sel = 1'd0;
+          o_pc_sel = 2'd0;
           o_pc_ld = 1'd0;
           o_ir_ld = 1'd0;
           
@@ -183,7 +184,7 @@ always_comb begin
         4'b0110: begin
           o_mem_rd = 1'd1;
           o_mem_addr_sel = 3'd1;
-          o_pc_sel = 1'd1;
+          o_pc_sel = 2'd1;
           o_pc_ld = 1'd1;
           o_ir_ld = 1'd1;
           
@@ -199,11 +200,11 @@ always_comb begin
           
           if (~i_ir[4]) begin
             o_mem_addr_sel = 3'd2;
-            o_pc_sel = 1'd0;
+            o_pc_sel = 2'd0;
           end
           else begin
             o_mem_addr_sel = 3'd4;
-            o_pc_sel = 1'd2;
+            o_pc_sel = 2'd2;
           end
         end
         // jzr, jz
@@ -215,17 +216,17 @@ always_comb begin
             
             if (~i_ir[4]) begin
               o_mem_addr_sel = 3'd2;
-              o_pc_sel = 1'd0;
+              o_pc_sel = 2'd0;
             end
             else begin
               o_mem_addr_sel = 3'd4;
-              o_pc_sel = 1'd2;
+              o_pc_sel = 2'd2;
             end
           end
           else begin
             o_mem_rd = 1'd1;
             o_mem_addr_sel = 3'd1;
-            o_pc_sel = 1'd1;
+            o_pc_sel = 2'd1;
             o_pc_ld = 1'd1;
             o_ir_ld = 1'd1;
           end
@@ -239,17 +240,17 @@ always_comb begin
             
             if (~i_ir[4]) begin
               o_mem_addr_sel = 3'd2;
-              o_pc_sel = 1'd0;
+              o_pc_sel = 2'd0;
             end
             else begin
               o_mem_addr_sel = 3'd4;
-              o_pc_sel = 1'd2;
+              o_pc_sel = 2'd2;
             end
           end
           else begin
             o_mem_rd = 1'd1;
             o_mem_addr_sel = 3'd1;
-            o_pc_sel = 1'd1;
+            o_pc_sel = 2'd1;
             o_pc_ld = 1'd1;
             o_ir_ld = 1'd1;
           end
@@ -266,22 +267,23 @@ always_comb begin
           
           if (~i_ir[4]) begin
             o_mem_addr_sel = 3'd2;
-            o_pc_sel = 1'd0;
+            o_pc_sel = 2'd0;
           end
           else begin
             o_mem_addr_sel = 3'd4;
-            o_pc_sel = 1'd2;
+            o_pc_sel = 2'd2;
           end
         end
       endcase
-      
+
     end
+    
     S_MEM_LD: begin
       nextstate = S_EXECUTE;
       
       o_mem_rd = 1'd1;
       o_mem_addr_sel = 3'd1;
-      o_pc_sel = 1'd1;
+      o_pc_sel = 2'd1;
       o_pc_ld = 1'd1;
       o_ir_ld = 1'd1;
       
@@ -289,12 +291,13 @@ always_comb begin
       o_rf_write = 1'd1;
       o_rf_addr_w_sel = 1'd0;
     end
+    
     S_MEM_ST: begin
       nextstate = S_EXECUTE;
       
       o_mem_rd = 1'd1;
       o_mem_addr_sel = 3'd1;
-      o_pc_sel = 1'd1;
+      o_pc_sel = 2'd1;
       o_pc_ld = 1'd1;
       o_ir_ld = 1'd1;
     end
