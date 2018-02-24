@@ -113,6 +113,7 @@ module cpu_datapath
 
 
   // Combinational Logic
+  assign o_mem_wrdata = rf_datax_out;
 
   assign pc_out = pc + 2;
   assign jmp_pc = pc_out + (ir_imm11 << 1);
@@ -146,7 +147,7 @@ module cpu_datapath
 
     case (i_rf_addrw_sel)
       0: rf_addrw = rf_addrx;
-      1: rf_addrw = rf_addry;
+      1: rf_addrw = 3'd7;
       default: rf_addrw = {'0};
     endcase
 
