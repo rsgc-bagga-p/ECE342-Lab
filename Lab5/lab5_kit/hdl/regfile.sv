@@ -20,6 +20,11 @@ module regfile #
   logic [NUMREGS-1:0] [WIDTH-1:0] regs;
 
   // assign outputs
+  // this works apparently
+  assign o_datax_out = regs[i_addrx];
+  assign o_datay_out = regs[i_addry];
+  // this doesn't work
+  /*
   integer c_i;
   always_comb begin
     for (c_i = 0; c_i < NUMREGS; c_i++) begin
@@ -27,6 +32,7 @@ module regfile #
       if (i_addry == c_i) o_datay_out = regs[c_i];
     end
   end
+  */
 
   // take inputs
   integer s_i;

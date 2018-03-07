@@ -4,7 +4,7 @@ module cpu_datapath
   input i_reset,
 
   // Control Signals
-  input [2:0]  i_mem_addr_sel,
+  input        i_mem_addr_sel,
 
   input        i_pc_ld,
   input [1:0]  i_pc_sel,
@@ -93,7 +93,7 @@ module cpu_datapath
 
   // Sequential Logic
 
-  always_ff @ (posedge i_clk, negedge i_reset) begin
+  always_ff @ (posedge i_clk, posedge i_reset) begin
 
     if (i_reset) begin
       pc <= {'0};
@@ -115,7 +115,7 @@ module cpu_datapath
   // Combinational Logic
   assign o_mem_wrdata = rf_datax_out;
 
-  assign pc_out = pc + 2;
+  assign pc_out = pc + 16'd2;
   assign jmp_pc = pc_out + (ir_imm11 << 1);
 
   assign ir_in = i_mem_rddata;
@@ -131,10 +131,7 @@ module cpu_datapath
 
     case (i_mem_addr_sel)
       0: o_mem_addr = pc;
-      1: o_mem_addr = pc_out;
-      2: o_mem_addr = rf_datax_out;
-      3: o_mem_addr = rf_datay_out;
-      4: o_mem_addr = jmp_pc;
+      1: o_mem_addr = rf_datay_out;
       default: o_mem_addr = {'0};
     endcase
 

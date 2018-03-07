@@ -3,7 +3,7 @@
 module tb_top();
 
   parameter UNIT = "none";
-  parameter TFILE = "software/sum10.hex";
+  parameter TFILE = "software/regjump.hex";
 
   generate
 

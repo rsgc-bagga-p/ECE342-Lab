@@ -3,7 +3,7 @@
 module tb_cpu();
 
 // Change this to use a different program!
-parameter HEX_FILE = "software/capital.hex";
+parameter HEX_FILE = "software/sum10.hex";
 
 // Create a 100MHz clock
 logic clk;

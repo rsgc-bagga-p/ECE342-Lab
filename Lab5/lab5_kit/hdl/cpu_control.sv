@@ -5,7 +5,7 @@ module cpu_control
 
   output logic o_mem_rd,
   output logic o_mem_wr,
-  output logic [2:0] o_mem_addr_sel,
+  output logic o_mem_addr_sel,
 
   output logic [1:0] o_pc_sel,
   output logic o_pc_ld,
@@ -46,7 +46,7 @@ always_comb begin
 
   o_mem_rd = 1'd0;
   o_mem_wr = 1'd0;
-  o_mem_addr_sel = 3'd0;
+  o_mem_addr_sel = 1'd0;
 
   o_pc_sel = 2'd0;
   o_pc_ld = 1'd0;
@@ -66,7 +66,7 @@ always_comb begin
     S_FETCH: begin
       nextstate = S_LD_IR;
       o_mem_rd = 1'd1;
-      o_mem_addr_sel = 3'd0;
+      o_mem_addr_sel = 1'd0;
     end
     
     S_LD_IR: begin
@@ -144,7 +144,7 @@ always_comb begin
           nextstate = S_MEM_LD;
 
           o_mem_rd = 1'd1;
-          o_mem_addr_sel = 3'd3;
+          o_mem_addr_sel = 1'd1;
           
           o_pc_sel = 2'd1;
           o_pc_ld = 1'd1;
@@ -154,7 +154,7 @@ always_comb begin
           nextstate = S_FETCH;
 
           o_mem_wr = 1'd1;
-          o_mem_addr_sel = 3'd3;
+          o_mem_addr_sel = 1'd1;
           
           o_pc_sel = 2'd1;
           o_pc_ld = 1'd1;
@@ -238,6 +238,11 @@ always_comb begin
             o_pc_sel = 2'd2;
           end
         end
+		  
+		  default: begin
+		    nextstate = S_FETCH;
+          o_pc_ld = 1'd1;
+		  end
       endcase
 
     end

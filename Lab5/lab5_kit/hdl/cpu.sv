@@ -15,7 +15,7 @@ module cpu
 
 
   // Signals
-  logic [2:0] mem_addr_sel;
+  logic       mem_addr_sel;
   logic       pc_ld;
   logic [1:0] pc_sel;
   logic       ir_ld;
