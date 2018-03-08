@@ -1,0 +1,14 @@
+DEPTH = 7;
+WIDTH = 16;
+ADDRESS_RADIX = HEX;
+DATA_RADIX = HEX;
+CONTENT
+BEGIN
+0000 : 0010;	-- mvi   r0, 0x00
+0001 : 2016;	-- mvhi  r0, 0x20 
+0002 : 0030;	-- mvi   r1, 0x00
+0003 : 3036;	-- mvhi  r1, 0x30 
+0004 : 0064;	-- ld    r3, r0   
+0005 : 0185;	-- st    r4, r1   
+0006 : ffb8;	-- j     loop     
+END;

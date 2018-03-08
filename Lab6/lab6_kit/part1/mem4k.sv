@@ -8,7 +8,7 @@ module mem4k #
 )
 (
 	input clk,
-	
+
 	input [10:0] addr,		// 2048 words means 11 bits of address
 	input [15:0] wrdata,	// Each word is 16 bits wide
 	input wr,
