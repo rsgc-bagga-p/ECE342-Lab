@@ -1,2 +1,2 @@
-vlog part1/*.sv part1/cpu/*.sv hvl/*.sv
+vlog part1/cpu/*.sv part1/*.sv hvl/*.sv
 restart -f

@@ -1,5 +1,3 @@
-// top-level module
-
 module cpu
 (
   input i_clk,

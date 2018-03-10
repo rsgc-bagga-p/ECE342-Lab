@@ -32,7 +32,7 @@ module de1soc_top
 );
 
   // Binary to run
-  parameter HEX_FILE = "../software/updateledr.hex"
+  parameter HEX_FILE = "../software/updateledr.hex";
 
   // Clock
   logic i_clk;
@@ -64,14 +64,14 @@ module de1soc_top
 
   // CPU Instantiation
   cpu m_cpu (
-    i_clk,
-    i_reset,
+    .i_clk,
+    .i_reset,
 
-    o_mem_addr      (cpu_mem_addr),
-    o_mem_rd        (cpu_mem_rd),
-    o_mem_wr        (cpu_mem_wr),
-    i_mem_rddata    (cpu_mem_rddata),
-    o_mem_wrdata    (cpu_mem_wrdata)
+    .o_mem_addr      (cpu_mem_addr),
+    .o_mem_rd        (cpu_mem_rd),
+    .o_mem_wr        (cpu_mem_wr),
+    .i_mem_rddata    (cpu_mem_rddata),
+    .o_mem_wrdata    (cpu_mem_wrdata)
   );
 
   // mem4k Instantiation
@@ -119,13 +119,13 @@ module de1soc_top
     .i_cpu_mem_rd       (cpu_mem_rd),
     .i_cpu_mem_wr       (cpu_mem_wr),
     .i_cpu_mem_wrdata   (cpu_mem_wrdata),
-    .o_cpu_mem_rddata   (cpu_mem_rddata)
+    .o_cpu_mem_rddata   (cpu_mem_rddata),
 
     // memory interface
     .i_mem4k_rddata     (mem4k_rddata),
     .o_mem4k_addr       (mem4k_addr),
     .o_mem4k_wr         (mem4k_wr),
-    .o_mem4k_wraddr     (mem4k_wrdata),
+    .o_mem4k_wrdata     (mem4k_wrdata),
 
     // ledr interface
     .o_ledr_en          (ledr_en),
@@ -133,6 +133,6 @@ module de1soc_top
 
     // sw interface
     .i_sw_data_out      (sw_data_out)
-  )
+  );
 
 endmodule

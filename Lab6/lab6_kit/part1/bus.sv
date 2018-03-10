@@ -14,29 +14,30 @@ module bus
   input        [15:0] i_mem4k_rddata,
   output logic [15:0] o_mem4k_addr,
   output logic [15:0] o_mem4k_wr,
-  output logic [15:0] o_mem4k_wraddr,
+  output logic [15:0] o_mem4k_wrdata,
 
   // ledr interface
   output logic        o_ledr_en,
-  output logic  [8:0] o_ledr_data_in,
+  output logic  [7:0] o_ledr_data_in,
 
   // sw interface
-  input         [8:0] i_sw_data_out
+  input         [7:0] i_sw_data_out
 );
 
   // bus logic
   always_comb begin
 
+    // signal defaults
+    o_cpu_mem_rddata        = {'0};
+
+    o_mem4k_addr            = {'0};
+    o_mem4k_wr              = {'0};
+    o_mem4k_wrdata          = {'0};
+
+    o_ledr_en               = {'0};
+    o_ledr_data_in          = {'0};
+
     case (i_cpu_mem_addr[15:12])
-
-      o_cpu_mem_rddata        = {'0};
-
-      o_mem4k_addr            = {'0};
-      o_mem4k_wr              = {'0};
-      o_mem4k_wraddr          = {'0};
-
-      o_ledr_en               = {'0};
-      o_ledr_data_in          = {'0};
 
       0: begin // mem4k
         o_mem4k_addr          = i_cpu_mem_addr >> 1;
@@ -46,13 +47,15 @@ module bus
       end
 
       2: begin // sw
-        o_cpu_mem_rddata      = i_sw_data_out;
+        o_cpu_mem_rddata      = {8'd0,i_sw_data_out};
       end
 
       3: begin // ledr
         o_ledr_en             = i_cpu_mem_wr;
-        o_ledr_data_in        = i_cpu_mem_wrdata;
+        o_ledr_data_in        = i_cpu_mem_wrdata[7:0];
       end
+
+      default: ; // do nothing
 
     endcase
 
