@@ -92,6 +92,7 @@ module lda_avalon_interface
     .o_plot        (vga_plot)
   );
 
+  /* commment this section out for simulation
   vga_adapter #(
     .BITS_PER_CHANNEL(1)
   ) m_vga_adapter (
@@ -109,5 +110,6 @@ module lda_avalon_interface
     .color         (vga_color),
     .plot          (vga_plot)
   );
+  */
 
 endmodule

@@ -9,6 +9,9 @@ module tb_top();
     if (UNIT == "bus")
       tb_bus m_tb_bus();
 
+    if (UNIT == "cpu")
+      tb_cpu m_tb_cpu();
+
   endgenerate
 
   if (UNIT != "bus" /*|| UNIT != "pt2"*/ ) begin

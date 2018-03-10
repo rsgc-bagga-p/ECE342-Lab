@@ -28,12 +28,12 @@ module tb_bus();
   logic [15:0] mem4k_wrdata;
 
   logic        ledr_en;
-  logic  [8:0] ledr_data_in;
+  logic  [7:0] ledr_data_in;
 
-  logic  [8:0] sw_data_out;
+  logic  [7:0] sw_data_out;
 
   // DUT Instantiation
-  module bus (
+  bus m_bus (
     .i_clk                (clk),
     .i_reset              (reset),
     // cpu interface
@@ -127,6 +127,10 @@ module tb_bus();
         end
       end
     end
+
+    // finish
+    $display("All cases passed!");
+    $stop;
 
   end
 
