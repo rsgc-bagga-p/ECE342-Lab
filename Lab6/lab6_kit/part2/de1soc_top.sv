@@ -43,5 +43,15 @@ always_ff @ (posedge CLOCK_50) begin
 	reset_reg <= {1'b1, reset_reg[1]};
 end
 
+system u0 (
+        .clk_clk                          (CLOCK_50),                          //                       clk.clk
+        .reset_reset_n                    (reset_n),                    //                     reset.reset_n
+        .quad_hex_decode_0_hex1_export    (HEX1),    //    quad_hex_decode_0_hex1.export
+        .quad_hex_decode_0_hex2_export    (HEX2),    //    quad_hex_decode_0_hex2.export
+        .quad_hex_decode_0_hex3_export    (HEX3),    //    quad_hex_decode_0_hex3.export
+        .quad_hex_decode_0_hex0_export    (HEX0),    //    quad_hex_decode_0_hex0.export
+        .pio_1_external_connection_export (LEDR), // pio_1_external_connection.export
+        .pio_0_external_connection_export (SW)  // pio_0_external_connection.export
+    );
 
 endmodule

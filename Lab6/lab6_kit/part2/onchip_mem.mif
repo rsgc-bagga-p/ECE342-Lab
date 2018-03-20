@@ -1,0 +1,29 @@
+DEPTH = 22;
+WIDTH = 16;
+ADDRESS_RADIX = HEX;
+DATA_RADIX = HEX;
+CONTENT
+BEGIN
+0000 : 0010;	-- mvi r0, 0x00
+0001 : 2016;	-- mvhi r0, 0x20
+0002 : 1030;	-- mvi r1, 0x10
+0003 : 2036;	-- mvhi r1, 0x20
+0004 : 2050;	-- mvi r2, 0x20
+0005 : 2056;	-- mvhi r2, 0x20
+0006 : ffb0;	-- mvi r5, 0xff
+0007 : 0070;	-- mvi r3, 0x00
+0008 : 0265;	-- st r3, r2
+0009 : 0084;	-- ld r4, r0
+000a : 0185;	-- st r4, r1
+000b : 0191;	-- addi r4, 0x01
+000c : 0583;	-- cmp r4, r5
+000d : 0039;	-- jz delay_loop2
+000e : ff98;	-- j delay_loop
+000f : 0192;	-- subi r4, 0x01
+0010 : 0093;	-- cmpi r4, 0x00
+0011 : 0039;	-- jz delay_continue
+0012 : ff98;	-- j delay_loop2
+0013 : 0171;	-- addi r3, 0x01
+0014 : 0265;	-- st r3, r2
+0015 : fe78;	-- j counter_loop
+END;
