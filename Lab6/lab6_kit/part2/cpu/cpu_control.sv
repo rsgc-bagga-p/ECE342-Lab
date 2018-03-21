@@ -44,7 +44,7 @@ end
 
 // State table
 always_comb begin
-   nextstate = state;
+  nextstate = state;
 
   o_mem_rd = 1'd0;
   o_mem_wr = 1'd0;
@@ -66,15 +66,17 @@ always_comb begin
 
   case (state)
     S_FETCH: begin
-      nextstate = S_LD_IR;
+      if (~i_mem_wait) nextstate = S_LD_IR;
       o_mem_rd = 1'd1;
       o_mem_addr_sel = 1'd0;
     end
     
     S_LD_IR: begin
-      nextstate = S_EXECUTE;
-      o_ir_ld = 1'd1;
-	 end
+      if (i_mem_rddatavalid) begin
+        nextstate = S_EXECUTE;
+        o_ir_ld = 1'd1;
+      end
+    end
     
     S_EXECUTE: begin
       case (i_ir[3:0])
@@ -143,23 +145,27 @@ always_comb begin
         end
         // ld
         4'b0100: begin
-          nextstate = S_MEM_LD;
+          if (~i_mem_wait) nextstate = S_MEM_LD;
 
           o_mem_rd = 1'd1;
           o_mem_addr_sel = 1'd1;
           
-          o_pc_sel = 2'd1;
-          o_pc_ld = 1'd1;
+          if (~i_mem_wait) begin
+            o_pc_sel = 2'd1;
+            o_pc_ld = 1'd1;
+          end
         end
         // st
         4'b0101: begin
-          nextstate = S_FETCH;
+          if (~i_mem_wait) nextstate = S_FETCH;
 
           o_mem_wr = 1'd1;
           o_mem_addr_sel = 1'd1;
           
-          o_pc_sel = 2'd1;
-          o_pc_ld = 1'd1;
+          if (~i_mem_wait) begin
+            o_pc_sel = 2'd1;
+            o_pc_ld = 1'd1;
+          end
         end
         // mvhi
         4'b0110: begin
@@ -250,11 +256,13 @@ always_comb begin
     end
 
     S_MEM_LD: begin
-      nextstate = S_FETCH;
+      if (i_mem_rddatavalid) begin
+        nextstate = S_FETCH;
 
-      o_rf_sel = 3'd4;
-      o_rf_write = 1'd1;
-      o_rf_addr_w_sel = 1'd0;
+        o_rf_sel = 3'd4;
+        o_rf_write = 1'd1;
+        o_rf_addr_w_sel = 1'd0;
+      end
     end
 	endcase
 end
