@@ -9,31 +9,33 @@ mvhi r1, 0x20
 mvi r2, 0x20
 mvhi r2, 0x20
 
-mvi r5, 0xff
-//mvhi r5, 0x7f
-
 // initalize counter
-counter_init:
 mvi r3, 0x00
 st r3, r2
 
 counter_loop:
 ld r4, r0
 st r4, r1
+mvi r5, 0x00
 
-delay_loop:
-addi r4, 0x01
-cmp r4, r5
-//jn delay_loop
-jz delay_continue
-j delay_loop
+	delay_loop:
+	//mvi r6, 0x00
+	
+	//	inner_loop:
+	//	addi r6, 0x01
+	//	cmpi r6, 0xff
+	//	jz inner_continue
+	//	j inner_loop
+	
+	//inner_continue:
+	addi r5, 0x01
+	cmp r5, r4
+	jz delay_continue
+	j delay_loop
 
 delay_continue:
 addi r3, 0x01
 st r3, r2
 
-//cmp r3, r5
-//jn counter_loop
-//j counter_init
 j counter_loop
 

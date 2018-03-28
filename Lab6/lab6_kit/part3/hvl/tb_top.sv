@@ -6,13 +6,16 @@ module tb_top();
 
   generate
 
-    if (UNIT == "lda")
-      tb_avlintf m_tb_lda();
+    if (UNIT == "bus")
+      tb_bus m_tb_bus();
+
+    if (UNIT == "cpu")
+      tb_cpu m_tb_cpu();
 
   endgenerate
 
-  if (UNIT != "lda") begin
-    $info("No testbench selected for sim.do\nusage: Modelsim> do sim.do [lda]");
+  if (UNIT != "bus" /*|| UNIT != "pt2"*/ ) begin
+    $info("No testbench selected for sim.do\nusage: Modelsim> do sim.do [bus]");
   end
 
 endmodule

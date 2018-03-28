@@ -271,14 +271,7 @@ set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
 set_instance_assignment -name FAST_INPUT_REGISTER ON -to *
 set_instance_assignment -name FAST_OUTPUT_ENABLE_REGISTER ON -to *
 set_instance_assignment -name FAST_OUTPUT_REGISTER ON -to *
-set_global_assignment -name SYSTEMVERILOG_FILE mem4k.sv
-set_global_assignment -name SYSTEMVERILOG_FILE en_reg_n.sv
-set_global_assignment -name SYSTEMVERILOG_FILE bus.sv
-set_global_assignment -name SYSTEMVERILOG_FILE cpu/regfile.sv
-set_global_assignment -name SYSTEMVERILOG_FILE cpu/cpu_datapath.sv
-set_global_assignment -name SYSTEMVERILOG_FILE cpu/cpu_control.sv
-set_global_assignment -name SYSTEMVERILOG_FILE cpu/cpu.sv
-set_global_assignment -name SYSTEMVERILOG_FILE cpu/alu.sv
+set_global_assignment -name QIP_FILE system/synthesis/system.qip
 set_global_assignment -name SYSTEMVERILOG_FILE de1soc_top.sv
 set_global_assignment -name SDC_FILE de1soc.sdc
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

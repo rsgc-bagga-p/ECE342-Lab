@@ -4,19 +4,15 @@
 2036	// 0006: mvhi r1, 0x20
 2050	// 0008: mvi r2, 0x20
 2056	// 000a: mvhi r2, 0x20
-ffb0	// 000c: mvi r5, 0xff
-0070	// 000e: mvi r3, 0x00
-0265	// 0010: st r3, r2
-0084	// 0012: ld r4, r0
-0185	// 0014: st r4, r1
-0191	// 0016: addi r4, 0x01
-0583	// 0018: cmp r4, r5
-0039	// 001a: jz delay_loop2
-ff98	// 001c: j delay_loop
-0192	// 001e: subi r4, 0x01
-0093	// 0020: cmpi r4, 0x00
-0039	// 0022: jz delay_continue
-ff98	// 0024: j delay_loop2
-0171	// 0026: addi r3, 0x01
-0265	// 0028: st r3, r2
-fe78	// 002a: j counter_loop
+0070	// 000c: mvi r3, 0x00
+0265	// 000e: st r3, r2
+0084	// 0010: ld r4, r0
+0185	// 0012: st r4, r1
+00b0	// 0014: mvi r5, 0x00
+01b1	// 0016: 	addi r5, 0x01
+04a3	// 0018: 	cmp r5, r4
+0039	// 001a: 	jz delay_continue
+ff98	// 001c: 	j delay_loop
+0171	// 001e: addi r3, 0x01
+0265	// 0020: st r3, r2
+fed8	// 0022: j counter_loop
