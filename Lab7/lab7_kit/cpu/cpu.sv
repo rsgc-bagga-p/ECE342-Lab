@@ -4,13 +4,13 @@ module cpu
   input reset,
 
   output [15:0] o_pc_addr,
-  output o_pc_rd,
-  input [15:0] i_pc_rddata,
+  output        o_pc_rd,
+  input  [15:0] i_pc_rddata,
 
   output [15:0] o_ldst_addr,
-  output o_ldst_rd,
-  output o_ldst_wr,
-  input [15:0] i_ldst_rddata,
+  output        o_ldst_rd,
+  output        o_ldst_wr,
+  input  [15:0] i_ldst_rddata,
   output [15:0] o_ldst_wrdata,
 
 	output [7:0][15:0] o_tb_regs
@@ -19,14 +19,17 @@ module cpu
 
   // Signals
   logic        rf_write;
+  logic        rf_datax_ld;
+  logic        rf_datay_ld;
   logic        datax_wr_ld;
   logic        datay_wr_ld;
   logic        rf_addrw_sel;
   logic [2:0]  rf_sel;
+  logic        alu_r_ld;
   logic        alu_n_ld;
   logic        alu_z_ld;
-  logic        alu_a_sel;
-  logic        alu_b_sel;
+  logic [1:0]  alu_a_sel;
+  logic [1:0]  alu_b_sel;
   logic        alu_op_sel;
   logic        pc_ld;
   logic        pc_dc_ld;
@@ -47,25 +50,42 @@ module cpu
 
 
   // CPU Control
+
   cpu_control m_cpu_ctrl (
     .i_clk              (clk),
     .i_reset            (reset),
-    .o_mem_rd           (o_mem_rd),
-    .o_mem_wr           (o_mem_wr),
-    .o_mem_addr_sel     (mem_addr_sel),
-    .o_pc_sel           (pc_sel),
-    .o_pc_ld            (pc_ld),
-    .i_ir               (ir_instrcode),
-    .o_ir_ld            (ir_ld),
-    .o_rf_sel           (rf_sel),
-    .o_rf_write         (rf_write),
-    .o_rf_addr_w_sel    (rf_addrw_sel),
+    .o_pc_rd,
+    .o_ldst_rd,
+    .o_ldst_wr,
+    .i_ir_dc            (ir_dc),
+    .i_ir_ex            (ir_ex),
+    .i_ir_wr            (ir_wr),
     .i_alu_n            (alu_n),
     .i_alu_z            (alu_z),
+    .i_alu_n_imm        (alu_n_imm),
+    .i_alu_z_imm        (alu_z_imm),
+    .o_rf_write         (rf_write),
+    .o_rf_datax_ld      (rf_datax_ld),
+    .o_rf_datay_ld      (rf_datay_ld),
+    .o_datax_wr_ld      (datax_wr_ld),
+    .o_datay_wr_ld      (datay_wr_ld),
+    .o_rf_addrw_sel     (rf_addrw_sel),
+    .o_rf_sel           (rf_sel),
+    .o_alu_r_ld         (alu_r_ld),
     .o_alu_n_ld         (alu_n_ld),
     .o_alu_z_ld         (alu_z_ld),
+    .o_alu_a_sel        (alu_a_sel),
     .o_alu_b_sel        (alu_b_sel),
-    .o_alu_op           (alu_op_sel)
+    .o_alu_op_sel       (alu_op_sel),
+    .o_pc_ld            (pc_ld),
+    .o_pc_dc_ld         (pc_dc_ld),
+    .o_pc_ex_ld         (pc_ex_ld),
+    .o_pc_wr_ld         (pc_wr_ld),
+    .o_pc_sel           (pc_sel),
+    .o_pc_addr_sel      (pc_addr_sel),
+    .o_ir_ex_ld         (ir_ex_ld),
+    .o_ir_wr_ld         (ir_wr_ld),
+    .o_ir_ex_sel        (ir_ex_sel)
   );
 
 
@@ -74,10 +94,13 @@ module cpu
     .i_clk              (clk),
     .i_reset            (reset),
     .i_rf_write         (rf_write),
+    .i_rf_datax_ld      (rf_datax_ld),
+    .i_rf_datay_ld      (rf_datay_ld),
     .i_datax_wr_ld      (datax_wr_ld),
     .i_datay_wr_ld      (datay_wr_ld),
     .i_rf_addrw_sel     (rf_addrw_sel),
     .i_rf_sel           (rf_sel),
+    .i_alu_r_ld         (alu_r_ld),
     .i_alu_n_ld         (alu_n_ld),
     .i_alu_z_ld         (alu_z_ld),
     .i_alu_a_sel        (alu_a_sel),
@@ -104,7 +127,7 @@ module cpu
     .o_pc_addr,
     .o_ldst_addr,
     .o_ldst_wrdata,
-    .o_tb_regs,
+    .o_tb_regs
   );
 
 

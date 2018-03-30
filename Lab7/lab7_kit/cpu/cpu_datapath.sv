@@ -5,11 +5,14 @@ module cpu_datapath
 
   // Control Signals
   input         i_rf_write,
+  input         i_rf_datax_ld,
+  input         i_rf_datay_ld,
   input         i_datax_wr_ld,
   input         i_datay_wr_ld,
   input         i_rf_addrw_sel,
   input  [2:0]  i_rf_sel,
 
+  input         i_alu_r_ld,
   input         i_alu_n_ld,
   input         i_alu_z_ld,
   input  [1:0]  i_alu_a_sel,
@@ -46,13 +49,11 @@ module cpu_datapath
   output [15:0] o_ldst_wrdata,
 
   // Output for Testbench
-  output [7:0] [15:0] o_tb_regs
+  output [7:0][15:0] o_tb_regs
 );
 
 
-  defparam INSTR_SIZE = 2;
-
-  /***********************************************************
+  /*************************************************************
    * Five Stage Pipeline, just like in the lab 7 handout
    * -----------------
    * STAGE 1: PREFETCH
@@ -92,7 +93,19 @@ module cpu_datapath
    *************************************************************/
 
 
-  // Signals
+  /* Parameters */
+
+  // Instruction size in bytes for incrementing PC
+  localparam INSTR_SIZE    = 2;
+
+  // Instruction Encoding for nop
+  localparam NOP           = 16'h0007; // opcode => 0_0111
+
+  // Register to store PC into for callr
+  localparam CALLR_REG     = 3'd7;
+
+
+  /* Signals */
 
   // Registers
   logic [15:0] r_pc;
@@ -102,6 +115,8 @@ module cpu_datapath
   logic        r_alu_n;
   logic        r_alu_z;
   logic [15:0] r_ir_wr;
+  logic [15:0] r_rf_datax;
+  logic [15:0] r_rf_datay;
   logic [15:0] r_datax_wr;
   logic [15:0] r_datay_wr;
 
@@ -136,7 +151,7 @@ module cpu_datapath
   logic [15:0] ir_wr_imm8;
 
 
-  // Assign Outputs
+  /* Assign Outputs */
 
   assign o_ir_dc       = ir_dc;
   assign o_ir_ex       = r_ir_ex;
@@ -151,7 +166,7 @@ module cpu_datapath
   assign o_ldst_wrdata = ldst_wrdata;
 
 
-  // Module Instantiations
+  /* Module Instantiations */
 
   // Register File
   regfile #(
@@ -184,7 +199,7 @@ module cpu_datapath
   );
 
 
-  // Sequential Logic
+  /* Sequential Logic */
 
   always_ff @ (posedge i_clk, posedge i_reset) begin
 
@@ -198,6 +213,8 @@ module cpu_datapath
       r_alu_z    <= {'0};
       r_pc_wr    <= {'0};
       r_ir_wr    <= {'0};
+      r_rf_datax <= {'0};
+      r_rf_datay <= {'0};
       r_datax_wr <= {'0};
       r_datay_wr <= {'0};
     end
@@ -207,6 +224,8 @@ module cpu_datapath
       if (i_pc_ld)       r_pc       <= pc_in;
       /* DECODE */
       if (i_pc_dc_ld)    r_pc_dc    <= r_pc;
+      if (i_rf_datax_ld) r_rf_datax <= rf_datax_out;
+      if (i_rf_datay_ld) r_rf_datay <= rf_datay_out;
       /* EXECUTE */
       if (i_pc_ex_ld)    r_pc_ex    <= r_pc_dc;
       if (i_ir_ex_ld)    r_ir_ex    <= ir_ex_in;
@@ -216,14 +235,14 @@ module cpu_datapath
       /* WRITE */
       if (i_pc_wr_ld)    r_pc_wr    <= r_pc_ex;
       if (i_ir_wr_ld)    r_ir_wr    <= ir_wr_in;
-      if (i_datax_wr_ld) r_datax_wr <= rf_datax_out;
-      if (i_datay_wr_ld) r_datay_wr <= rf_datay_out;
+      if (i_datax_wr_ld) r_datax_wr <= r_rf_datax;
+      if (i_datay_wr_ld) r_datay_wr <= r_rf_datay;
     end
 
-  end // always_ff
+  end
 
 
-  // Combinational Logic
+  /* Combinational Logic */
 
   /*
    * PREFETCH
@@ -232,7 +251,7 @@ module cpu_datapath
   // PC Input Logic
   assign pc_nxt = r_pc + INSTR_SIZE;
   assign jmp_pc_nxt = jmp_pc + INSTR_SIZE;
-  assign datax_nxt = rf_datax_out + INSTR_SIZE;
+  assign datax_nxt = r_rf_datax + INSTR_SIZE;
 
   always_comb begin
     case (i_pc_sel)
@@ -248,13 +267,13 @@ module cpu_datapath
    */
 
   // PC_MEM Input Logic
-  assign jmp_pc = pc_nxt + (ir_dc_imm11 << 1);
+  assign jmp_pc = r_pc + (ir_dc_imm11 << 1);
 
   always_comb begin
     case (i_pc_addr_sel)
       0: pc_addr = r_pc;
       1: pc_addr = jmp_pc;        // j instructions
-      2: pc_addr = rf_datax_out;  // jr instructions
+      2: pc_addr = r_rf_datax;  // jr instructions
       default: pc_addr = {'0};
     endcase
   end
@@ -271,7 +290,7 @@ module cpu_datapath
   assign rf_addry = ir_dc[10:8];
 
   // IR Input Logic
-  assign ir_ex_in = i_ir_ex_sel ? {'1} /* nop */ : ir_dc;
+  assign ir_ex_in = i_ir_ex_sel ? NOP : ir_dc;
 
   /*
    * EXECUTE
@@ -282,13 +301,13 @@ module cpu_datapath
 
   always_comb begin
     case (i_alu_a_sel)
-      0: alu_op_a = rf_datax_out;
+      0: alu_op_a = r_rf_datax;
       1: alu_op_a = r_alu_result;   // RAW forwarding
       2: alu_op_a = i_ldst_rddata;  // Raw forwarding
       default: alu_op_a = {'0};
     case (i_alu_b_sel)
       0: alu_op_b = ir_imm8;
-      1: alu_op_b = rf_datay_out;
+      1: alu_op_b = r_rf_datay;
       2: alu_op_b = r_alu_result;   // RAW forwarding
       3: alu_op_b = i_ldst_rddata;  // RAW forwarding
       default: alu_op_b = {'0};
@@ -296,8 +315,8 @@ module cpu_datapath
   end
 
   // MEM Input Logic
-  assign ldst_addr = rf_datay_out;
-  assign ldst_wrdata = rf_datax_out;
+  assign ldst_addr = r_rf_datay;
+  assign ldst_wrdata = r_rf_datax;
 
   /*
    * WRITEBACK
@@ -305,7 +324,7 @@ module cpu_datapath
 
   // RF Write Logic
   assign ir_wr_imm8 = {{8{r_ir_wr[15]}},r_ir_wr[15:8]};
-  assign rf_addrw = (i_rf_addrw_sel) ? 3'd7 /* callr */ : r_ir_wr[7:5];
+  assign rf_addrw = (i_rf_addrw_sel) ? CALLR_REG : r_ir_wr[7:5];
 
   always_comb begin
     case (i_rf_sel)
