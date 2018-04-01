@@ -2,7 +2,7 @@ module cpu_fetch_control
 (
   // In from detect_jump module
   input i_de_jump_i,
-  input o_ex_jump_r,
+  input i_ex_jump_r,
   
   // Out to memory, pc port
   output o_pc_rd,
@@ -18,14 +18,14 @@ always_comb begin
   // Look at special cases
   // Start from instructions furthest along pipeline
   
-  // Jump, using reg
+  // Jump, using reg, at execute stage
   // jr, jzr, jnr, callr
   if (i_ex_jump_r) begin
     o_pc_rd = 1'd1;
     o_pc_addr_sel = 2'd2;
   end
   
-  // Jump, using immediate
+  // Jump, using immediate, at decode stage
   // j, jz, jn, call
   else if (i_de_jump_i) begin
     o_pc_rd = 1'd1;

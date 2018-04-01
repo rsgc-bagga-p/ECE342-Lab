@@ -10,12 +10,18 @@ module cpu_decode_control (
 );
 
 always_comb begin
+  o_ir_ex_sel = 1'd0;
   
   // Jump using immediate, currently at execute stage, will occur
   // Insert bubble (no-op) into ir_ex
+  if (i_ex_jump_r) begin
+    o_ir_ex_sel = 1'd1;
+  end
   
   // Default
-  o_ir_ex_sel = 1'd0;
+  else begin
+    o_ir_ex_sel = 1'd0;
+  end
 end
 
 endmodule
