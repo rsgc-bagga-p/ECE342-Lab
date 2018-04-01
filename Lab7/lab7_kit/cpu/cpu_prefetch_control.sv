@@ -16,5 +16,6 @@ always_comb begin
   // Default, increment by 2
   o_pc_sel = 2'd0;
   o_pc_ld = 1'd1;
+end
 
 endmodule

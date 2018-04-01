@@ -3,7 +3,7 @@ module cpu_decode_control (
   input i_ex_jump_r,
   
   // In from datapath
-  input [15:0] i_ir_dc
+  input [15:0] i_ir_dc,
   
   // Out to datapath
   output o_ir_ex_sel
@@ -15,7 +15,7 @@ always_comb begin
   // Insert bubble (no-op) into ir_ex
   
   // Default
-  i_ir_ex_sel = 1'd0;
+  o_ir_ex_sel = 1'd0;
 end
 
 endmodule

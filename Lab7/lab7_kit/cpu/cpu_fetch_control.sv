@@ -37,6 +37,7 @@ always_comb begin
     o_pc_rd = 1'd1;
     o_pc_addr_sel = 2'd0;
   end
+end
 
 endmodule
 
