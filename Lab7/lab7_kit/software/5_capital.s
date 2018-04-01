@@ -1,6 +1,7 @@
 // Turns a fixed string into uppercase
 // Expected result:
 // THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG
+// Minimum IPC of 0.6
 
 	mvi r0, str		// r0 is the address of str
 
@@ -49,7 +50,7 @@ str:
 .org 0x1000
 .dw 0x0	// start PC of measurement region
 .dw end		// end PC
-.dw 464	// number of instructions
-.dw 51	// minimum IPC * 128
+.dw 622	// number of instructions
+.dw 76	// minimum IPC * 128
 .dw 0	// which regs to check
 .dw 0,0,0,0,0,0,0,0
