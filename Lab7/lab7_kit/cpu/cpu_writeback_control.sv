@@ -7,7 +7,7 @@ module cpu_writeback_control
 
   output        o_rf_write,
   output        o_rf_addrw_sel,
-  output [3:0]  o_rf_sel
+  output [2:0]  o_rf_sel
 );
 
 
@@ -24,7 +24,7 @@ module cpu_writeback_control
 
   logic rf_write;
   logic rf_addrw_sel;
-  logic [3:0] rf_sel;
+  logic [2:0] rf_sel;
 
   assign o_rf_write = rf_write;
   assign o_rf_addrw_sel = rf_addrw_sel;
