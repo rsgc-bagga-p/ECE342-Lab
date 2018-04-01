@@ -9,9 +9,9 @@ module detect_jump (
   // jump using reg, currently in decode stage, will occur
   //output       o_de_jump_r,
   // jump using immediate, currently in decode stage, will occur
-  output       o_de_jump_i,
+  output logic o_dc_jump_i,
   // jump using reg, currently in execute stage, will occur
-  output       o_ex_jump_r
+  output logic o_ex_jump_r
 );
   logic jump_z;
   logic jump_n;
@@ -30,7 +30,7 @@ module detect_jump (
     //o_de_jump_r = i_ir_dc[4:0] == 5'b01000 | (i_ir_dc[4:0] == 5'b01001 & jump_z) |
     //    (i_ir_dc[4:0] == 5'b01010 & jump_n) | i_ir_dc[4:0] == 5'b01100;
     
-    o_de_jump_i = i_ir_dc[4:0] == 5'b11000 | (i_ir_dc[4:0] == 5'b11001 & jump_z) |
+    o_dc_jump_i = i_ir_dc[4:0] == 5'b11000 | (i_ir_dc[4:0] == 5'b11001 & jump_z) |
         (i_ir_dc[4:0] == 5'b11010 & jump_n) | i_ir_dc[4:0] == 5'b11100;
     
     o_ex_jump_r = i_ir_ex[4:0] == 5'b01000 | (i_ir_ex[4:0] == 5'b01001 & jump_z) |
