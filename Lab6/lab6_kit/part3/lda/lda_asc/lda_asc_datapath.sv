@@ -49,14 +49,14 @@ import lda_asc_pkg::*;
         o_mode    <=  i_writedata[0];
       end
       if (i_sp_hi_ld) begin
-        o_y0[7]   <=  i_writedata[0];
+        o_y0[7]   <=  i_writedata[16];
       end
       if (i_sp_lo_ld) begin
         o_x0      <=  i_writedata[8:0];
         o_y0[6:0] <=  i_writedata[15:9];
       end
       if (i_ep_hi_ld) begin
-        o_y1[7]   <=  i_writedata[0];
+        o_y1[7]   <=  i_writedata[16];
       end
       if (i_ep_lo_ld) begin
         o_x1      <=  i_writedata[8:0];
