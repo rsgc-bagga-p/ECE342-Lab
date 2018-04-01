@@ -26,6 +26,9 @@ module cpu_datapath
   input  [1:0]  i_pc_sel,
   input  [1:0]  i_pc_addr_sel,
 
+  input         i_ldst_addr_sel,
+  input         i_ldst_wrdata_sel,
+
   input         i_ir_ex_ld,
   input         i_ir_wr_ld,
   input         i_ir_ex_sel,
@@ -96,7 +99,7 @@ module cpu_datapath
   /* Parameters */
 
   // Instruction size in bytes for incrementing PC
-  localparam INSTR_SIZE    = 2;
+  localparam INSTR_SIZE    = 16'd2;
 
   // Instruction Encoding for nop
   localparam NOP           = 16'h0007; // opcode => 0_0111
@@ -111,7 +114,9 @@ module cpu_datapath
   logic [15:0] r_pc;
   logic [15:0] r_pc_dc;
   logic [15:0] r_pc_ex;
+  logic [15:0] r_pc_wr;
   logic [15:0] r_ir_ex;
+  logic [15:0] r_alu_r;
   logic        r_alu_n;
   logic        r_alu_z;
   logic [15:0] r_ir_wr;
@@ -157,7 +162,7 @@ module cpu_datapath
   assign o_ir_ex       = r_ir_ex;
   assign o_ir_wr       = r_ir_wr;
   assign o_alu_n       = r_alu_n;
-  assign o_alu_z       = r_alu_n;
+  assign o_alu_z       = r_alu_z;
   assign o_alu_n_imm   = alu_n;
   assign o_alu_z_imm   = alu_z;
 
@@ -204,19 +209,19 @@ module cpu_datapath
   always_ff @ (posedge i_clk, posedge i_reset) begin
 
     if (i_reset) begin
-      r_pc       <= {'0};
-      r_pc_dc    <= {'0};
-      r_pc_ex    <= {'0};
-      r_ir_ex    <= {'0};
-      r_alu_r    <= {'0};
-      r_alu_n    <= {'0};
-      r_alu_z    <= {'0};
-      r_pc_wr    <= {'0};
-      r_ir_wr    <= {'0};
-      r_rf_datax <= {'0};
-      r_rf_datay <= {'0};
-      r_datax_wr <= {'0};
-      r_datay_wr <= {'0};
+      r_pc       <= '0;
+      r_pc_dc    <= '0;
+      r_pc_ex    <= '0;
+      r_ir_ex    <= '0;
+      r_alu_r    <= '0;
+      r_alu_n    <= '0;
+      r_alu_z    <= '0;
+      r_pc_wr    <= '0;
+      r_ir_wr    <= '0;
+      r_rf_datax <= '0;
+      r_rf_datay <= '0;
+      r_datax_wr <= '0;
+      r_datay_wr <= '0;
     end
 
     else begin
@@ -234,7 +239,7 @@ module cpu_datapath
       if (i_alu_z_ld)    r_alu_z    <= alu_z;
       /* WRITE */
       if (i_pc_wr_ld)    r_pc_wr    <= r_pc_ex;
-      if (i_ir_wr_ld)    r_ir_wr    <= ir_wr_in;
+      if (i_ir_wr_ld)    r_ir_wr    <= r_ir_ex;
       if (i_datax_wr_ld) r_datax_wr <= r_rf_datax;
       if (i_datay_wr_ld) r_datay_wr <= r_rf_datay;
     end
@@ -255,10 +260,10 @@ module cpu_datapath
 
   always_comb begin
     case (i_pc_sel)
-      0: pc_in = pc_nxt         // regular operation/callr where Rx is R7
+      0: pc_in = pc_nxt;        // regular operation/callr where Rx is R7
       1: pc_in = jmp_pc_nxt;    // j instruction
       2: pc_in = datax_nxt;     // jr instruction
-      default: pc_in = {'0};
+      default: pc_in = '0;
     endcase
   end
 
@@ -274,7 +279,7 @@ module cpu_datapath
       0: pc_addr = r_pc;
       1: pc_addr = jmp_pc;        // j instructions
       2: pc_addr = r_rf_datax;  // jr instructions
-      default: pc_addr = {'0};
+      default: pc_addr = '0;
     endcase
   end
 
@@ -301,22 +306,21 @@ module cpu_datapath
 
   always_comb begin
     case (i_alu_a_sel)
-      0: alu_op_a = r_rf_datax;
-      1: alu_op_a = r_alu_result;   // RAW forwarding
-      2: alu_op_a = i_ldst_rddata;  // Raw forwarding
-      default: alu_op_a = {'0};
+      0: alu_op_a = rf_data_in; // RAW forwarding, might need to change to speed up
+      1: alu_op_a = r_rf_datax;
+      default: alu_op_a = '0;
+    endcase
     case (i_alu_b_sel)
-      0: alu_op_b = ir_imm8;
-      1: alu_op_b = r_rf_datay;
-      2: alu_op_b = r_alu_result;   // RAW forwarding
-      3: alu_op_b = i_ldst_rddata;  // RAW forwarding
-      default: alu_op_b = {'0};
+      0: alu_op_b = rf_data_in; // RAW forwarding, see above
+      1: alu_op_b = ir_ex_imm8;
+      2: alu_op_b = r_rf_datay;
+      default: alu_op_b = '0;
     endcase
   end
 
   // MEM Input Logic
-  assign ldst_addr = r_rf_datay;
-  assign ldst_wrdata = r_rf_datax;
+  assign ldst_addr = i_ldst_addr_sel ? rf_data_in : r_rf_datay;
+  assign ldst_wrdata = i_ldst_wrdata_sel ? rf_data_in : r_rf_datax;
 
   /*
    * WRITEBACK
@@ -330,11 +334,11 @@ module cpu_datapath
     case (i_rf_sel)
       0: rf_data_in = ir_wr_imm8;
       1: rf_data_in = {ir_wr_imm8[7:0],r_datax_wr[7:0]};
-      2: rf_data_in = r_alu_result;
+      2: rf_data_in = r_alu_r;
       3: rf_data_in = r_pc_wr;
       4: rf_data_in = i_ldst_rddata;
       5: rf_data_in = r_datay_wr;
-      default: rf_data_in = {'0};
+      default: rf_data_in = '0;
     endcase
   end
 

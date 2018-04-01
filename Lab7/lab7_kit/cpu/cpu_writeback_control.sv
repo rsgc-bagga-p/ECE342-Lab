@@ -3,12 +3,11 @@ module cpu_writeback_control
   input i_clk,
   input i_reset,
 
-  input i_ir_wr,
-  input i_pc_wr,
+  input  [15:0] i_ir_wr,
 
-  output o_rf_write,
-  output o_rf_addrw_sel,
-  output [3:0] o_rf_sel
+  output        o_rf_write,
+  output        o_rf_addrw_sel,
+  output [3:0]  o_rf_sel
 );
 
 
@@ -41,13 +40,14 @@ module cpu_writeback_control
   // don't care about any other case, either Rx get written to RF is disabled
   assign rf_addrw_sel = (i_ir_wr[3:0] == 4'b1100);
 
-  always_comb
-    if (i_ir_wr[4:0] == 5'b10000)               rf_sel = '0;
-    if (i_ir_wr[3:0] == 4'b0110)                rf_sel = '1;
-    if (i_ir_wr[3:2] == 2'b00 && |i_ir_wr[1:0]) rf_sel = '2;
-    if (i_ir_wr[3:0] == 4'b1100)                rf_sel = '3;
-    if (i_ir_wr[3:0] == 4'b0100)                rf_sel = '4;
-    if (i_ir_wr[4:0] == 5'b00000)               rf_sel = '5;
+  always_comb begin
+    rf_sel = '0;
+    if (i_ir_wr[4:0] == 5'b10000)               rf_sel = 3'd0;
+    if (i_ir_wr[3:0] == 4'b0110)                rf_sel = 3'd1;
+    if (i_ir_wr[3:2] == 2'b00 && |i_ir_wr[1:0]) rf_sel = 3'd2;
+    if (i_ir_wr[3:0] == 4'b1100)                rf_sel = 3'd3;
+    if (i_ir_wr[3:0] == 4'b0100)                rf_sel = 3'd4;
+    if (i_ir_wr[4:0] == 5'b00000)               rf_sel = 3'd5;
   end
 
 

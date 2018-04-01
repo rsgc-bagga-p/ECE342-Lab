@@ -15,11 +15,11 @@ module regfile #
   output  logic [WIDTH-1:0]     o_datax_out,
   output  logic [WIDTH-1:0]     o_datay_out,
   // make internal regs visible for testbench
-  output  [NUMREGS-1:0][WIDTH-1] o_regs
+  output  [NUMREGS-1:0][WIDTH-1:0] o_regs
 );
 
   // internal registers
-  logic [NUMREGS-1:0] [WIDTH-1:0] regs;
+  logic [NUMREGS-1:0][WIDTH-1:0] regs;
 
   assign o_regs = regs;
 
