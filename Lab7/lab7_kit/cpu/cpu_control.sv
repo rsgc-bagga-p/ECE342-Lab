@@ -1,7 +1,7 @@
 module cpu_control
 (
-  input i_clk,
-  input i_reset,
+    i_clk,
+    i_reset,
 
   // To Memory
   output o_pc_rd,
@@ -9,13 +9,13 @@ module cpu_control
   output o_ldst_wr,
 
   // From Datapath
-  input  [15:0] i_ir_dc,
-  input  [15:0] i_ir_ex,
-  input  [15:0] i_ir_wr,
-  input         i_alu_n,
-  input         i_alu_z,
-  input         i_alu_n_imm,
-  input         i_alu_z_imm,
+      [15:0] i_ir_dc,
+      [15:0] i_ir_ex,
+      [15:0] i_ir_wr,
+            i_alu_n,
+            i_alu_z,
+            i_alu_n_imm,
+            i_alu_z_imm,
 
   // To Datapath
   output        o_rf_write,
@@ -40,17 +40,45 @@ module cpu_control
   output        o_ir_wr_ld,
   output        o_ir_ex_sel
 );
-
+  
+  logic de_jump_i;
+  logic ex_jump_r;
+  detect_jump m_detect_jump (
+    .i_ir_dc,
+    .i_ir_ex,
+    .i_alu_z,
+    .i_alu_n,
+    .i_alu_z_imm,
+    .i_alu_n_imm,
+    .o_de_jump_i(de_jump_i),
+    .o_ex_jump_r(ex_jump_r)
+  );
 
   /*
    * PREFETCH/FETCH
    */
-
+  cpu_prefetch_control m_cpu_prefetch_control (
+    .i_de_jump_r(de_jump_i),
+    .i_ex_jump_i(ex_jump_r),
+    .o_pc_sel,
+    .o_pc_ld
+  );
+  
+  cpu_fetch_control m_cpu_fetch_control (
+    .i_de_jump_i(de_jump_i),
+    .o_ex_jump_r(ex_jump_r),
+    .o_pc_rd,
+    .o_pc_addr_sel
+  );
 
   /*
    * DECODE
    */
-
+  cpu_decode_control (
+    .i_ex_jump_r(ex_jump_r),
+    .i_ir_dc
+    .o_ir_ex_sel
+  );
 
   /*
    * EXECUTE
