@@ -228,7 +228,7 @@ module cpu_datapath
       /* FETCH */
       if (i_pc_ld)       r_pc       <= pc_in;
       /* DECODE */
-      if (i_pc_dc_ld)    r_pc_dc    <= r_pc;
+      if (i_pc_dc_ld)    r_pc_dc    <= pc_addr;
       if (i_rf_datax_ld) r_rf_datax <= rf_datax_out;
       if (i_rf_datay_ld) r_rf_datay <= rf_datay_out;
       /* EXECUTE */

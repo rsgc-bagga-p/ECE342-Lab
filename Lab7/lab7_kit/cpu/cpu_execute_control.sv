@@ -24,7 +24,7 @@ module cpu_execute_control
 
 
   // Instruction Encoding for nop
-  localparam NOP           = 16'h0007; // opcode => 0_0111
+  localparam NOP = 16'h0007; // opcode => 0_0111
 
   /*************************************************************************
    * Things to take care of:
@@ -115,7 +115,6 @@ module cpu_execute_control
             (((prev_rx) && (i_ir_ex[10:8] == i_ir_wr[7:5])) ||
              ((prev_r7) && (i_ir_ex[10:8] == 3'd7)));
 
-
     pc_wr_ld        = 1'd1;
     ir_wr_ld        = 1'd1;
     alu_r_ld        = '0;
@@ -130,35 +129,23 @@ module cpu_execute_control
     ldst_wrdata_sel = '0;
 
     // x0001 -> x0011 (add, sub, cmp/addi, subi, cmpi)
-    if (~(&i_ir_ex[3:2]) && (|i_ir_ex[1:0])) begin
+    if (i_ir_ex[3:2] == 2'b00 && i_ir_ex[1:0] != 2'b00) begin
       alu_r_ld   = 1'd1;
       alu_n_ld   = 1'd1;
       alu_z_ld   = 1'd1;
       alu_op_sel = i_ir_ex[1];
-
-      if (fw_rx)
-        alu_a_sel = 1'd0;
-      else
-        alu_a_sel = 1'd1;
-
-      if (fw_ry)
-        alu_b_sel = 2'd0;
-      else
-        alu_b_sel = i_ir_ex[4] ? 2'd1 : 2'd2;
-
+      if (fw_rx) alu_a_sel = 1'd0;
+      else       alu_a_sel = 1'd1;
+      if (fw_ry) alu_b_sel = 2'd0;
+      else       alu_b_sel = i_ir_ex[4] ? 2'd1 : 2'd2;
     end
 
     // x0100 -> x0100 (ld, st)
     if (i_ir_ex[3:1] == 3'b010) begin
       ldst_rd = ~i_ir_ex[0]; // ld
       ldst_wr = i_ir_ex[0];  // st
-
-      if (fw_rx)
-        ldst_addr_sel   = 1'd1;
-
-      if (fw_ry)
-        ldst_wrdata_sel = 1'd1;
-
+      if (fw_rx) ldst_addr_sel   = 1'd1;
+      if (fw_ry) ldst_wrdata_sel = 1'd1;
     end
 
   end
