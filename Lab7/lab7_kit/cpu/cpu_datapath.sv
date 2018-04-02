@@ -13,6 +13,8 @@ module cpu_datapath
   input  [2:0]  i_rf_sel,
   input         i_datax_sel,
   input         i_datay_sel,
+  input         i_datax_wr_sel,
+  input         i_datay_wr_sel,
 
   input         i_alu_r_ld,
   input         i_alu_n_ld,
@@ -137,6 +139,8 @@ module cpu_datapath
   logic [15:0] rf_datay_out;
   logic [15:0] datax_in;
   logic [15:0] datay_in;
+  logic [15:0] datax_wr_in;
+  logic [15:0] datay_wr_in;
 
   logic [15:0] alu_op_a;
   logic [15:0] alu_op_b;
@@ -247,8 +251,8 @@ module cpu_datapath
       /* WRITE */
       if (i_pc_wr_ld)    r_pc_wr    <= r_pc_ex;
       if (i_ir_wr_ld)    r_ir_wr    <= r_ir_ex;
-      if (i_datax_wr_ld) r_datax_wr <= r_rf_datax;
-      if (i_datay_wr_ld) r_datay_wr <= r_rf_datay;
+      if (i_datax_wr_ld) r_datax_wr <= datax_wr_in;
+      if (i_datay_wr_ld) r_datay_wr <= datay_wr_in;
     end
 
   end
@@ -273,7 +277,7 @@ module cpu_datapath
       default: pc_in = '0;
     endcase
   end
-  
+
   /*
    * FETCH
    */
@@ -304,7 +308,7 @@ module cpu_datapath
 
   // IR Input Logic
   assign ir_ex_in = i_ir_ex_sel ? NOP : ir_dc;
-  
+
   // RF Data Input
   always_comb begin
     case (i_datax_sel)
@@ -312,7 +316,7 @@ module cpu_datapath
       1: datax_in <= rf_data_in; // RAW forwarding
       default: datax_in <= '0;
     endcase
-    
+
     case (i_datay_sel)
       0: datay_in <= rf_datay_out;
       1: datay_in <= rf_data_in; // RAW forwarding
@@ -344,6 +348,10 @@ module cpu_datapath
   // MEM Input Logic
   assign ldst_addr = i_ldst_addr_sel ? rf_data_in : r_rf_datay;
   assign ldst_wrdata = i_ldst_wrdata_sel ? rf_data_in : r_rf_datax;
+
+  // RF Propagation Logic
+  assign datax_wr_in = i_datax_wr_sel ? rf_data_in : r_rf_datax;
+  assign datay_wr_in = i_datay_wr_sel ? rf_data_in : r_rf_datay;
 
   /*
    * WRITEBACK
