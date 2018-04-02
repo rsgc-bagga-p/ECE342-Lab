@@ -99,7 +99,7 @@ module cpu_execute_control
 
     // current instruction uses Rx
     // x0001->x0011, does not care about jump instructions
-    curr_rx = (i_ir_wr[3:2] == 2'b00 && i_ir_wr[1:0] != 2'b00);
+    curr_rx = (i_ir_ex[3:2] == 2'b00 && i_ir_ex[1:0] != 2'b00);
 
     // current instruction uses Ry
     // 00000->00100
@@ -148,6 +148,13 @@ module cpu_execute_control
       if (fw_ry) ldst_wrdata_sel = 1'd1;
     end
 
+    // x0111 (nop)
+    if (i_ir_ex[3:0] == 4'b0111) begin
+      pc_wr_ld = 1'b0;
+      ir_wr_ld = 1'b0;
+    end
+
   end
+
 
 endmodule
