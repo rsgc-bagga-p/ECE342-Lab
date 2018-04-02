@@ -1,6 +1,3 @@
-proc build {} {
-  vlog tb.sv cpu/*.sv
-}
 
-build
+vlog tb.sv cpu/*.sv
 vsim -novopt tb

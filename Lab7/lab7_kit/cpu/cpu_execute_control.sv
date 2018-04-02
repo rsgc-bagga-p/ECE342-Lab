@@ -5,7 +5,7 @@ module cpu_execute_control
 
   input  [15:0] i_ir_ex,
   input  [15:0] i_ir_wr,
-  
+
   input         i_fw_rx,
   input         i_fw_ry,
 
@@ -19,6 +19,8 @@ module cpu_execute_control
   output        o_alu_op_sel,
   output        o_datax_wr_ld,
   output        o_datay_wr_ld,
+  output        o_datax_wr_sel,
+  output        o_datay_wr_sel,
   output        o_ldst_rd,
   output        o_ldst_wr,
   output        o_ldst_addr_sel,
@@ -36,7 +38,7 @@ module cpu_execute_control
    *   - x0000          (mv/mvi)                         => propagate Ry
    *   - x0001 -> x0011 (add, sub, cmp/addi, subi, cmpi) => ALU
    *   - x0100 -> x0101 (ld, st)                         => MEM
-   *   - x0110          (mvhi)                           => nothing
+   *   - x0110          (mvhi)                           => propagate Rx
    *   - x1000 -> x1010 (jr, jzr, jnr/j, jz, jn)         => nothing
    *   - x1100          (callr/call)                     => propagate Rx
    *   - 00111          (nop)                            => nothing
@@ -49,13 +51,6 @@ module cpu_execute_control
    *************************************************************************/
 
 
-  /*logic prev_rx;
-  logic prev_r7;
-  logic curr_rx;
-  logic curr_ry;
-  logic fw_rx;
-  logic fw_ry;*/
-
   logic pc_wr_ld;
   logic ir_wr_ld;
   logic alu_r_ld;
@@ -66,6 +61,8 @@ module cpu_execute_control
   logic alu_op_sel;
   logic datax_wr_ld;
   logic datay_wr_ld;
+  logic datax_wr_sel;
+  logic datay_wr_sel;
   logic ldst_rd;
   logic ldst_wr;
   logic ldst_addr_sel;
@@ -83,40 +80,13 @@ module cpu_execute_control
   assign o_ldst_wr = ldst_wr;
   assign o_ldst_addr_sel = ldst_addr_sel;
   assign o_ldst_wrdata_sel = ldst_wrdata_sel;
+  assign o_datax_wr_sel = datax_wr_sel;
+  assign o_datay_wr_sel = datay_wr_sel;
 
   assign o_datax_wr_ld = (i_ir_wr[4:0] == NOP) ? 1'd0 : 1'd1;
   assign o_datay_wr_ld = (i_ir_wr[4:0] == NOP) ? 1'd0 : 1'd1;
 
   always_comb begin
-
-    // Forwarding checks
-
-    // previous instruction writes to Rx
-    // x0000->x0010, 00100, 10110
-    //prev_rx = (i_ir_wr[3:2] == 2'b00 && i_ir_wr[1:0] != 2'b11) ||
-    //          (i_ir_wr[3:2] == 2'b01 && ~i_ir_wr[0]);
-
-    // previous instruction writes to R7
-    // x1100
-    //prev_r7 = (i_ir_wr[4:0] == 4'b1100);
-
-    // current instruction uses Rx
-    // x0001->x0011, does not care about jump instructions
-    //curr_rx = (i_ir_ex[3:2] == 2'b00 && i_ir_ex[1:0] != 2'b00);
-
-    // current instruction uses Ry
-    // 00000->00100
-    //curr_ry = (i_ir_ex[4:3] == 2'b00 && i_ir_ex[2:0] != 3'b111);
-
-    // conflict with Rx
-    //fw_rx = (curr_rx) &&
-    //        (((prev_rx) && (i_ir_ex[7:5] == i_ir_wr[7:5])) ||
-    //         ((prev_r7) && (i_ir_ex[7:5] == 3'd7)));
-
-    // conflict with Ry
-    //fw_ry = (curr_ry) &&
-    //        (((prev_rx) && (i_ir_ex[10:8] == i_ir_wr[7:5])) ||
-    //         ((prev_r7) && (i_ir_ex[10:8] == 3'd7)));
 
     pc_wr_ld        = 1'd1;
     ir_wr_ld        = 1'd1;
@@ -130,6 +100,17 @@ module cpu_execute_control
     ldst_wr         = '0;
     ldst_addr_sel   = '0;
     ldst_wrdata_sel = '0;
+    datay_wr_sel    = '0;
+
+    // 00000 (mv)
+    if (i_ir_ex[4:0] == 5'b00000) begin
+      if (i_fw_ry) datay_wr_sel = 1'd1;
+    end
+
+    // 10110 (mvhi)
+    if (i_ir_ex[3:0] == 4'b0110) begin
+      if (i_fw_rx) datax_wr_sel = 1'd1;
+    end
 
     // x0001 -> x0011 (add, sub, cmp/addi, subi, cmpi)
     if (i_ir_ex[3:2] == 2'b00 && i_ir_ex[1:0] != 2'b00) begin

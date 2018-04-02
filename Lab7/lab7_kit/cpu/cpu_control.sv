@@ -27,6 +27,8 @@ module cpu_control
   output [2:0]  o_rf_sel,
   output        o_datax_sel,
   output        o_datay_sel,
+  output        o_datax_wr_sel,
+  output        o_datay_wr_sel,
   output        o_alu_r_ld,
   output        o_alu_n_ld,
   output        o_alu_z_ld,
@@ -62,9 +64,9 @@ module cpu_control
     .o_dc_jump_i(dc_jump_i),
     .o_ex_jump_r(ex_jump_r)
   );
-  
+
   /*
-   * Logic block for detecting if a raw hazard is occuring
+   * Logic block for detecting if a RAW is occuring between write and execute
    */
   logic fw_rx;
   logic fw_ry;
@@ -73,6 +75,18 @@ module cpu_control
     .i_ir_wr,
     .fw_rx,
     .fw_ry
+  );
+
+  /*
+   * Logic block for detecting if a RAW is occuring between write and decode
+   */
+  logic fw_rx2;
+  logic fw_ry2;
+  detect_raw m_detect_raw_2 (
+    .i_ir_ex (i_ir_dc),
+    .i_ir_wr,
+    .fw_rx (fw_rx2),
+    .fw_ry (fw_ry2)
   );
 
   /*
@@ -99,8 +113,8 @@ module cpu_control
 
   cpu_decode_control m_cpu_decode_control (
     .i_ex_jump_r(ex_jump_r),
-    .i_fw_rx (fw_rx),
-    .i_fw_ry (fw_ry),
+    .i_fw_rx (fw_rx2),
+    .i_fw_ry (fw_ry2),
     .i_ir_dc,
     .o_ir_ex_sel,
     .o_rf_datax_ld,
@@ -132,6 +146,8 @@ module cpu_control
     .o_alu_op_sel,
     .o_datax_wr_ld,
     .o_datay_wr_ld,
+    .o_datax_wr_sel,
+    .o_datay_wr_sel,
     .o_ldst_rd,
     .o_ldst_wr,
     .o_ldst_addr_sel,
