@@ -100,6 +100,7 @@ module cpu_execute_control
     ldst_wr         = '0;
     ldst_addr_sel   = '0;
     ldst_wrdata_sel = '0;
+	 datax_wr_sel    = '0;
     datay_wr_sel    = '0;
 
     // 00000 (mv)

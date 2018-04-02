@@ -91,18 +91,6 @@ module cpu_control
   );
 
   /*
-   * Logic block for detecting if a RAW is occuring between write and decode
-   */
-  logic fw_rx2;
-  logic fw_ry2;
-  detect_raw m_detect_raw_2 (
-    .i_ir_ex (i_ir_dc),
-    .i_ir_wr,
-    .fw_rx (fw_rx2),
-    .fw_ry (fw_ry2)
-  );
-
-  /*
    * PREFETCH/FETCH
    */
   cpu_prefetch_control m_cpu_prefetch_control (
