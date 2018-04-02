@@ -39,6 +39,7 @@ module cpu
   logic        pc_wr_ld;
   logic [1:0]  pc_sel;
   logic [1:0]  pc_addr_sel;
+  logic 			jr_pc_sel;
   logic        ldst_addr_sel;
   logic        ldst_wrdata_sel;
   logic        ir_ex_ld;
@@ -89,6 +90,7 @@ module cpu
     .o_pc_wr_ld         (pc_wr_ld),
     .o_pc_sel           (pc_sel),
     .o_pc_addr_sel      (pc_addr_sel),
+	 .o_jr_pc_sel			(jr_pc_sel),
     .o_ldst_addr_sel    (ldst_addr_sel),
     .o_ldst_wrdata_sel  (ldst_wrdata_sel),
     .o_ir_ex_ld         (ir_ex_ld),
@@ -122,6 +124,7 @@ module cpu
     .i_pc_wr_ld         (pc_wr_ld),
     .i_pc_sel           (pc_sel),
     .i_pc_addr_sel      (pc_addr_sel),
+	 .i_jr_pc_sel		   (jr_pc_sel),
     .i_ldst_addr_sel    (ldst_addr_sel),
     .i_ldst_wrdata_sel  (ldst_wrdata_sel),
     .i_ir_ex_ld         (ir_ex_ld),

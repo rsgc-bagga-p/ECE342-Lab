@@ -39,6 +39,7 @@ module cpu_control
   output        o_pc_wr_ld,
   output [1:0]  o_pc_sel,
   output [1:0]  o_pc_addr_sel,
+  output			 o_jr_pc_sel,
   output        o_ldst_addr_sel,
   output        o_ldst_wrdata_sel,
   output        o_ir_ex_ld,
@@ -100,9 +101,11 @@ module cpu_control
   cpu_fetch_control m_cpu_fetch_control (
     .i_dc_jump_i(dc_jump_i),
     .i_ex_jump_r(ex_jump_r),
+	 .i_fw_rx(fw_rx),
     .o_pc_rd,
     .o_pc_addr_sel,
-    .o_pc_dc_ld
+    .o_pc_dc_ld,
+	 .o_jr_pc_sel
   );
 
   /*
