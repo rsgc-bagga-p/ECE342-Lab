@@ -25,6 +25,8 @@ module cpu_control
   output        o_datay_wr_ld,
   output        o_rf_addrw_sel,
   output [2:0]  o_rf_sel,
+  output        o_datax_sel,
+  output        o_datay_sel,
   output        o_alu_r_ld,
   output        o_alu_n_ld,
   output        o_alu_z_ld,
@@ -60,6 +62,18 @@ module cpu_control
     .o_dc_jump_i(dc_jump_i),
     .o_ex_jump_r(ex_jump_r)
   );
+  
+  /*
+   * Logic block for detecting if a raw hazard is occuring
+   */
+  logic fw_rx;
+  logic fw_ry;
+  detect_raw m_detect_raw (
+    .i_ir_ex,
+    .i_ir_wr,
+    .fw_rx,
+    .fw_ry
+  );
 
   /*
    * PREFETCH/FETCH
@@ -85,10 +99,14 @@ module cpu_control
 
   cpu_decode_control m_cpu_decode_control (
     .i_ex_jump_r(ex_jump_r),
+    .i_fw_rx (fw_rx),
+    .i_fw_ry (fw_ry),
     .i_ir_dc,
     .o_ir_ex_sel,
     .o_rf_datax_ld,
     .o_rf_datay_ld,
+    .o_datax_sel,
+    .o_datay_sel,
     .o_pc_ex_ld,
     .o_ir_ex_ld
   );
@@ -102,6 +120,8 @@ module cpu_control
     .i_reset,
     .i_ir_ex,
     .i_ir_wr,
+    .i_fw_rx (fw_rx),
+    .i_fw_ry (fw_ry),
     .o_pc_wr_ld,
     .o_ir_wr_ld,
     .o_alu_r_ld,

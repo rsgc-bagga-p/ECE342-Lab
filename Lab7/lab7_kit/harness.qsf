@@ -25,6 +25,7 @@ set_global_assignment -name OPTIMIZATION_MODE "AGGRESSIVE PERFORMANCE"
 set_instance_assignment -name VIRTUAL_PIN ON -to i_*
 set_instance_assignment -name VIRTUAL_PIN ON -to o_*
 
+set_global_assignment -name SYSTEMVERILOG_FILE cpu/detect_raw.sv
 set_global_assignment -name SYSTEMVERILOG_FILE cpu/detect_jump.sv
 set_global_assignment -name SYSTEMVERILOG_FILE cpu/cpu_prefetch_control.sv
 set_global_assignment -name SYSTEMVERILOG_FILE cpu/cpu_fetch_control.sv

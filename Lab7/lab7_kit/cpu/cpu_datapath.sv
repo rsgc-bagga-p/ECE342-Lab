@@ -11,6 +11,8 @@ module cpu_datapath
   input         i_datay_wr_ld,
   input         i_rf_addrw_sel,
   input  [2:0]  i_rf_sel,
+  input         i_datax_sel,
+  input         i_datay_sel,
 
   input         i_alu_r_ld,
   input         i_alu_n_ld,
@@ -132,6 +134,8 @@ module cpu_datapath
   logic [15:0] rf_data_in;
   logic [15:0] rf_datax_out;
   logic [15:0] rf_datay_out;
+  logic [15:0] datax_in;
+  logic [15:0] datay_in;
 
   logic [15:0] alu_op_a;
   logic [15:0] alu_op_b;
@@ -229,8 +233,8 @@ module cpu_datapath
       if (i_pc_ld)       r_pc       <= pc_in;
       /* DECODE */
       if (i_pc_dc_ld)    r_pc_dc    <= pc_addr;
-      if (i_rf_datax_ld) r_rf_datax <= rf_datax_out;
-      if (i_rf_datay_ld) r_rf_datay <= rf_datay_out;
+      if (i_rf_datax_ld) r_rf_datax <= datax_in;
+      if (i_rf_datay_ld) r_rf_datay <= datay_in;
       /* EXECUTE */
       if (i_pc_ex_ld)    r_pc_ex    <= r_pc_dc;
       if (i_ir_ex_ld)    r_ir_ex    <= ir_ex_in;
@@ -266,7 +270,7 @@ module cpu_datapath
       default: pc_in = '0;
     endcase
   end
-
+  
   /*
    * FETCH
    */
@@ -296,6 +300,21 @@ module cpu_datapath
 
   // IR Input Logic
   assign ir_ex_in = i_ir_ex_sel ? NOP : ir_dc;
+  
+  // RF Data Input
+  always_comb begin
+    case (i_datax_sel)
+      0: datax_in <= rf_datax_out;
+      1: datax_in <= rf_data_in; // RAW forwarding
+      default: datax_in <= '0;
+    endcase
+    
+    case (i_datay_sel)
+      0: datay_in <= rf_datay_out;
+      1: datay_in <= rf_data_in; // RAW forwarding
+      default: datay_in <= '0;
+    endcase
+  end
 
   /*
    * EXECUTE

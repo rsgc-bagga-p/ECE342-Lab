@@ -25,6 +25,8 @@ module cpu
   logic        datay_wr_ld;
   logic        rf_addrw_sel;
   logic [2:0]  rf_sel;
+  logic        datax_sel;
+  logic        datay_sel;
   logic        alu_r_ld;
   logic        alu_n_ld;
   logic        alu_z_ld;
@@ -73,6 +75,8 @@ module cpu
     .o_datay_wr_ld      (datay_wr_ld),
     .o_rf_addrw_sel     (rf_addrw_sel),
     .o_rf_sel           (rf_sel),
+    .o_datax_sel        (datax_sel),
+    .o_datay_sel        (datay_sel),
     .o_alu_r_ld         (alu_r_ld),
     .o_alu_n_ld         (alu_n_ld),
     .o_alu_z_ld         (alu_z_ld),
@@ -104,6 +108,8 @@ module cpu
     .i_datay_wr_ld      (datay_wr_ld),
     .i_rf_addrw_sel     (rf_addrw_sel),
     .i_rf_sel           (rf_sel),
+    .i_datax_sel        (datax_sel),
+    .i_datay_sel        (datay_sel),
     .i_alu_r_ld         (alu_r_ld),
     .i_alu_n_ld         (alu_n_ld),
     .i_alu_z_ld         (alu_z_ld),

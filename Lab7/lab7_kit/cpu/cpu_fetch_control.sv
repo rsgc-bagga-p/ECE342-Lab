@@ -65,7 +65,7 @@ if mv | ld
 else if jr | jzr | jnr | callr
   same_reg = rw == rx ? 1:0
 else
-  same_reg = rw == rx & rw == ry
+  same_reg = rw == rx | rw == ry
 
 raw = rfw_is_writing & exe_is_reading & same_reg
 */
