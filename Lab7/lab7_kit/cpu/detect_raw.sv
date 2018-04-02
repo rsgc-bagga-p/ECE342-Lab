@@ -27,7 +27,7 @@ module detect_raw
 
     // current instruction uses Rx
     // x0001->x0011, does not care about jump instructions
-    curr_rx = (i_ir_wr[3:2] == 2'b00 && i_ir_wr[1:0] != 2'b00);
+    curr_rx = (i_ir_ex[3:2] == 2'b00 && i_ir_ex[1:0] != 2'b00);
 
     // current instruction uses Ry
     // 00000->00100
