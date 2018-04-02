@@ -129,8 +129,8 @@ module cpu_execute_control
     if (i_ir_ex[3:1] == 3'b010) begin
       ldst_rd = ~i_ir_ex[0]; // ld
       ldst_wr = i_ir_ex[0];  // st
-      if (i_fw_rx) ldst_addr_sel   = 1'd1;
-      if (i_fw_ry) ldst_wrdata_sel = 1'd1;
+      if (i_fw_rx) ldst_wrdata_sel = 1'd1;
+      if (i_fw_ry) ldst_addr_sel   = 1'd1;
     end
 
     // x0111 (nop)
