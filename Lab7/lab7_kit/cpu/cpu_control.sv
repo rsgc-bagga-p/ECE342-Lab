@@ -64,7 +64,7 @@ module cpu_control
   );
   
   /*
-   * Logic block for detecting if a raw hazard is occuring
+   * Logic block for detecting if a RAW is occuring between write and execute
    */
   logic fw_rx;
   logic fw_ry;
@@ -73,6 +73,18 @@ module cpu_control
     .i_ir_wr,
     .fw_rx,
     .fw_ry
+  );
+  
+  /*
+   * Logic block for detecting if a RAW is occuring between write and decode
+   */
+  logic fw_rx2;
+  logic fw_ry2;
+  detect_raw m_detect_raw_2 (
+    .i_ir_ex (i_ir_dc),
+    .i_ir_wr,
+    .fw_rx (fw_rx2),
+    .fw_ry (fw_ry2)
   );
 
   /*
@@ -99,8 +111,8 @@ module cpu_control
 
   cpu_decode_control m_cpu_decode_control (
     .i_ex_jump_r(ex_jump_r),
-    .i_fw_rx (fw_rx),
-    .i_fw_ry (fw_ry),
+    .i_fw_rx (fw_rx2),
+    .i_fw_ry (fw_ry2),
     .i_ir_dc,
     .o_ir_ex_sel,
     .o_rf_datax_ld,
