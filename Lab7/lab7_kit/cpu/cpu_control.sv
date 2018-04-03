@@ -103,7 +103,7 @@ module cpu_control
   cpu_fetch_control m_cpu_fetch_control (
     .i_dc_jump_i(dc_jump_i),
     .i_ex_jump_r(ex_jump_r),
-	 .i_fw_rx(fw_rx),
+    .i_fw_rx(fw_rx),
     .o_pc_rd,
     .o_pc_addr_sel,
     .o_pc_dc_ld,

@@ -157,8 +157,7 @@ module cpu_datapath
   logic [15:0] jmp_pc;
   logic [15:0] jmp_pc_nxt;
   logic [15:0] jr_pc;
-  logic [15:0] jr_pc_next;
-  logic			jr_pc_sel;
+  logic [15:0] jr_pc_nxt;
 
   logic [15:0] ir_dc;
   logic [15:0] ir_dc_imm11;
@@ -366,7 +365,7 @@ module cpu_datapath
       0: rf_data_in = ir_wr_imm8;
       1: rf_data_in = {ir_wr_imm8[7:0],r_datax_wr[7:0]};
       2: rf_data_in = r_alu_r;
-      3: rf_data_in = r_pc_wr;
+      3: rf_data_in = r_pc_wr + INSTR_SIZE;
       4: rf_data_in = i_ldst_rddata;
       5: rf_data_in = r_datay_wr;
       default: rf_data_in = '0;

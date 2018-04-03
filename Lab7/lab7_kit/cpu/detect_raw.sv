@@ -23,7 +23,7 @@ module detect_raw
 
     // previous instruction writes to R7
     // x1100
-    prev_r7 = (i_ir_wr[4:0] == 4'b1100);
+    prev_r7 = (i_ir_wr[3:0] == 4'b1100);
 
     // current instruction uses Rx
     // x0001->x0011, x0101, x0110, 01xxx
