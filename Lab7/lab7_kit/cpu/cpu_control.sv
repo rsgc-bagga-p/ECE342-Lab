@@ -51,7 +51,7 @@ module cpu_control
 
 
   /*
-   * Logic block for detecting if a jump instruction is suppose to occur
+   * Detecting if a jump instruction is suppose to occur
    */
   logic dc_jump_i;
   logic ex_jump_r;
@@ -67,27 +67,27 @@ module cpu_control
   );
 
   /*
-   * Logic block for detecting if a RAW is occuring between write and execute
+   * Detect if a RAW is occuring between write and execute
    */
-  logic fw_rx;
-  logic fw_ry;
-  detect_raw m_detect_raw (
-    .i_ir_ex,
-    .i_ir_wr,
-    .fw_rx,
-    .fw_ry
+  logic fw_rx_ex_wr;
+  logic fw_ry_ex_wr;
+  detect_raw m_detect_raw_ex_wr (
+    .i_ir_curr (i_ir_ex),
+    .i_ir_prev (i_ir_wr),
+    .fw_rx (fw_rx_ex_wr),
+    .fw_ry (fw_ry_ex_wr)
   );
   
   /*
-   * Logic block for detecting if a RAW is occuring between write and decode
+   * Detect if a RAW is occuring between write and decode
    */
-  logic fw_rx2;
-  logic fw_ry2;
-  detect_raw m_detect_raw_2 (
-    .i_ir_ex (i_ir_dc),
-    .i_ir_wr,
-    .fw_rx (fw_rx2),
-    .fw_ry (fw_ry2)
+  logic fw_rx_dc_wr;
+  logic fw_ry_dc_wr;
+  detect_raw m_detect_raw_dc_wr (
+    .i_ir_curr (i_ir_dc),
+    .i_ir_prev (i_ir_wr),
+    .fw_rx (fw_rx_dc_wr),
+    .fw_ry (fw_ry_dc_wr)
   );
 
   /*
@@ -103,7 +103,7 @@ module cpu_control
   cpu_fetch_control m_cpu_fetch_control (
     .i_dc_jump_i(dc_jump_i),
     .i_ex_jump_r(ex_jump_r),
-    .i_fw_rx(fw_rx),
+    .i_fw_rx(fw_rx_ex_wr),
     .o_pc_rd,
     .o_pc_addr_sel,
     .o_pc_dc_ld,
@@ -116,8 +116,8 @@ module cpu_control
 
   cpu_decode_control m_cpu_decode_control (
     .i_ex_jump_r(ex_jump_r),
-    .i_fw_rx (fw_rx2),
-    .i_fw_ry (fw_ry2),
+    .i_fw_rx (fw_rx_dc_wr),
+    .i_fw_ry (fw_ry_dc_wr),
     .i_ir_dc,
     .o_ir_ex_sel,
     .o_rf_datax_ld,
@@ -137,8 +137,8 @@ module cpu_control
     .i_reset,
     .i_ir_ex,
     .i_ir_wr,
-    .i_fw_rx (fw_rx),
-    .i_fw_ry (fw_ry),
+    .i_fw_rx (fw_rx_ex_wr),
+    .i_fw_ry (fw_ry_ex_wr),
     .o_pc_wr_ld,
     .o_ir_wr_ld,
     .o_alu_r_ld,
