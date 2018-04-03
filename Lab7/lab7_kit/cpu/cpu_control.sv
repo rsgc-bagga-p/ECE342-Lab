@@ -119,13 +119,13 @@ module cpu_control
     .i_fw_rx (fw_rx_dc_wr),
     .i_fw_ry (fw_ry_dc_wr),
     .i_ir_dc,
-    .o_ir_ex_sel,
     .o_rf_datax_ld,
     .o_rf_datay_ld,
     .o_datax_sel,
     .o_datay_sel,
     .o_pc_ex_ld,
-    .o_ir_ex_ld
+    .o_ir_ex_ld,
+    .o_ir_ex_sel
   );
 
   /*
