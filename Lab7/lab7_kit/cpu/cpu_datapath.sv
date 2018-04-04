@@ -29,7 +29,7 @@ module cpu_datapath
   input         i_pc_wr_ld,
   input  [1:0]  i_pc_sel,
   input  [1:0]  i_pc_addr_sel,
-  input			 i_jr_pc_sel,
+  input  [1:0]  i_jr_pc_sel,
 
   input         i_ldst_addr_sel,
   input         i_ldst_wrdata_sel,
@@ -283,9 +283,25 @@ module cpu_datapath
 
   // PC_MEM Input Logic
   assign jmp_pc = r_pc + (ir_dc_imm11 << 1);
-  assign jr_pc = i_jr_pc_sel ? rf_data_in : r_rf_datax;
-
+  //assign jr_pc = i_jr_pc_sel ? rf_data_in : r_rf_datax;
+  
+  logic [15:0] jr_pc_ex_in;
   always_comb begin
+    jr_pc_ex_in = '0;
+    if (r_ir_ex[4:0] == 5'b10000)               jr_pc_ex_in = ir_ex_imm8;
+    if (r_ir_ex[3:0] == 4'b0110)                jr_pc_ex_in = {ir_ex_imm8[7:0],datax_wr_in[7:0]};
+    if (r_ir_ex[3:2] == 2'b00 && |r_ir_ex[1:0]) jr_pc_ex_in = alu_out;
+    if (r_ir_ex[3:0] == 4'b1100)                jr_pc_ex_in = r_pc_ex + INSTR_SIZE;
+    //if (r_ir_ex[3:0] == 4'b0100)                jr_pc_ex_in =; // can't do this, memory load
+    if (r_ir_ex[4:0] == 5'b00000)               jr_pc_ex_in = datay_wr_in;
+  
+	case (i_jr_pc_sel)
+	  0: jr_pc = datax_in; //r_rf_datax;
+	  1: jr_pc = rf_data_in; // RAW wr
+	  2: jr_pc = jr_pc_ex_in; // RAW ex
+	  default: jr_pc = '0;
+	endcase
+	
     case (i_pc_addr_sel)
       0: pc_addr = r_pc;
       1: pc_addr = jmp_pc;        // j instructions

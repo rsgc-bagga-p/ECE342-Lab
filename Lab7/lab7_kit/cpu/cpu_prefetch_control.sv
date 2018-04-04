@@ -1,6 +1,7 @@
 module cpu_prefetch_control
 (
   // In from detect_jump module
+  input i_dc_jump_r,
   input i_dc_jump_i,
   input i_ex_jump_r,
   
@@ -19,8 +20,11 @@ always_comb begin
   // Start from jump instructions furthest along pipeline
   // Jump, using reg, at execute stage
   // jr, jzr, jnr, callr
-  if (i_ex_jump_r) begin
-    o_pc_sel = 2'd2;
+  //if (i_ex_jump_r) begin
+  //  o_pc_sel = 2'd2;
+  //end
+  if (i_dc_jump_r) begin
+	o_pc_sel = 2'd2;
   end
   // Jump, using immediate, at decode stage
   // j, jz, jn, call

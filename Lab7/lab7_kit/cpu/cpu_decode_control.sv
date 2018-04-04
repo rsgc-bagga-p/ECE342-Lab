@@ -37,9 +37,9 @@ always_comb begin
   
   // Jump using immediate, currently at execute stage, will occur
   // Insert bubble (no-op) into ir_ex
-  if (i_ex_jump_r) begin
-    o_ir_ex_sel = 1'd1;
-  end
+  //if (i_ex_jump_r) begin
+  //  o_ir_ex_sel = 1'd1;
+  //end
 end
 
 endmodule

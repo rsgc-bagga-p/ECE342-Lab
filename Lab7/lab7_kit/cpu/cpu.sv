@@ -41,7 +41,7 @@ module cpu
   logic        pc_wr_ld;
   logic [1:0]  pc_sel;
   logic [1:0]  pc_addr_sel;
-  logic 			jr_pc_sel;
+  logic [1:0]  jr_pc_sel;
   logic        ldst_addr_sel;
   logic        ldst_wrdata_sel;
   logic        ir_ex_ld;

@@ -41,7 +41,7 @@ module cpu_control
   output        o_pc_wr_ld,
   output [1:0]  o_pc_sel,
   output [1:0]  o_pc_addr_sel,
-  output			 o_jr_pc_sel,
+  output [1:0]  o_jr_pc_sel,
   output        o_ldst_addr_sel,
   output        o_ldst_wrdata_sel,
   output        o_ir_ex_ld,
@@ -53,6 +53,7 @@ module cpu_control
   /*
    * Detecting if a jump instruction is suppose to occur
    */
+  logic dc_jump_r;
   logic dc_jump_i;
   logic ex_jump_r;
   detect_jump m_detect_jump (
@@ -62,6 +63,7 @@ module cpu_control
     .i_alu_n,
     .i_alu_z_imm,
     .i_alu_n_imm,
+	.o_dc_jump_r(dc_jump_r),
     .o_dc_jump_i(dc_jump_i),
     .o_ex_jump_r(ex_jump_r)
   );
@@ -91,9 +93,22 @@ module cpu_control
   );
 
   /*
+   * Detect if a RAW is occuring between execute and decode
+   */
+  logic fw_rx_dc_ex;
+  logic fw_ry_dc_ex;
+  detect_raw m_detect_raw_dc_ex (
+    .i_ir_curr (i_ir_dc),
+    .i_ir_prev (i_ir_ex),
+    .fw_rx (fw_rx_dc_ex),
+    .fw_ry (fw_ry_dc_ex)
+  );
+  
+  /*
    * PREFETCH/FETCH
    */
   cpu_prefetch_control m_cpu_prefetch_control (
+	.i_dc_jump_r(dc_jump_r),
     .i_dc_jump_i(dc_jump_i),
     .i_ex_jump_r(ex_jump_r),
     .o_pc_sel,
@@ -101,13 +116,16 @@ module cpu_control
   );
 
   cpu_fetch_control m_cpu_fetch_control (
+	.i_dc_jump_r(dc_jump_r),
     .i_dc_jump_i(dc_jump_i),
     .i_ex_jump_r(ex_jump_r),
-    .i_fw_rx(fw_rx_ex_wr),
+	.i_fw_rx_dc_ex(fw_rx_dc_ex),
+	.i_fw_rx_dc_wr(fw_rx_dc_wr),
+    .i_fw_rx_ex_wr(fw_rx_ex_wr),
     .o_pc_rd,
     .o_pc_addr_sel,
     .o_pc_dc_ld,
-	 .o_jr_pc_sel
+	.o_jr_pc_sel
   );
 
   /*
