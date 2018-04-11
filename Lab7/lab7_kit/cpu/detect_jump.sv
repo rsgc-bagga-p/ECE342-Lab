@@ -27,14 +27,17 @@ module detect_jump (
       jump_n = i_alu_n;
     end
 
-    o_dc_jump_r = i_ir_dc[4:0] == 5'b01000 | (i_ir_dc[4:0] == 5'b01001 & jump_z) |
-        (i_ir_dc[4:0] == 5'b01010 & jump_n) | i_ir_dc[4:0] == 5'b01100;
+    o_dc_jump_r = (i_ir_dc[4:3] == 2'b01 && i_ir_dc[1:0] == 2'b00)
+    	| (i_ir_dc[4:3] == 2'b01 && i_ir_dc[0] & jump_z) |
+        (i_ir_dc[4:3] == 2'b01 && i_ir_dc[1] & jump_n);
 
-    o_dc_jump_i = i_ir_dc[4:0] == 5'b11000 | (i_ir_dc[4:0] == 5'b11001 & jump_z) |
-        (i_ir_dc[4:0] == 5'b11010 & jump_n) | i_ir_dc[4:0] == 5'b11100;
+    o_dc_jump_i = (i_ir_dc[4:3] == 2'b11 && i_ir_dc[1:0] == 2'b00)
+    	| (i_ir_dc[4:3] == 2'b11 && i_ir_dc[0] & jump_z) |
+        (i_ir_dc[4:3] == 2'b11 && i_ir_dc[1] & jump_n);
 
-    o_ex_jump_r = i_ir_ex[4:0] == 5'b01000 | (i_ir_ex[4:0] == 5'b01001 & jump_z) |
-        (i_ir_ex[4:0] == 5'b01010 & jump_n) | i_ir_ex[4:0] == 5'b01100;
+    o_ex_jump_r = (i_ir_ex[4:3] == 2'b01 && i_ir_ex[1:0] == 2'b00)
+    	| (i_ir_ex[4:3] == 2'b01 && i_ir_ex[0] & jump_z) |
+        (i_ir_ex[4:3] == 2'b01 && i_ir_ex[1] & jump_n);
   end
 
 endmodule
