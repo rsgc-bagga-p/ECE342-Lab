@@ -40,14 +40,17 @@ module detect_jump (
     
     // NEW
     // j, call
-    o_dc_jump_i = i_ir_dc[4:0] == 5'b11000 || i_ir_dc[4:0] == 5'b11100;
+    o_dc_jump_i = i_ir_dc[4:3] == 2'b11 && i_ir_dc[1:0] == 2'b00;//i_ir_dc[4:0] == 5'b11000 || i_ir_dc[4:0] == 5'b11100;
     
     // jz, jn
-    o_ex_jump_i = (i_ir_ex[4:0] == 5'b11001 && i_alu_z) || (i_ir_ex[4:0] == 5'b11010 && i_alu_n);
+    o_ex_jump_i = (i_ir_ex[4:3] == 2'b11 && i_ir_ex[0] && i_alu_z) || (i_ir_ex[4:3] == 2'b11 && i_ir_ex[1] && i_alu_n);
+	 //(i_ir_ex[4:0] == 5'b11001 && i_alu_z) || (i_ir_ex[4:0] == 5'b11010 && i_alu_n);
     
     // jr, jzr, jnr, callr
-    o_ex_jump_r = i_ir_ex[4:0] == 5'b01000 || (i_ir_ex[4:0] == 5'b01001 & i_alu_z) ||
-        (i_ir_ex[4:0] == 5'b01010 && i_alu_n) || i_ir_ex[4:0] == 5'b01100;
+    o_ex_jump_r = (i_ir_ex[4:3] == 2'b01 && i_ir_ex[1:0] == 2'b00)
+	   || (i_ir_ex[4:3] == 2'b01 && i_ir_ex[0] && i_alu_z) || (i_ir_ex[4:3] == 2'b01 && i_ir_ex[1] && i_alu_n);
+	 //i_ir_ex[4:0] == 5'b01000 || (i_ir_ex[4:0] == 5'b01001 & i_alu_z) ||
+        //(i_ir_ex[4:0] == 5'b01010 && i_alu_n) || i_ir_ex[4:0] == 5'b01100;
     
   end
 
