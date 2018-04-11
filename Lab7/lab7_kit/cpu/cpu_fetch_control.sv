@@ -2,6 +2,7 @@ module cpu_fetch_control
 (
   // In from detect_jump module
   input i_dc_jump_i,
+  input i_ex_jump_i,
   input i_ex_jump_r,
   
   // In detect_raw ex to wr
@@ -29,8 +30,11 @@ always_comb begin
   // Jump, using reg, at execute stage
   // jr, jzr, jnr, callr
   if (i_ex_jump_r) begin
-    o_pc_addr_sel = 2'd2;
+    o_pc_addr_sel = 2'd3;
     if (i_fw_rx) o_jr_pc_sel = 1'd1;
+  end
+  else if (i_ex_jump_i) begin
+    o_pc_addr_sel = 2'd2;
   end
   // Jump, using immediate, at decode stage
   // j, jz, jn, call

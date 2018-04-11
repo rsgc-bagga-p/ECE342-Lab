@@ -1,5 +1,6 @@
 module cpu_decode_control (
   // In from jump_detect module
+  input i_ex_jump_i,
   input i_ex_jump_r,
   
   // In from detect_raw dc to wr
@@ -37,7 +38,7 @@ always_comb begin
   
   // Jump using immediate, currently at execute stage, will occur
   // Insert bubble (no-op) into ir_ex
-  if (i_ex_jump_r) begin
+  if (i_ex_jump_i || i_ex_jump_r) begin
     o_ir_ex_sel = 1'd1;
   end
 end

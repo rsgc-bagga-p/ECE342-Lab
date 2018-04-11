@@ -54,15 +54,17 @@ module cpu_control
    * Detecting if a jump instruction is suppose to occur
    */
   logic dc_jump_i;
+  logic ex_jump_i;
   logic ex_jump_r;
   detect_jump m_detect_jump (
     .i_ir_dc,
     .i_ir_ex,
     .i_alu_z,
     .i_alu_n,
-    .i_alu_z_imm,
-    .i_alu_n_imm,
+    //.i_alu_z_imm,
+    //.i_alu_n_imm,
     .o_dc_jump_i(dc_jump_i),
+    .o_ex_jump_i(ex_jump_i),
     .o_ex_jump_r(ex_jump_r)
   );
 
@@ -95,6 +97,7 @@ module cpu_control
    */
   cpu_prefetch_control m_cpu_prefetch_control (
     .i_dc_jump_i(dc_jump_i),
+    .i_ex_jump_i(ex_jump_i),
     .i_ex_jump_r(ex_jump_r),
     .o_pc_sel,
     .o_pc_ld
@@ -102,6 +105,7 @@ module cpu_control
 
   cpu_fetch_control m_cpu_fetch_control (
     .i_dc_jump_i(dc_jump_i),
+    .i_ex_jump_i(ex_jump_i),
     .i_ex_jump_r(ex_jump_r),
     .i_fw_rx(fw_rx_ex_wr),
     .o_pc_rd,
@@ -115,6 +119,7 @@ module cpu_control
    */
 
   cpu_decode_control m_cpu_decode_control (
+    .i_ex_jump_i(ex_jump_i),
     .i_ex_jump_r(ex_jump_r),
     .i_fw_rx (fw_rx_dc_wr),
     .i_fw_ry (fw_ry_dc_wr),

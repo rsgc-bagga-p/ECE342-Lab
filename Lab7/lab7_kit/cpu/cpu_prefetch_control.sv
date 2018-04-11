@@ -2,6 +2,7 @@ module cpu_prefetch_control
 (
   // In from detect_jump module
   input i_dc_jump_i,
+  input i_ex_jump_i,
   input i_ex_jump_r,
   
   // Out to datapath
@@ -20,6 +21,9 @@ always_comb begin
   // Jump, using reg, at execute stage
   // jr, jzr, jnr, callr
   if (i_ex_jump_r) begin
+    o_pc_sel = 2'd3;
+  end
+  else if (i_ex_jump_i) begin
     o_pc_sel = 2'd2;
   end
   // Jump, using immediate, at decode stage

@@ -156,6 +156,8 @@ module cpu_datapath
   logic [15:0] pc_nxt;
   logic [15:0] jmp_pc;
   logic [15:0] jmp_pc_nxt;
+  logic [15:0] jmp_pc_ex;
+  logic [15:0] jmp_pc_ex_nxt;
   logic [15:0] jr_pc;
   logic [15:0] jr_pc_nxt;
 
@@ -163,6 +165,7 @@ module cpu_datapath
   logic [15:0] ir_dc_imm11;
   logic [15:0] ir_ex_in;
   logic [15:0] ir_ex_imm8;
+  logic [15:0] ir_ex_imm11;
   logic [15:0] ir_wr_imm8;
 
 
@@ -266,13 +269,15 @@ module cpu_datapath
   // PC Input Logic
   assign pc_nxt = r_pc + INSTR_SIZE;
   assign jmp_pc_nxt = jmp_pc + INSTR_SIZE;
+  assign jmp_pc_ex_nxt = jmp_pc_ex + INSTR_SIZE;
   assign jr_pc_nxt = jr_pc + INSTR_SIZE;
 
   always_comb begin
     case (i_pc_sel)
       0: pc_in = pc_nxt;        // regular operation/callr where Rx is R7
       1: pc_in = jmp_pc_nxt;    // j instruction
-      2: pc_in = jr_pc_nxt;     // jr instruction
+      2: pc_in = jmp_pc_ex_nxt;
+      3: pc_in = jr_pc_nxt;     // jr instruction
       default: pc_in = '0;
     endcase
   end
@@ -283,13 +288,15 @@ module cpu_datapath
 
   // PC_MEM Input Logic
   assign jmp_pc = r_pc + (ir_dc_imm11 << 1);
+  assign jmp_pc_ex = r_pc_ex + INSTR_SIZE + (ir_ex_imm11 << 1);
   assign jr_pc = i_jr_pc_sel ? rf_data_in : r_rf_datax;
 
   always_comb begin
     case (i_pc_addr_sel)
       0: pc_addr = r_pc;
       1: pc_addr = jmp_pc;        // j instructions
-      2: pc_addr = jr_pc;  // jr instructions
+      2: pc_addr = jmp_pc_ex;
+      3: pc_addr = jr_pc;  // jr instructions
       default: pc_addr = '0;
     endcase
   end
@@ -329,6 +336,7 @@ module cpu_datapath
 
   // ALU Input Logic
   assign ir_ex_imm8 = {{8{r_ir_ex[15]}},r_ir_ex[15:8]};
+  assign ir_ex_imm11 = {{5{r_ir_ex[15]}},r_ir_ex[15:5]};
 
   always_comb begin
     case (i_alu_a_sel)
